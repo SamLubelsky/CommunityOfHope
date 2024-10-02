@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json.schemastore.org/prettierrc",
+  "printWidth": 80,
+  "tabWidth": 2,
+  "useTabs": false,
+  "semi": false,
+  "singleQuote": true,
+  "quoteProps": "as-needed",
+  "jsxSingleQuote": true,
+  "trailingComma": "all",
+  "bracketSpacing": true,
+  "bracketSameLine": true,
+  "arrowParens": "always",
+  "importOrder": [
+    "^@(api/(.*)$|components|config|errors|hooks|providers|log|mocks|navigation|theme|types|utils)",
+    "^[./](.*)(?<!module.css)$",
+    "^@mantine/(.*)/(styles.css)$",
+    "^[./](.*)(module.css)$"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true,
+  "endOfLine": "lf",
+  "overrides": [
+    {
+      "files": ["**/*.yaml", "**/*.yml"],
+      "options": {
+        "bracketSpacing": false,
+        "singleQuote": false,
+        "parser": "yaml"
+      }
+    },
+    {
+      "files": ["**/*.md"],
+      "options": {
+        "parser": "markdown"
+      }
+    },
+    {
+      "files": ["**/*.json", ".prettierrc"],
+      "options": {
+        "parser": "json"
+      }
+    }
+  ]
+}
