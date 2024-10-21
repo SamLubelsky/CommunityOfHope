@@ -6,6 +6,7 @@ import IconButton from '@/components/IconButton'
 import CircleButton from '@/components/CircleButton'
 import EmojiPicker from '@/components/EmojiPicker'
 import EmojiList from '@/components/EmojiList'
+import VolunteerRequestForm from "@/components/VolunteerRequestForm";
 import { useState } from 'react';
 import EmojiSticker from '@/components/EmojiSticker';
 import { StatusBar } from 'expo-status-bar';
@@ -30,18 +31,13 @@ export default function Index() {
       alert('You did not select any image');
     }
   }
-  const onReset = () => {
-    setShowAppOptions(false);
-  }
-  const onAddSticker = () =>{
+  const requestVolunteer = async () =>{
     setIsModalVisible(true);
   }
   const onModalClose = () => {
     setIsModalVisible(false);
-  }
-  const onSaveImageAsync = async () => {
+  };
 
-  }
   return (
     <>
     <View style={styles.container} >
@@ -67,8 +63,10 @@ export default function Index() {
         <EmojiList onSelect={setPickedEmoji} onCloseModal={onModalClose}/>
       </EmojiPicker> */}
       <View style={styles.textContainer}>
-        <Text style={styles.text}> Welcome to EPIC</Text>
+        <Text style={styles.text}> Welcome to EPIC!</Text>
       </View>
+      <Button label="REQUEST A VOLUNTEER" onPress={requestVolunteer}/>
+      <VolunteerRequestForm isVisible={isModalVisible} onClose={onModalClose}/>
     </View>
     <StatusBar style="light" />
     </>
