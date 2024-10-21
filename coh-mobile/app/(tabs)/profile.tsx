@@ -7,7 +7,9 @@ export default function Profile(){
     <View style={styles.container}>
         <View style={styles.nameContainer}>
             <Text style={styles.text}>
-                Sam Lubelsky has helped <strong>13</strong> moms through EPIC
+                Sam Lubelsky has helped 
+                <Text style={styles.textBold}> 13 </Text>
+                 moms through EPIC
             </Text>
         </View>
         <View style={styles.imageContainer}>
@@ -34,5 +36,9 @@ const styles = StyleSheet.create({
     nameContainer:{
         flex: 1 / 10,
         justifyContent: 'space-between',
+    },
+    textBold:{
+        fontWeight: 'bold',
+        marginHorizontal: 20,
     }
   });
