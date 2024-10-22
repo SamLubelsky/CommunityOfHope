@@ -1,6 +1,11 @@
 import { Request, Response } from 'express'
 import { getAllUsers, createUser } from '../models/userModel'
 
+type UserRequest = {
+  user: string
+  password: string
+}
+
 export const getUsers = async (req: Request, res: Response) => {
   try {
     const users = await getAllUsers();

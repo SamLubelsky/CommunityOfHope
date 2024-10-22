@@ -4,6 +4,11 @@ const dotenv = require('dotenv')
 const bcrypt =require('bcrypt')
 import userRoutes from './routes/userRoutes';
 
+type UserRequest = {
+  user: string
+  password: string
+}
+
 dotenv.config()
 
 const app: Express = express()
