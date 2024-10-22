@@ -1,5 +1,5 @@
 import db from '../config/database'
-import bcrypt from 'bcrypt'
+const bcrypt = require('bcrypt')
 
 export const getAllUsers = () => {
   return new Promise((resolve, reject) => {

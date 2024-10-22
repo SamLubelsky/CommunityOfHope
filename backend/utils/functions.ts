@@ -1,7 +1,7 @@
 type UserRequest = {
     user: string
     password: string
-  }
+}
 
 const validateUserInput = (body: UserRequest): string | null => {
     if (!body.user || !body.password) return 'Username and password are required.'

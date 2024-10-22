@@ -11,7 +11,9 @@ export const getUsers = async (req: Request, res: Response) => {
 };
 
 export const addUser = async (req: Request, res: Response) => {
-  const { user, password } = req.body;
+  const body = req.body as UserRequest;
+  const user = body.user;
+  const password = body.password;
   try {
     const newUserID = await createUser(user, password);
     res.json({ message: `User ${user} added with ID ${newUserID}` });
