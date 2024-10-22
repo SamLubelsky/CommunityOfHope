@@ -6,8 +6,10 @@ import IconButton from '@/components/IconButton'
 import CircleButton from '@/components/CircleButton'
 import EmojiPicker from '@/components/EmojiPicker'
 import EmojiList from '@/components/EmojiList'
+import VolunteerRequestForm from "@/components/VolunteerRequestForm";
 import { useState } from 'react';
 import EmojiSticker from '@/components/EmojiSticker';
+import { StatusBar } from 'expo-status-bar';
 
 const placeholderImage = require('@/assets/images/background-image.png')
 
@@ -29,21 +31,17 @@ export default function Index() {
       alert('You did not select any image');
     }
   }
-  const onReset = () => {
-    setShowAppOptions(false);
-  }
-  const onAddSticker = () =>{
+  const requestVolunteer = async () =>{
     setIsModalVisible(true);
   }
   const onModalClose = () => {
     setIsModalVisible(false);
-  }
-  const onSaveImageAsync = async () => {
+  };
 
-  }
   return (
+    <>
     <View style={styles.container} >
-      <View style={styles.imageContainer}>
+      {/* <View style={styles.imageContainer}>
         <ImageViewer imgSource={placeholderImage} selectedImage={selectedImage}/>
         {pickedEmoji && <EmojiSticker imageSize={40} stickerSource={pickedEmoji}/>}
       </View>
@@ -62,19 +60,34 @@ export default function Index() {
         </View>
       )}
       <EmojiPicker isVisible={isModalVisible} onClose={onModalClose}>
-        {/* List of Emoji components goes here*/}
         <EmojiList onSelect={setPickedEmoji} onCloseModal={onModalClose}/>
-      </EmojiPicker>
+      </EmojiPicker> */}
+      <View style={styles.textContainer}>
+        <Text style={styles.text}> Welcome to EPIC!</Text>
+      </View>
+      <Button label="REQUEST A VOLUNTEER" onPress={requestVolunteer}/>
+      <VolunteerRequestForm isVisible={isModalVisible} onClose={onModalClose}/>
     </View>
+    <StatusBar style="light" />
+    </>
+  
   );
 }
 const styles = StyleSheet.create({
   container:
   {
     flex: 1,
-    backgroundColor: '#25292e',
+    backgroundColor: '#F7ACCF',
     alignItems: 'center',
   }, 
+  textContainer: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  text: {
+    color: '#fff',
+    fontSize: 24,
+  },
   imageContainer:{
     flex: 1,
     paddingTop: 28,
