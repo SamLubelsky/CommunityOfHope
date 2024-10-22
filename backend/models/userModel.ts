@@ -1,4 +1,5 @@
-import db from '../config/database';
+import db from '../config/database'
+import bcrypt from 'bcrypt'
 
 export const getAllUsers = () => {
   return new Promise((resolve, reject) => {
@@ -13,10 +14,11 @@ export const getAllUsers = () => {
 };
 
 export const createUser = (username: string, password: string) => {
+  const hashedPass = bcrypt.hashSync(password, 10);
   return new Promise((resolve, reject) => {
     db.run(
       'INSERT INTO users (username, password) VALUES (?, ?)',
-      [username, password],
+      [username, hashedPass],
       function (err) {
         if (err) {
           reject(err);
