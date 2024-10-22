@@ -1,4 +1,10 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "target": "ES2015",
+    "lib": ["ES2015", "DOM"],
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true 
+  },
   "extends": "expo/tsconfig.base"
 }
