@@ -1,21 +1,9 @@
-# Community Of Hope
-
-Community of Hope is looking for a way to allow St. Louis area moms to easily get help from their volunteers.  Our site will allow registered moms to send an alert to community of hope volunteers asking for help.  A verified volunteer will then be able to accept the request and chat with the mom, so that they can come over to the mom and help.
-
 # Setup Instructions
-
-## Backend
 
 - cd into the `/CommunityOfHope/backend` directory.
 - run `npm install` for first time setup
 - run `npx tsc index.ts`
 - run `node index.js`
-
-## Frontend
-
-- cd into the `/CommunitOfHope/coh-mobile` directory
-- run `yarn` for first time setup
-- run `npx expo start` to launch the app
 
 ## Git Instructions
 
