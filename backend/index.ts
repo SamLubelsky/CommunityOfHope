@@ -37,8 +37,8 @@ app.post('/', (req: Request, res: Response) => {
   })
 })
 
-if (require.main == module) {
-  app.listen(port, () => {
-    console.log(`[server]: Server is running at http://localhost:${port}`)
-  })
-}
+// if (require.main == module) {
+//   app.listen(port, () => {
+//     console.log(`[server]: Server is running at http://localhost:${port}`)
+//   })
+// }
