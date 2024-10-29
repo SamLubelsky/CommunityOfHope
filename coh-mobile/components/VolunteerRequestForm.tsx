@@ -1,27 +1,79 @@
 import {Modal, StyleSheet, Text, TextInput, View, Pressable} from 'react-native';
 import Button from './Button';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import {useForm, Controller, SubmitHandler} from 'react-hook-form'; 
+
 type Props = {
     isVisible: boolean;
     onClose: () => void;
 }
+type FormData = {
+    category: string;
+    description: string;
+}
+type InputProps={
+    name: string;
+    control: any;
+}
+const Input = ({name, control}: InputProps) => {
+    return (
+    <Controller 
+    control={control}
+    rules={{
+        required: true,
+    }}
+    render={({field: {onChange, onBlur, value}}) => (
+        <TextInput 
+        placeholder={name}
+        value={value}
+        onChangeText={onChange}
+        onBlur={onBlur}
+        style={styles.input}
+        placeholderTextColor="#64748b"
+        />
+    )}
+    name={name}
+    />);
+}
 export default function VolunteerRequestForm({isVisible, onClose}: Props){
+    const {control, handleSubmit, formState: {errors}} = useForm({
+        defaultValues: {
+            category: '',
+            description: '',
+        }
+    });
+    const onSubmit: SubmitHandler<FormData> = async (data) => {
+        const category = data.category;
+        const description = data.description;
+
+        const response = await fetch('/api/submitLogin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ category, description }),
+        });
+        const json = await response.json();
+        console.log(json);
+    }
     return (
         <Modal animationType="slide" visible={isVisible}>
             <View style={styles.container}>
-                {/* <View style={styles.headingContainer}> */}
-                    <Text style={styles.text}>Request a Volunteer</Text>
-                    <View style={styles.closeButton}>
-                        <Pressable onPress={onClose}>
-                            <MaterialIcons name="close" color="#fff" size={22} />
-                        </Pressable>
-                    </View>
-                {/* </View> */}
-                <Text style={styles.inputLabel}>Category</Text>
-                <TextInput placeholder="Category" style={styles.input}/>
-                <Text style={styles.inputLabel}>Additional Info</Text>
-                <TextInput placeholder="Additional Info" style={styles.input}/>
-                <Button label="Submit"/>
+                    {/* <View style={styles.headingContainer}> */}
+                        <Text style={styles.text}>Request a Volunteer</Text>
+                        <View style={styles.closeButton}>
+                            <Pressable onPress={onClose}>
+                                <MaterialIcons name="close" color="#fff" size={22} />
+                            </Pressable>
+                        </View>
+                    {/* </View> */}
+                    <Text style={styles.inputLabel}>Category</Text>
+                    {/* <TextInput placeholder="Category" style={styles.input}/> */}
+                    <Input name="category" control={control} />
+                    {errors.category && <Text style={styles.error}>This field is required</Text>}
+                    <Text style={styles.inputLabel}>Additional Info</Text>
+                    {/* <TextInput placeholder="Additional Info" style={styles.input}/> */}
+                    <Input name="description" control={control}/>
+                    {errors.description  && <Text style={styles.error}>This field is required</Text>}
+                    <Button label="Submit" onPress={handleSubmit(onSubmit)}/>
             </View>
         </Modal>
     )
@@ -62,5 +114,10 @@ const styles = StyleSheet.create({
         width: 300,
         padding: 10,
         marginBottom: 10,
-    }
+    },
+    error:{
+        marginTop: -5,
+        marginBottom: 10,
+        color: 'red',
+    },
 })

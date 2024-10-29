@@ -37,7 +37,6 @@ export default function Index() {
   const onModalClose = () => {
     setIsModalVisible(false);
   };
-
   return (
     <>
     <View style={styles.container} >
@@ -66,7 +65,7 @@ export default function Index() {
         <Text style={styles.text}> Welcome to EPIC!</Text>
       </View>
       <Button label="REQUEST A VOLUNTEER" onPress={requestVolunteer}/>
-      <VolunteerRequestForm isVisible={isModalVisible} onClose={onModalClose}/>
+      <VolunteerRequestForm isVisible={isModalVisible} onClose={onModalClose} />
     </View>
     <StatusBar style="light" />
     </>
