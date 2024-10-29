@@ -12,12 +12,14 @@ type UserRequest = {
 dotenv.config()
 
 const app: Express = express()
+module.exports = app.listen(3000)
 const port = process.env.PORT || 3000
 
 const key = process.env.KEY
 console.log(key)
 
 app.use(express.json())
+app.use('/api', userRoutes)
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server')
@@ -35,6 +37,8 @@ app.post('/', (req: Request, res: Response) => {
   })
 })
 
-app.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`)
-})
+if (require.main == module) {
+  app.listen(port, () => {
+    console.log(`[server]: Server is running at http://localhost:${port}`)
+  })
+}
