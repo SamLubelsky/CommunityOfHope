@@ -21,4 +21,14 @@ describe('User Routes', () => {
     expect(res.body).to.have.property('message').that.includes('User testuser added');
   });
 
+  it('should log in an existing user', async () => {
+    const user = { user: 'testuser', password: 'testpassword' };  // Use the user we created in before hook
+    const res = await request(app)
+      .post('/api/login')
+      .send(user);
+    expect(res.status).to.equal(200);
+    expect(res.body).to.have.property('message').that.equals('Login successful');
+    expect(res.body).to.have.property('token');  // Check if token is returned
+  });
+
 });
