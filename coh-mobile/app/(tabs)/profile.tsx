@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     container:
     {
       flex: 1,
-      backgroundColor: '#25292e',
+      backgroundColor: '#F7ACCF',
       alignItems: 'center',
     }, 
     imageContainer:{
@@ -32,6 +32,8 @@ const styles = StyleSheet.create({
     },
     text:{
         color:'#fff',
+        fontSize: 30,
+        margin: 10,
     },
     nameContainer:{
         flex: 1 / 10,

@@ -9,8 +9,10 @@ export default function AboutScreen() {
     //     <Text style={styles.text}>About Screen</Text>
     // </View>
     // );
-    return (<ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+    return (
+    <View style={styles.container}>
+    <ParallaxScrollView
+      headerBackgroundColor={{ light: '#BBE5ED', dark: '#BBE5ED' }}
       headerImage={
         <Image
           source={require('@/assets/images/icon.png')}
@@ -46,13 +48,14 @@ export default function AboutScreen() {
           with whatever you need.
         </ThemedText>
       </ThemedView>
-    </ParallaxScrollView>);
+    </ParallaxScrollView>
+    </View>);
 }
 const styles = StyleSheet.create({
     container:
     {
       flex: 1,
-      backgroundColor: '#25292e',
+      backgroundColor: '#F7ACCF ',
       alignItems: 'center',
       justifyContent: 'center',
     },
