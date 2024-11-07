@@ -16,4 +16,13 @@ const db = new Database('database.db', (err) => {
     )
   `);
   
+  db.run(`
+    CREATE TABLE IF NOT EXISTS help_requests (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      mom_id INTEGER,
+      request TEXT,
+      FOREIGN KEY (mom_id) REFERENCES users(id)
+    )
+  `);
+
   export default db;
