@@ -31,6 +31,8 @@ export const addUser = async (req: Request, res: Response) => {
   }
 };
 
+
+
 export const loginUser = async (req: Request, res: Response): Promise<any> => {
   const { user, password } = req.body;
 

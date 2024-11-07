@@ -35,13 +35,9 @@ export const createUser = async (username: string, password: string) => {
     return Promise.reject(new Error(validationError));
   }
 
-  try {
-    const existingUser = await findUserByUsername(username);  // Use the function to check if the user exists
-    if (existingUser) {
-      return Promise.reject(new Error('User already exists'));  // Reject if user exists
-    }
-  } catch (error) {
-    return Promise.reject(new Error('Error checking for existing user'));
+  const existingUser = await findUserByUsername(username);  // Use the function to check if the user exists
+  if (existingUser) {
+    return Promise.reject(new Error('User already exists'));  // Reject if user exists
   }
   
   const hashedPass = bcrypt.hashSync(password, 10);
@@ -57,5 +53,18 @@ export const createUser = async (username: string, password: string) => {
         }
       }
     );
+  });
+};
+
+export const deleteUserByUsername = (username: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const query = 'DELETE FROM users WHERE username = ?';
+    db.run(query, [username], function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
   });
 };
