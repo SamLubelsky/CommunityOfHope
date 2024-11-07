@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getAllUsers, createUser, findUserByUsername } from '../models/userModel'
+import { getAllUsers, createUser, findUserByUsername, deleteUserByUsername } from '../models/userModel'
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
@@ -31,7 +31,15 @@ export const addUser = async (req: Request, res: Response) => {
   }
 };
 
-
+export const deleteUser = async(req: Request, res: Response) => {
+  const { username } = req.params;
+  try {
+    await deleteUserByUsername(username);
+    res.status(201).json({ message: `User ${username} deleted` });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message })
+  }
+}
 
 export const loginUser = async (req: Request, res: Response): Promise<any> => {
   const { user, password } = req.body;
