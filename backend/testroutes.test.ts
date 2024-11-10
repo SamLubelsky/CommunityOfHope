@@ -31,4 +31,10 @@ describe('User Routes', () => {
     expect(res.body).to.have.property('token');  // Check if token is returned
   });
 
+  it('should delete an existing user', async () => {
+    const res = await request(app)
+      .delete('/api/users/testuser')
+    expect(res.status).to.equal(201);
+    expect(res.body).to.have.property('message').that.equals('User testuser deleted');
+  });
 });
