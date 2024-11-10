@@ -16,14 +16,14 @@ export const getAllUsers = () => {
 
 export const findUserByUsername = (username: string): Promise<any> => {
   return new Promise((resolve, reject) => {
-    const query = 'SELECT * FROM users WHERE username = ?';  // SQL query to find user by username
+    const query = 'SELECT * FROM users WHERE username = ?'; 
     db.get(query, [username], (err, row) => {
       if (err) {
-        reject(err);  // Reject the promise with the error
+        reject(err);
       } else if (!row) {
-        resolve(null);  // If no user is found, resolve with null
+        resolve(null);
       } else {
-        resolve(row);  // Resolve with the found user
+        resolve(row);
       }
     });
   });
@@ -35,13 +35,9 @@ export const createUser = async (username: string, password: string) => {
     return Promise.reject(new Error(validationError));
   }
 
-  try {
-    const existingUser = await findUserByUsername(username);  // Use the function to check if the user exists
-    if (existingUser) {
-      return Promise.reject(new Error('User already exists'));  // Reject if user exists
-    }
-  } catch (error) {
-    return Promise.reject(new Error('Error checking for existing user'));
+  const existingUser = await findUserByUsername(username); 
+  if (existingUser) {
+    return Promise.reject(new Error('Username already exists'));
   }
   
   const hashedPass = bcrypt.hashSync(password, 10);
