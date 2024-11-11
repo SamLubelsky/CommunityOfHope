@@ -1,7 +1,6 @@
 import { Request, Response } from 'express'
 import { getAllUsers, createUser, findUserByUsername, deleteUserByUsername } from '../models/userModel'
 const bcrypt = require('bcrypt')
-const jwt = require('jsonwebtoken')
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
 
@@ -61,15 +60,19 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
       return res.status(400).json({ message: 'Invalid username or password.' });
     }
 
-    const token = jwt.sign(
-      { id: existingUser.id, username: existingUser.username },
-      JWT_SECRET,
-      { expiresIn: '1h' }  
-    );
-
-    return res.status(200).json({ message: 'Login successful', token });
+    req.session.userId = existingUser.id;
+    return res.status(200).json({ message: 'Login successful' });
 
   } catch (error) {
     return res.status(500).json({ message: 'Error logging in', error: (error as Error).message });
   }
+};
+
+export const logoutUser = (req: Request, res: Response): void => {
+  req.session.destroy((err: any) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error logging out' });
+    }
+    res.status(200).json({ message: 'Logout successful' });
+  });
 };

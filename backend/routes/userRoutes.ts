@@ -1,11 +1,13 @@
 import { Router } from 'express'
-import { getUsers, addUser, loginUser, deleteUser } from '../controllers/userController'
+import { getUsers, addUser, loginUser, deleteUser, logoutUser } from '../controllers/userController'
+import { requireAuth } from '../authMiddleware';
 
 const router = Router();
 
 router.get('/users', getUsers);
-router.post('/users', addUser);
+router.post('/users', requireAuth, addUser);
 router.post('/login', loginUser);
-router.delete('/users/:username', deleteUser);
+router.post('/logout', logoutUser);
+router.delete('/users/:username', requireAuth, deleteUser);
 
 export default router;

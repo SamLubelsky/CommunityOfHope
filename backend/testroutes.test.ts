@@ -28,7 +28,6 @@ describe('User Routes', () => {
       .send(user);
     expect(res.status).to.equal(200);
     expect(res.body).to.have.property('message').that.equals('Login successful');
-    expect(res.body).to.have.property('token');  // Check if token is returned
   });
 
   it('should delete an existing user', async () => {
