@@ -55,3 +55,16 @@ export const createUser = async (username: string, password: string) => {
     );
   });
 };
+
+export const deleteUserByUsername = (username: string): Promise<void> => {
+  return new Promise((resolve, reject) => {
+    const query = 'DELETE FROM users WHERE username = ?';
+    db.run(query, [username], function (err) {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+};

@@ -3,6 +3,7 @@ const express = require('express')
 const dotenv = require('dotenv')
 const bcrypt =require('bcrypt')
 import userRoutes from './routes/userRoutes';
+import helpRoutes from './routes/helpRoutes';
 
 type UserRequest = {
   user: string
@@ -20,6 +21,8 @@ console.log(key)
 
 app.use(express.json())
 app.use('/api', userRoutes)
+app.use('/api', helpRoutes);
+
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server')
@@ -36,6 +39,8 @@ app.post('/', (req: Request, res: Response) => {
     message: `Hello ${user}! Your hashed password is ${hashedPass}`,
   })
 })
+
+export default app;
 
 // if (require.main == module) {
 //   app.listen(port, () => {
