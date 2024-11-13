@@ -7,7 +7,7 @@ import CircleButton from '@/components/CircleButton'
 import EmojiPicker from '@/components/EmojiPicker'
 import EmojiList from '@/components/EmojiList'
 import VolunteerRequestForm from "@/components/VolunteerRequestForm";
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import EmojiSticker from '@/components/EmojiSticker';
 import { StatusBar } from 'expo-status-bar';
 
@@ -69,7 +69,7 @@ export default function Index() {
     </View>
     <StatusBar style="light" />
     </>
-  
+    
   );
 }
 const styles = StyleSheet.create({
