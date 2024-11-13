@@ -24,7 +24,7 @@ export const addUser = async (req: Request, res: Response) => {
   const password = body.password;
   try {
     const newUserID = await createUser(user, password);
-    res.status(201).json({ message: `User ${user} added with ID ${newUserID}` });
+    res.status(201).json({ message: `User ${user} added` });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }
