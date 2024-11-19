@@ -27,6 +27,9 @@
     "typescript": "^5.6.3"
   },
   "scripts": {
-    "test": "mocha --require tsx 'testroutes.test.ts'"
+    "test": "mocha --require tsx 'testroutes.test.ts'",
+    "build": "npx tsc",
+    "start": "node index.js",
+    "dev": "nodemon index.ts"
   }
 }
