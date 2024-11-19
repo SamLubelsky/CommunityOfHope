@@ -16,13 +16,19 @@ const db = new Database('database.db', (err) => {
     )
   `);
   
-  db.run(`
-    CREATE TABLE IF NOT EXISTS help_requests (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      mom_id INTEGER,
-      request TEXT,
-      FOREIGN KEY (mom_id) REFERENCES users(id)
-    )
-  `);
+// Drop existing table if needed
+db.run(`DROP TABLE IF EXISTS help_requests`);
 
-  export default db;
+// Create new table with updated schema
+db.run(`
+  CREATE TABLE IF NOT EXISTS help_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    mom_id INTEGER,
+    mom_name TEXT,
+    category TEXT,
+    request TEXT,
+    FOREIGN KEY (mom_id) REFERENCES users(id)
+  )
+`);
+
+export default db;
