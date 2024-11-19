@@ -5,7 +5,8 @@ import { requireAuth } from '../authMiddleware';
 const router = Router();
 
 router.get('/users', getUsers);
-router.post('/users', requireAuth, addUser);
+// router.post('/users', requireAuth, addUser);
+router.post('/users', addUser);
 router.post('/login', loginUser);
 router.post('/logout', logoutUser);
 router.delete('/users/:username', deleteUser);
