@@ -2,10 +2,14 @@
 
 - cd into the `/CommunityOfHope/backend` directory.
 - run `npm install` for first time setup
-- run `npx tsc index.ts`
-- run `node index.js`
+  
+### Everytime you want to run the backend do the following:
 
-## Git Instructions
+- cd into the `/CommunityOfHope/backend` directory.
+- run `npm run build`
+- run `npm run start`
+
+# Git Instructions
 
 - First, ALWAYS `git pull` before you make changes.
 - `git branch [Name of Branch]` to create a new branch
