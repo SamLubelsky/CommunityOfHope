@@ -15,9 +15,10 @@ dotenv.config()
 const app = express()
 module.exports = app.listen(3000)
 const port = process.env.PORT || 3000
-
+app.set('trust proxy', 1)
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your_secret_key',  // Replace with a secure key
+  name: 'session',
   resave: false,
   saveUninitialized: false,
   cookie: { secure: false }  // Set secure: true in production when using HTTPS

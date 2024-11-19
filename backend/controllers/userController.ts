@@ -9,12 +9,12 @@ type UserRequest = {
   password: string
 }
 
-export const getUsers = async (req: Request, res: Response) => {
+export const getUsers = async (req: Request, res: Response): Promise<any> => {
   try {
     const users = await getAllUsers();
-    res.json(users);
+    return res.status(201).json(users);
   } catch (error) {
-    res.status(500).json({ error: (error as Error).message });
+    return res.status(500).json({ error: (error as Error).message });
   }
 };
 
@@ -25,13 +25,14 @@ export const addUser = async (req: Request, res: Response): Promise<any> => {
   }
   try {
     const newUserID = await createUser(user, password);
-    res.status(201).json({ message: `User ${user} added` });
+    return res.status(201).json({ message: `User ${user} added` });
   } catch (error) {
-    res.status(500).json({ error: (error as Error).message });
+    return res.status(500).json({ error: (error as Error).message });
   }
 };
 
 export const deleteUser = async(req: Request, res: Response) => {
+  console.log("DELETING USER");
   const { username } = req.params;
   try {
     await deleteUserByUsername(username);
