@@ -1,32 +1,50 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Button from '@/components/Button';
 const placeholder = {"Requests": [{"Name": "Sharon", "Category": "Hospital Stay", "requestId": 2},
  {"Name": "Jennifer", "Category": "Grocery Shopping", "requestId": 3,},
  {"Name": "Alice", "Category": "Help At Home", "requestId": 1},]}
-
+type HelpRequest ={
+  name: string;
+  category: string;
+  id: number;
+}
 export default function HelpRequests(){
+    const [requests, setRequests] = useState<HelpRequest[]>([]);
     async function onSubmit(id: Number){
-        const response = await fetch('/api/acceptRequest', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({id}),
-        });
-        const json = await response.json();
+        setRequests(requests.filter(request => request.id !== id));
+        // const response = await fetch('/api/acceptRequest', {
+        //     method: 'PATCH',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({id}),
+        // });
+        // const json = await response.json();
         console.log(`Request ${id} accepted`);
+
     }
-    function getRequestsList(data: any){
-        return data.Requests.map((request: any, index: any) => {
+    async function getRequests(){
+        const response = await fetch('http://localhost:3000/api/help_requests');
+        const json = await response.json();
+        setRequests(json.Requests);
+    }
+    function getRequestsList(data: HelpRequest[]){
+        if (data.length === 0){
+            return <Text style={styles.helpText}>No requests found</Text>;
+        }
+        return data.map((request: any, index: any) => {
             return (
                 <View key={index} style={styles.itemContainer}>
-                    <Text style={styles.helpText}> {request.Name} needs help with: {request.Category}</Text>
-                    <Button theme="primary" label="Accept Help Request" onPress={() => onSubmit(request.requestId)}/>
+                    <Text style={styles.helpText}> {request.mom_name} needs help with: {request.category}</Text>
+                    <Button theme="primary" label="Accept Help Request" onPress={() => onSubmit(request.id)}/>
                 </View>
             )});
     }
+    useEffect(() => {
+          getRequests();
+        }, []);
     return (<View style={styles.container}>
         <Text style={styles.text}> All Current Help Requests</Text>
-        {getRequestsList(placeholder)}
+        {getRequestsList(requests)}
         </View>)
 }
 const styles = StyleSheet.create({

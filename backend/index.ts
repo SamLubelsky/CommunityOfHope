@@ -3,6 +3,7 @@ const express = require('express')
 const session = require('express-session')
 const dotenv = require('dotenv')
 const bcrypt =require('bcrypt')
+const cors = require('cors')
 import userRoutes from './routes/userRoutes';
 import helpRoutes from './routes/helpRoutes';
 
@@ -25,7 +26,7 @@ app.use(session({
   cookie: { secure: false }  // Set secure: true in production when using HTTPS
 }));
 
-
+app.use(cors());
 app.use(express.json())
 app.use('/api', userRoutes)
 app.use('/api', helpRoutes);

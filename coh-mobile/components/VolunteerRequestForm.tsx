@@ -21,14 +21,16 @@ export default function VolunteerRequestForm({isVisible, onClose}: Props){
     const onSubmit: SubmitHandler<FormData> = async (data) => {
         const category = data.category;
         const description = data.description;
-
-        const response = await fetch('/api/submitLogin', {
+        const mom_id = Math.floor(Math.random() * 10000) + 1;
+        const mom_name = "Alice";
+        const response = await fetch('http://localhost:3000/api/help_requests', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ category, description }),
-        });
+            body: JSON.stringify({ mom_id, mom_name, category, description }),
+        }); 
         const json = await response.json();
         console.log(json);
+        onClose();
     }
     return (
         <Modal animationType="slide" visible={isVisible}>
