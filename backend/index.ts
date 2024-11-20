@@ -1,5 +1,6 @@
 import { Express, Request, Response } from 'express'
 const express = require('express')
+const session = require('express-session')
 const dotenv = require('dotenv')
 const bcrypt =require('bcrypt')
 import userRoutes from './routes/userRoutes';
@@ -12,12 +13,18 @@ type UserRequest = {
 
 dotenv.config()
 
-const app: Express = express()
+const app = express()
 module.exports = app.listen(3000)
 const port = process.env.PORT || 3000
+app.set('trust proxy', 1)
+app.use(session({
+  secret: process.env.SESSION_SECRET || 'your_secret_key',  // Replace with a secure key
+  name: 'session',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }  // Set secure: true in production when using HTTPS
+}));
 
-const key = process.env.KEY
-console.log(key)
 
 app.use(express.json())
 app.use('/api', userRoutes)
