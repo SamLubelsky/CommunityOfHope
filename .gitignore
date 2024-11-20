@@ -1,6 +1,6 @@
 #js files
 *.js
-database.db
+
 # Logs
 logs
 *.log
@@ -132,4 +132,5 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-*.db
+#SQLite database file
+database.db
