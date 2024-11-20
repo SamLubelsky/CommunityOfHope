@@ -1,58 +1,66 @@
-// backend/routes/helpRoutes.ts
-import express from 'express';
-import { 
-  getAllHelpRequests,
-  getHelpRequestById,
-  createHelpRequest,
-  updateHelpRequest,
-  deleteHelpRequest
-} from '../models/helpRequestModel';
+const request = require('supertest');
+import { expect } from 'chai';
+const app = require('../index.ts');
+import nock from 'nock';
 
-const router = express.Router();
+describe('Help Request Routes', () => {
+  beforeEach(() => {
+    nock.cleanAll();
+  });
 
-router.get('/help_requests', async (req, res) => {
-  try {
-    const requests = await getAllHelpRequests();
-    res.json({ help_requests: requests });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
+  it('should return all help requests', async () => {
+    nock('http://localhost:3000')
+      .get('/api/help_requests')
+      .reply(200, { help_requests: [] });
+
+    const res = await request(app).get('/api/help_requests');
+    expect(res.status).to.equal(200);
+    expect(res.body).to.have.property('help_requests').that.is.an('array');
+  });
+
+  it('should return a help request by ID', async () => {
+    nock('http://localhost:3000')
+      .get('/api/help_requests/1')
+      .reply(200, { help_request: {} });
+
+    const res = await request(app).get('/api/help_requests/1');
+    expect(res.status).to.equal(200);
+    expect(res.body).to.have.property('help_request').that.is.an('object');
+  });
+
+  it('should create a new help request', async () => {
+    const newRequest = { mom_id: 1, title: 'New Request', description: 'Need help', status: 'pending' };
+    nock('http://localhost:3000')
+      .post('/api/help_requests', newRequest)
+      .reply(201, { id: 1 });
+
+    const res = await request(app)
+      .post('/api/help_requests')
+      .send(newRequest);
+    expect(res.status).to.equal(201);
+    expect(res.body).to.have.property('id');
+  });
+
+  it('should update an existing help request', async () => {
+    const updates = { title: 'Updated Request', description: 'Updated description', status: 'completed' };
+    nock('http://localhost:3000')
+      .put('/api/help_requests/1', updates)
+      .reply(200, { message: 'Help request updated successfully' });
+
+    const res = await request(app)
+      .put('/api/help_requests/1')
+      .send(updates);
+    expect(res.status).to.equal(200);
+    expect(res.body).to.have.property('message').that.equals('Help request updated successfully');
+  });
+
+  it('should delete a help request', async () => {
+    nock('http://localhost:3000')
+      .delete('/api/help_requests/1')
+      .reply(200, { message: 'Help request deleted successfully' });
+
+    const res = await request(app).delete('/api/help_requests/1');
+    expect(res.status).to.equal(200);
+    expect(res.body).to.have.property('message').that.equals('Help request deleted successfully');
+  });
 });
-
-router.get('/help_requests/:id', async (req, res) => {
-  try {
-    const request = await getHelpRequestById(parseInt(req.params.id));
-    res.json({ help_request: request });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-router.post('/help_requests', async (req, res) => {
-  try {
-    const id = await createHelpRequest(req.body);
-    res.status(201).json({ id });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-router.put('/help_requests/:id', async (req, res) => {
-  try {
-    await updateHelpRequest(parseInt(req.params.id), req.body);
-    res.json({ message: 'Help request updated successfully' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-router.delete('/help_requests/:id', async (req, res) => {
-  try {
-    await deleteHelpRequest(parseInt(req.params.id));
-    res.json({ message: 'Help request deleted successfully' });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
-
-export default router;
