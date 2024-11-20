@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-<<<<<<< HEAD
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
     /* Projects */
@@ -109,23 +108,3 @@
     "skipLibCheck": true                                 /* Skip type checking all .d.ts files. */
   }
 }
-=======
-    "target": "ES2015",
-    "lib": ["ES2015", "DOM"],
-    "module": "commonjs",
-    "strict": true,
-    "esModuleInterop": true,
-    "types": ["node", "mocha"],
-    "outDir": "./dist",
-    "rootDir": "./",
-    "moduleResolution": "node",
-    "resolveJsonModule": true
-  },
-  "include": [
-    "./**/*"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
-}
->>>>>>> refs/remotes/origin/ose
