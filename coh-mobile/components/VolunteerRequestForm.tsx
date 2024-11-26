@@ -2,6 +2,7 @@ import {Modal, StyleSheet, Text, TextInput, View, Pressable} from 'react-native'
 import Button from './Button';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form'; 
+import {SafeAreaView,SafeAreaProvider } from 'react-native-safe-area-context'
 import Input from './Input';
 type Props = {
     isVisible: boolean;
@@ -33,27 +34,31 @@ export default function VolunteerRequestForm({isVisible, onClose}: Props){
         onClose();
     }
     return (
-        <Modal animationType="slide" visible={isVisible}>
-            <View style={styles.container}>
-                    {/* <View style={styles.headingContainer}> */}
-                        <Text style={styles.text}>Request a Volunteer</Text>
-                        <View style={styles.closeButton}>
-                            <Pressable onPress={onClose}>
-                                <MaterialIcons name="close" color="#fff" size={22} />
-                            </Pressable>
-                        </View>
-                    {/* </View> */}
-                    <Text style={styles.inputLabel}>Category</Text>
-                    {/* <TextInput placeholder="Category" style={styles.input}/> */}
-                    <Input name="category" control={control} />
-                    {errors.category && <Text style={styles.error}>This field is required</Text>}
-                    <Text style={styles.inputLabel}>Additional Info</Text>
-                    {/* <TextInput placeholder="Additional Info" style={styles.input}/> */}
-                    <Input name="description" control={control}/>
-                    {errors.description  && <Text style={styles.error}>This field is required</Text>}
-                    <Button label="Submit" onPress={handleSubmit(onSubmit)}/>
-            </View>
-        </Modal>
+        <SafeAreaProvider>
+            <SafeAreaView style = {styles.container}>
+                <Modal animationType="slide" visible={isVisible}>
+                    <View style={styles.container}> 
+                        {/* <View style={styles.headingContainer}> */}
+                            <Text style={styles.text}>Request a Volunteer</Text>
+                            <View style={styles.closeButton}>
+                                <Pressable onPress={onClose}>
+                                    <MaterialIcons name="close" color="#fff" size={22} />
+                                </Pressable>
+                            </View>
+                        {/* </View> */}
+                        <Text style={styles.inputLabel}>Category</Text>
+                        {/* <TextInput placeholder="Category" style={styles.input}/> */}
+                        <Input name="category" control={control} />
+                        {errors.category && <Text style={styles.error}>This field is required</Text>}
+                        <Text style={styles.inputLabel}>Additional Info</Text>
+                        {/* <TextInput placeholder="Additional Info" style={styles.input}/> */}
+                        <Input name="description" control={control}/>
+                        {errors.description  && <Text style={styles.error}>This field is required</Text>}
+                        <Button label="Submit" onPress={handleSubmit(onSubmit)}/>
+                    </View>
+                </Modal>
+            </SafeAreaView>
+        </SafeAreaProvider>
     )
 }
 const styles = StyleSheet.create({
