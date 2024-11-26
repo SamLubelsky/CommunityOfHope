@@ -1,9 +1,8 @@
-import {StyleSheet, View, Pressable, Text}  from 'react-native';
+import {StyleSheet, View, Pressable, Text, ViewStyle}  from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 type Props = {
     label: string;
-    theme?: 'primary',
     onPress?: () => void;
 }
 
