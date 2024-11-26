@@ -6,6 +6,8 @@ const bcrypt =require('bcrypt')
 const cors = require('cors')
 import userRoutes from './routes/userRoutes';
 import helpRoutes from './routes/helpRoutes';
+import {Server} from 'socket.io'
+const http = require('http')
 
 type UserRequest = {
   user: string
@@ -15,8 +17,6 @@ type UserRequest = {
 dotenv.config()
 
 const app = express()
-module.exports = app.listen(3000)
-const port = process.env.PORT || 3000
 app.set('trust proxy', 1)
 app.use(session({
   secret: process.env.SESSION_SECRET || 'your_secret_key',  // Replace with a secure key
@@ -48,7 +48,24 @@ app.post('/', (req: Request, res: Response) => {
   })
 })
 
-export default app;
+const port = process.env.PORT || 3000
+const httpServer = http.createServer(app)  
+httpServer.listen(port)
+const io = new Server(httpServer,{
+  cors:{
+    // origin: process.env.NODE_ENV === 'production' ? false : ["http://localhost:3000"],
+    origin: "http://localhost:8081", 
+  }
+});
+io.on('connection', (socket) => {
+  console.log(`User ${socket.id} connected`)
+  socket.on('chat message', msg => {
+    console.log('message: ' + msg);
+    io.emit('chat message', `${socket.id.substring(0,5)}:   ${msg}`)
+  });
+}); 
+export default httpServer;
+
 
 // if (require.main == module) {
 //   app.listen(port, () => {
