@@ -8,6 +8,7 @@
     "jest": "^29.7.0",
     "jsonwebtoken": "^9.0.2",
     "nock": "^13.5.6",
+    "socket.io": "^4.8.1",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
@@ -38,6 +39,7 @@
     "start": "node index.js",
     "build": "npx tsc",
     "dev": "npx ts-node-dev --respawn index.ts",
-    "test": "npx ts-node node_modules/mocha/bin/mocha tests/**/*.test.ts"
+    "test": "npx ts-node node_modules/mocha/bin/mocha tests/**/*.test.ts",
+    "go": "npm run build && npm run start"
   }
 }
