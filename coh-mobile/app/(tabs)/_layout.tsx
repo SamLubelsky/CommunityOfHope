@@ -32,6 +32,12 @@ export default function TabLayout() {
             <Ionicons name={focused ? 'people' : 'people-outline'} color={color} size={24} />
         ),
        }} />
+      <Tabs.Screen name="helpRequests" 
+      options={{ title: 'helpRequests',
+        tabBarIcon: ({color, focused}) => (
+            <Ionicons name={focused ? 'accessibility' : 'accessibility-outline'} color={color} size={24} />
+        ),
+       }} />
     </Tabs>
   );
 }

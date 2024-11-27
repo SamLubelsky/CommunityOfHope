@@ -3,7 +3,7 @@ import Button from './Button';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form'; 
 import {SafeAreaView,SafeAreaProvider } from 'react-native-safe-area-context'
-
+import Input from './Input';
 type Props = {
     isVisible: boolean;
     onClose: () => void;
@@ -11,30 +11,6 @@ type Props = {
 type FormData = {
     category: string;
     description: string;
-}
-type InputProps={
-    name: string;
-    control: any;
-}
-const Input = ({name, control}: InputProps) => {
-    return (
-    <Controller 
-    control={control}
-    rules={{
-        required: true,
-    }}
-    render={({field: {onChange, onBlur, value}}) => (
-        <TextInput 
-        placeholder={name}
-        value={value}
-        onChangeText={onChange}
-        onBlur={onBlur}
-        style={styles.input}
-        placeholderTextColor="#64748b"
-        />
-    )}
-    name={name}
-    />);
 }
 export default function VolunteerRequestForm({isVisible, onClose}: Props){
     const {control, handleSubmit, formState: {errors}} = useForm({
@@ -46,14 +22,16 @@ export default function VolunteerRequestForm({isVisible, onClose}: Props){
     const onSubmit: SubmitHandler<FormData> = async (data) => {
         const category = data.category;
         const description = data.description;
-
-        const response = await fetch('/api/submitLogin', {
+        const mom_id = Math.floor(Math.random() * 10000) + 1;
+        const mom_name = "Alice";
+        const response = await fetch('http://localhost:3000/api/help_requests', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ category, description }),
-        });
+            body: JSON.stringify({ mom_id, mom_name, category, description }),
+        }); 
         const json = await response.json();
         console.log(json);
+        onClose();
     }
     return (
         <SafeAreaProvider>
