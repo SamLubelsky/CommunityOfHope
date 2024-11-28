@@ -10,5 +10,5 @@ router.post('/users', requireAuth, addUser);
 router.post('/login', loginUser);
 router.post('/logout', logoutUser);
 router.delete('/users/:username', deleteUser);
-
+router.delete('/logout', logoutUser);
 export default router;

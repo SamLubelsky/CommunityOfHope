@@ -2,8 +2,6 @@ import { Request, Response } from 'express'
 import { getAllUsers, createUser, findUserByUsername, deleteUserByUsername } from '../models/userModel'
 const bcrypt = require('bcrypt')
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret_key';
-
 type UserRequest = {
   user: string
   password: string
@@ -19,7 +17,8 @@ export const getUsers = async (req: Request, res: Response): Promise<any> => {
 };
 
 export const addUser = async (req: Request, res: Response): Promise<any> => {
-  const {user, password} = req.body;
+  console.log("ADDING USER");
+  const {user, password, firstName, lastName} = req.body;
   if (!user || !password) {
     return res.status(400).json({ message: 'Username and password are required.' });
   }
@@ -44,14 +43,12 @@ export const deleteUser = async(req: Request, res: Response) => {
 
 export const loginUser = async (req: Request, res: Response): Promise<any> => {
   const { user, password } = req.body;
-
   if (!user || !password) {
     return res.status(400).json({ message: 'Username and password are required.' });
   }
 
   try {
     const existingUser = await findUserByUsername(user);
-
     if (!existingUser) {
       return res.status(400).json({ message: 'Invalid username or password.' });
     }
@@ -61,9 +58,11 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
     if (!passwordMatch) {
       return res.status(400).json({ message: 'Invalid username or password.' });
     }
-
+    const id = existingUser.id;
+    const firstName = existingUser.firstName;
+    const lastName = existingUser.lastName;
     req.session.userId = existingUser.id;
-    return res.status(200).json({ message: 'Login successful' });
+    return res.status(200).json({ message: 'Login successful', id, firstName, lastName });
 
   } catch (error) {
     return res.status(500).json({ message: 'Error logging in', error: (error as Error).message });
@@ -71,10 +70,11 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
 };
 
 export const logoutUser = (req: Request, res: Response): void => {
-  req.session.destroy((err: any) => {
+    req.session.destroy((err: any) => {
     if (err) {
       return res.status(500).json({ message: 'Error logging out' });
     }
+    res.clearCookie('connect.sid');
     res.status(200).json({ message: 'Logout successful' });
   });
 };

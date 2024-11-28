@@ -1,4 +1,4 @@
-import {Database} from 'sqlite3'
+import {Database} from 'sqlite3';
 
 const db = new Database('database.db', (err) => {
     if (err) {
@@ -10,7 +10,7 @@ const db = new Database('database.db', (err) => {
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           mom_id INTEGER,
           mom_name TEXT,
-          category TEXT,
+          description TEXT,
           request TEXT,
           FOREIGN KEY (mom_id) REFERENCES users(id)
         )
@@ -19,10 +19,11 @@ const db = new Database('database.db', (err) => {
         CREATE TABLE IF NOT EXISTS users (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           username TEXT,
-          password TEXT
+          password TEXT,
+          firstName TEXT,
+          lastName TEXT
         )
       `);
-        
     }
   });
 

@@ -1,8 +1,26 @@
 import {View, Text, StyleSheet} from 'react-native';
 import ImageViewer from '@/components/ImageViewer';
+import {useEffect} from 'react';
+import { useBoundStore } from '@/store/useBound';
 const placeholderImage = require('@/assets/images/profilePicture.jpg')
 
 export default function Profile(){
+    const isSignedIn = useBoundStore((state) => state.isSignedIn);
+    const email = useBoundStore((state) => state.email);
+    const password = useBoundStore((state) => state.password);
+    const firstName = useBoundStore((state) => state.firstName);
+    const lastName = useBoundStore((state) => state.lastName);
+    useEffect(() =>{
+        const fetchData = async() => {
+            const response = await fetch("http://localhost:3000/api/users",{
+                method: 'GET',
+            });
+            const json = await response.json();
+            console.log(json);
+            }
+        fetchData();
+    }, []);
+
     return (
     <View style={styles.container}>
         <View style={styles.nameContainer}>
