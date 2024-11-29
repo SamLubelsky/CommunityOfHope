@@ -7,6 +7,8 @@ import RequireAuth from './RequireAuth.tsx'
 import Login from "./Login.tsx"
 import Logout from './Logout.tsx'
 import AddUser from './AddUser.tsx'
+import Users from './Users.tsx'
+import EditUser from './EditUser.tsx'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
@@ -26,6 +28,16 @@ createRoot(document.getElementById('root')!).render(
           <Route path="/logout" element={
           <RequireAuth>
             <Logout />
+          </RequireAuth>
+        } />
+          <Route path="/user-list" element={
+          <RequireAuth>
+            <Users />
+          </RequireAuth>
+        } />
+        <Route path="/edit-user" element={
+          <RequireAuth>
+            <EditUser />
           </RequireAuth>
         } />
       </Routes>

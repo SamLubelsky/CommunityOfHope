@@ -14,11 +14,13 @@ export default function Profile(){
         const fetchData = async() => {
             const response = await fetch("http://localhost:3000/api/users",{
                 method: 'GET',
+                credentials: 'include'
             });
             const json = await response.json();
             console.log(json);
             }
         fetchData();
+        
     }, []);
 
     return (

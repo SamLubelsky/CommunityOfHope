@@ -21,7 +21,25 @@ const db = new Database('database.db', (err) => {
           username TEXT,
           password TEXT,
           firstName TEXT,
-          lastName TEXT
+          lastName TEXT,
+          role TEXT
+        )
+      `);
+      db.run(`
+        CREATE TABLE IF NOT EXISTS chatIds (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          momId INTEGER,
+          volunteerId INTEGER
+        )
+      `);
+      db.run(`
+        CREATE TABLE IF NOT EXISTS chats (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          chatId INTEGER,
+          message TEXT, 
+          senderId INTEGER,
+          dateSent DATETIME DEFAULT CURRENT_TIMESTAMPm
+          FOREIGN KEY (sender_id) REFERENCES users(id)
         )
       `);
     }

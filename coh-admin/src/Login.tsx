@@ -3,12 +3,6 @@ import InputField from './components/inputField';
 import SubmitButton from './components/submitButton';
 import { useNavigate } from 'react-router-dom';
 import "./index.css";
-import {
-    AtSymbolIcon,
-    KeyIcon,
-    ExclamationCircleIcon,
-} from '@heroicons/react/24/outline';
-
 export default function Login(){
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
@@ -16,7 +10,7 @@ export default function Login(){
     useEffect(()=>{
         if(localStorage.getItem("SignedIn")){
             console.log("you are already logged in");
-            navigate("/");
+            navigate("/dashboard");
         }
     }, [])
     async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -29,7 +23,7 @@ export default function Login(){
         const response = await fetch('http://localhost:3000/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user, password }),
+            body: JSON.stringify({ user, password }),    
             credentials: 'include'
         });
         const responseData = await response.json();

@@ -5,6 +5,7 @@ export default function TabLayout() {
   return (
     <Tabs screenOptions={{
         tabBarActiveTintColor: "#ffd33d",
+        tabBarInactiveTintColor: '#fff',
         headerStyle: {
             backgroundColor: '#0994dc'
         },
@@ -24,6 +25,12 @@ export default function TabLayout() {
       options={{ title: 'About',
         tabBarIcon: ({color, focused}) => (
             <Ionicons name={focused ? 'information-circle' : 'information-circle-outline'} color={color} size={24} />
+        ),
+       }} />
+      <Tabs.Screen name="chats" 
+      options={{ title: 'Chats',
+        tabBarIcon: ({color, focused}) => (
+            <Ionicons name={focused ? 'chatbox' : 'chatbox-outline'} color={color} size={24} />
         ),
        }} />
       <Tabs.Screen name="profile" 
