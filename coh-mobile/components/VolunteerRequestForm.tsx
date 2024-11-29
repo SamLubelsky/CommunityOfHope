@@ -4,6 +4,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form'; 
 import {SafeAreaView,SafeAreaProvider } from 'react-native-safe-area-context'
 import Input from './Input';
+import { useBoundStore } from '@/store/useBound';
 type Props = {
     isVisible: boolean;
     onClose: () => void;
@@ -19,15 +20,17 @@ export default function VolunteerRequestForm({isVisible, onClose}: Props){
             description: '',
         }
     });
+    const firstName = useBoundStore((state) => state.firstName);
+    const id = useBoundStore((state) => state.id);
     const onSubmit: SubmitHandler<FormData> = async (data) => {
-        const category = data.category;
+
         const description = data.description;
-        const mom_id = Math.floor(Math.random() * 10000) + 1;
-        const mom_name = "Alice";
+        const mom_id = id;
+        const mom_name = firstName;
         const response = await fetch('http://localhost:3000/api/help_requests', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mom_id, mom_name, category, description }),
+            body: JSON.stringify({ mom_id, mom_name, description }),
         }); 
         const json = await response.json();
         console.log(json);
@@ -48,9 +51,7 @@ export default function VolunteerRequestForm({isVisible, onClose}: Props){
                         {/* </View> */}
                         <Text style={styles.inputLabel}>Category</Text>
                         {/* <TextInput placeholder="Category" style={styles.input}/> */}
-                        <Input name="category" control={control} />
-                        {errors.category && <Text style={styles.error}>This field is required</Text>}
-                        <Text style={styles.inputLabel}>Additional Info</Text>
+                        <Text style={styles.inputLabel}>What do you need help with?</Text>
                         {/* <TextInput placeholder="Additional Info" style={styles.input}/> */}
                         <Input name="description" control={control}/>
                         {errors.description  && <Text style={styles.error}>This field is required</Text>}

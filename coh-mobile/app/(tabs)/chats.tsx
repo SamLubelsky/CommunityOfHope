@@ -19,7 +19,7 @@ export default function Chats(){
             return (
                 <View key={index} style={styles.itemContainer}>
                     <Text style={styles.helpText}> Chat with {chat.name}</Text>
-                    <Button theme="primary" label="Open Chat" onPress={() => onSubmit(chat.chatId)}/>
+                    <Button label="Open Chat" onPress={() => onSubmit(chat.chatId)}/>
                 </View>
             )});
     }       

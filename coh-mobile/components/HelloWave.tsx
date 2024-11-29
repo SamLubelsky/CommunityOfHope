@@ -22,6 +22,7 @@ export function HelloWave() {
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${rotationAnimation.value}deg` }],
+    backgroundColor: '#F7ACCF',
   }))
 
   return (

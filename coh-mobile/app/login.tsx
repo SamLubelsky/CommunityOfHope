@@ -9,11 +9,17 @@
       const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
       const setEmail = useBoundStore((state) => state.setEmail);
       const setPassword = useBoundStore((state) => state.setPassword);
+      const setId = useBoundStore((state) => state.setId);
+      const setFirstName = useBoundStore((state) => state.setFirstName);
+      const setLastName = useBoundStore((state) => state.setLastName);
       const email = useBoundStore((state) => state.email);
       const password = useBoundStore((state) => state.password);
+      const firstName = useBoundStore((state) => state.firstName);
+      const lastName = useBoundStore((state) => state.lastName);
+      const id = useBoundStore((state) => state.id);
       const [isLoading, setIsLoading] = React.useState<boolean>(false);
     
-      const handleLogin = () => {
+      const handleLogin = async () => {
         // Add your authentication logic here + the api call for the login
         // validate the user credentials
         // call the api for the login
@@ -22,6 +28,27 @@
     
         // update the sign in state in the authenticationSlice
         setIsSignedIn(true);
+        const response = await fetch("http://localhost:3000/api/login", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user: email,
+            password: password,
+          }),
+        });
+        if(response.ok){
+          const json = await response.json();
+          const {firstName, lastName, id} = json;
+          setFirstName(firstName);
+          setLastName(lastName);
+          setId(id);
+          console.log("Login successful");
+        }else{
+          console.log("Login failed");
+          Alert.alert("Login failed", "Please try again", [{ text: "OK" }]);
+        }
         router.push("/(tabs)");
       };
     

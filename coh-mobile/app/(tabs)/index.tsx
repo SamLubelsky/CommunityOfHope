@@ -8,7 +8,7 @@ import { Slot } from 'expo-router';
 export default function RootLayout() {
   return (
     <View style={styles.container}>
-      <Slot />
+      {/* <Slot /> */}
       <StatusBar style="light" />
     </View>
   );
@@ -17,7 +17,7 @@ export default function RootLayout() {
 export function Page() {
   const isSignedIn = useBoundStore((state) => state.isSignedIn);
   const router = useRouter();
-
+  console.log("we are signed in");
   useEffect(() => {
     const timer = setTimeout(() => {
       if (isSignedIn) {

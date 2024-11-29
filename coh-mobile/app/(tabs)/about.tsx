@@ -12,12 +12,13 @@ export default function AboutScreen() {
     return (
     <View style={styles.container}>
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#BBE5ED', dark: '#BBE5ED' }}
+      headerBackgroundColor={{ light: '#F7ACCF', dark: '#F7ACCF' }}
       headerImage={
         <Image
           source={require('@/assets/images/icon.png')}
           style={styles.reactLogo}
         />
+      
       }>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type='title'>Welcome!</ThemedText>
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
     container:
     {
       flex: 1,
-      backgroundColor: '#F7ACCF ',
+      backgroundColor: '#F7ACCF',
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -66,10 +67,12 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       gap: 8,
+      backgroundColor: '#F7ACCF',
     },
     stepContainer: {
       gap: 8,
       marginBottom: 8,
+      backgroundColor: '#F7ACCF',
     },
     reactLogo: {
       height: 178,
@@ -77,6 +80,7 @@ const styles = StyleSheet.create({
       bottom: 0,
       left: 0,
       position: 'absolute',
+      backgroundColor: '#F7ACCF',
     },
   });
   

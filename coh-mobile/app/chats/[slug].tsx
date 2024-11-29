@@ -16,7 +16,7 @@ export default function Page(){
     console.log(socket);
     const chatId = Number(useLocalSearchParams().slug);
     const [messages, setMessages] = useState<Message[]>([]);
-    const [curMessage, setCurMessage] = useState<string>('');
+    const[curMessage, setCurMessage] = useState<string>('');
     socket.on("chat message", (data)=>{
         console.log(`Received message: ${data}`);
     })
