@@ -4,13 +4,13 @@ import { requireAuth } from '../authMiddleware';
 
 const router = Router();
 
-router.get('/users', requireAuth, getUsers);
-router.post('/users', requireAuth, addUser);
+router.get('/users', requireAuth('admin'), getUsers);
+router.post('/users', requireAuth('admin'), addUser);
 // npm run
 router.post('/login', loginUser);
 router.post('/logout', logoutUser);
-router.delete('/users/:id', deleteUser);
+router.delete('/users/:id',requireAuth('admin'), deleteUser);
 router.delete('/logout', logoutUser);
-router.put('/users/:id', requireAuth, editUser);
-router.get('/users/:id', requireAuth, getUser)
+router.put('/users/:id', requireAuth('admin'), editUser);
+router.get('/users/:id', requireAuth('admin'), getUser)
 export default router;

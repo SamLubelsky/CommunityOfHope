@@ -84,6 +84,7 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
     const firstName = existingUser.firstName;
     const lastName = existingUser.lastName;
     req.session.userId = existingUser.id;
+    req.session.role = existingUser.role;
     return res.status(200).json({ message: 'Login successful', id, firstName, lastName });
 
   } catch (error) {
