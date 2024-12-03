@@ -40,7 +40,7 @@
     "start": "node index.js",
     "build": "npx tsc",
     "dev": "npx ts-node-dev --respawn index.ts",
-    "test": "npx ts-node node_modules/mocha/bin/mocha tests/**/*.test.ts",
+    "test": "mocha --require tsx tests/**/*.test.ts",
     "go": "npm run build && npm run start"
   }
 }

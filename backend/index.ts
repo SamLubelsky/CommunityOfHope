@@ -67,7 +67,7 @@ io.on('connection', (socket) => {
     io.emit('chat message', `${socket.id.substring(0,5)}:   ${msg}`)
   });
 }); 
-export default httpServer;
+export {app, httpServer};
 
 
 // if (require.main == module) {

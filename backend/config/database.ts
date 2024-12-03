@@ -5,16 +5,13 @@ const db = new Database('database.db', (err) => {
       console.error('Failed to connect to the database');
     } else {
       console.log('Connected to the database');
-      db.run(`
-        CREATE TABLE IF NOT EXISTS help_requests (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          mom_id INTEGER,
-          mom_name TEXT,
-          description TEXT,
-          request TEXT,
-          FOREIGN KEY (mom_id) REFERENCES users(id)
-        )
-      `);
+      db.run('PRAGMA foreign_keys = ON', (err) => {
+        if (err) {
+          console.error('Error enabling foreign keys:', err.message);
+        } else {
+          console.log('Foreign key support enabled');
+        }
+      });
       db.run(`
         CREATE TABLE IF NOT EXISTS users (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -26,10 +23,22 @@ const db = new Database('database.db', (err) => {
         )
       `);
       db.run(`
+        CREATE TABLE IF NOT EXISTS help_requests (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          mom_id INTEGER,
+          mom_name TEXT,
+          description TEXT,
+          request TEXT,
+          FOREIGN KEY (mom_id) REFERENCES users(id)
+        )
+      `);
+      db.run(`
         CREATE TABLE IF NOT EXISTS chatIds (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           momId INTEGER,
-          volunteerId INTEGER
+          volunteerId INTEGER,
+          FOREIGN KEY (momId) REFERENCES users(id),
+          FOREIGN KEY (volunteerId) REFERENCES users(id)
         )
       `);
       db.run(`
@@ -38,8 +47,8 @@ const db = new Database('database.db', (err) => {
           chatId INTEGER,
           message TEXT, 
           senderId INTEGER,
-          dateSent DATETIME DEFAULT CURRENT_TIMESTAMPm
-          FOREIGN KEY (sender_id) REFERENCES users(id)
+          dateSent DATETIME DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (senderId) REFERENCES users(id)
         )
       `);
     }

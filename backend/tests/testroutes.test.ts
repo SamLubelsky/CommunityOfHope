@@ -1,6 +1,6 @@
 const request = require('supertest')
 import { expect } from 'chai';
-const app = require('./index.ts')
+import { app } from '../index';
 
 describe('User Routes', () => {
 
