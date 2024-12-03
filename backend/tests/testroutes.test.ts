@@ -27,7 +27,7 @@ describe('User Routes', () => {
 
     const cookies = loginRes.headers['set-cookie'];
   
-    const user = { user: 'testuser', password: 'testpassword' };
+    const user = { user: 'testuser', password: 'testpassword', firstName: 'Test', lastName: 'User', role: 'mom' };
     const res = await request(app)
       .post('/api/users')
       .set('Cookie', cookies)
@@ -56,8 +56,17 @@ describe('User Routes', () => {
   });
 
   it('should delete an existing user', async () => {
+    const root = { user: 'rootuser', password: 'rootpass' };
+    const loginRes = await request(app)
+      .post('/api/login')
+      .send(root);
+    expect(loginRes.status).to.equal(201);
+    expect(loginRes.body).to.have.property('message').that.equals('Login successful');
+
+    const cookies = loginRes.headers['set-cookie'];
     const res = await request(app)
       .delete('/api/users/testuser')
+      .set('Cookie', cookies)
     expect(res.status).to.equal(201);
     expect(res.body).to.have.property('message').that.equals('User testuser deleted');
   });

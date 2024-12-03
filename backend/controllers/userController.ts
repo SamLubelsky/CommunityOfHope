@@ -33,7 +33,7 @@ export const addUser = async (req: Request, res: Response): Promise<any> => {
   }
   try {
     const newUserID = await createUser(user, password, firstName, lastName, role);
-    return res.status(201).json({ message: `User ${user} added` });
+    return res.status(200).json({ message: `User ${user} added` });
   } catch (error) {
     return res.status(500).json({ message: (error as Error).message });
   }
