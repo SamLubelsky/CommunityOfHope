@@ -72,20 +72,20 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
   try {
     const existingUser = await findUserByUsername(user);
     if (!existingUser) {
-      return res.status(400).json({ message: 'Invalid username or password.' });
+      return res.status(405).json({ message: 'Invalid username or password.' });
     }
 
     const passwordMatch = await bcrypt.compare(password, existingUser.password);
 
     if (!passwordMatch) {
-      return res.status(400).json({ message: 'Invalid username or password.' });
+      return res.status(406).json({ message: 'Invalid username or password.' });
     }
     const id = existingUser.id;
     const firstName = existingUser.firstName;
     const lastName = existingUser.lastName;
     req.session.userId = existingUser.id;
     req.session.role = existingUser.role;
-    return res.status(200).json({ message: 'Login successful', id, firstName, lastName });
+    return res.status(201).json({ message: 'Login successful', id, firstName, lastName });
 
   } catch (error) {
     return res.status(500).json({ message: 'Error logging in', error: (error as Error).message });
@@ -98,6 +98,6 @@ export const logoutUser = (req: Request, res: Response): void => {
       return res.status(500).json({ message: 'Error logging out' });
     }
     res.clearCookie('connect.sid');
-    res.status(200).json({ message: 'Logout successful' });
+    res.status(201).json({ message: 'Logout successful' });
   });
 };

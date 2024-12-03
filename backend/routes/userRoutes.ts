@@ -4,7 +4,7 @@ import { requireAuth } from '../authMiddleware';
 
 const router = Router();
 
-router.get('/users', requireAuth('admin'), getUsers);
+router.get('/users', getUsers);
 router.post('/users', requireAuth('admin'), addUser);
 // npm run
 router.post('/login', loginUser);
