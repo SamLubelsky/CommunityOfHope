@@ -4,5 +4,5 @@ import { getMessages, sendChat } from '../controllers/chatsController'
 
 const router = Router();
 
-router.get('/chats/:volunteerId/:momId', requireAuth, getMessages);
-router.post('/chats', requireAuth, sendChat);
+router.get('/chats/:volunteerId/:momId', requireAuth('mom'), getMessages);
+router.post('/chats', requireAuth('mom'), sendChat);
