@@ -58,6 +58,8 @@ const io = new Server(httpServer, {
   }
 });
 
+export { io }; // Add this export
+
 io.on('connection', (socket: Socket) => {
   console.log(`User ${socket.id} connected`)
   socket.on('chat message', (msg: string) => {
