@@ -16,8 +16,11 @@
     "@types/chai": "^5.0.1",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
+    "@types/mocha": "^10.0.10",
+    "@types/nock": "^10.0.3",
     "@types/node": "^22.7.4",
     "@types/passport": "^1.0.17",
+    "@types/socket.io": "^3.0.1",
     "@types/supertest": "^6.0.2",
     "chai": "^5.1.2",
     "concurrently": "^9.1.0",
@@ -36,10 +39,10 @@
     "@xmldom/xmldom": "^0.8.10"
   },
   "scripts": {
-    "start": "node index.js",
-    "build": "npx tsc",
-    "dev": "npx ts-node-dev --respawn index.ts",
-    "test": "npx ts-node node_modules/mocha/bin/mocha tests/**/*.test.ts",
-    "go": "npm run build && npm run start"
+    "start": "node dist/index.js",
+    "build": "rimraf dist && tsc",
+    "dev": "nodemon --watch \"./**/*.ts\" --exec ts-node index.ts",
+    "test": "ts-mocha -p tsconfig.json tests/**/*.test.ts --timeout 10000",
+    "test:watch": "ts-mocha -p tsconfig.json tests/**/*.test.ts --watch --timeout 10000"
   }
 }

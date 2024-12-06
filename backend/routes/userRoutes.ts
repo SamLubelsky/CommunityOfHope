@@ -4,11 +4,13 @@ import { requireAuth } from '../authMiddleware';
 
 const router = Router();
 
+// Protected routes that need authentication
 router.get('/users', requireAuth, getUsers);
-router.post('/users', requireAuth, addUser);
-// npm run
+router.delete('/users/:username', requireAuth, deleteUser);
+
+// Public routes that don't need authentication
+router.post('/users', addUser); // Remove requireAuth for user registration
 router.post('/login', loginUser);
 router.post('/logout', logoutUser);
-router.delete('/users/:username', deleteUser);
 
 export default router;
