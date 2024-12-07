@@ -5,6 +5,7 @@ const session = require('express-session')
 const dotenv = require('dotenv')
 const bcrypt =require('bcrypt')
 const cors = require('cors')
+const SQLiteStore = require('connect-sqlite3')(session);
 import userRoutes from './routes/userRoutes';
 import helpRoutes from './routes/helpRoutes';
 const http = require('http')
@@ -17,21 +18,22 @@ type UserRequest = {
 dotenv.config()
 
 const app = express()
-export { app }  // Add this line
-app.set('trust proxy', 1)
 app.use(session({
+  store: new SQLiteStore(),
   secret: process.env.SESSION_SECRET || 'your_secret_key',  // Replace with a secure key
-  name: 'session',
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false }  // Set secure: true in production when using HTTPS
+  cookie: { 
+    httpOnly: true,
+    secure: false,
+    maxAge: 1000 * 60 * 60 * 24 * 7 //1 week
+  }  // Set secure: true in production when using HTTPS
 }));
 
-app.use(cors());
+app.use(cors({origin: ["http://localhost:8081", "http://localhost:5173"], credentials: true}));
 app.use(express.json())
 app.use('/api', userRoutes)
 app.use('/api', helpRoutes);
-
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server')
@@ -67,7 +69,7 @@ io.on('connection', (socket: Socket) => {
     io.emit('chat message', `${socket.id.substring(0,5)}: ${msg}`)
   });
 }); 
-export default httpServer;
+export {app, httpServer};
 
 
 // if (require.main == module) {

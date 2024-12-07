@@ -1,16 +1,16 @@
 import { Router } from 'express'
-import { getUsers, addUser, loginUser, deleteUser, logoutUser } from '../controllers/userController'
+import { getUsers, addUser, loginUser, deleteUser, logoutUser, editUser, getUser } from '../controllers/userController'
 import { requireAuth } from '../authMiddleware';
 
 const router = Router();
 
-// Protected routes that need authentication
-router.get('/users', requireAuth, getUsers);
-router.delete('/users/:username', requireAuth, deleteUser);
-
-// Public routes that don't need authentication
-router.post('/users', addUser); // Remove requireAuth for user registration
+router.get('/users', getUsers);
+router.post('/users', requireAuth('admin'), addUser);
+// npm run
 router.post('/login', loginUser);
 router.post('/logout', logoutUser);
-
+router.delete('/users/:id',requireAuth('admin'), deleteUser);
+router.delete('/logout', logoutUser);
+router.put('/users/:id', requireAuth('admin'), editUser);
+router.get('/users/:id', requireAuth('admin'), getUser) 
 export default router;

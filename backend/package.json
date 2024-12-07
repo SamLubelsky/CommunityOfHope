@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "bcrypt": "^5.1.1",
+    "connect-sqlite3": "^0.9.15",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
@@ -39,10 +40,13 @@
     "@xmldom/xmldom": "^0.8.10"
   },
   "scripts": {
-    "start": "node dist/index.js",
-    "build": "rimraf dist && tsc",
-    "dev": "nodemon --watch \"./**/*.ts\" --exec ts-node index.ts",
+    "start2": "node dist/index.js",
+    "dev2": "nodemon --watch \"./**/*.ts\" --exec ts-node index.ts",
     "test": "ts-mocha -p tsconfig.json tests/**/*.test.ts --timeout 10000",
-    "test:watch": "ts-mocha -p tsconfig.json tests/**/*.test.ts --watch --timeout 10000"
+    "test:watch": "ts-mocha -p tsconfig.json tests/**/*.test.ts --watch --timeout 10000",
+    "start": "node index.js",
+    "build": "npx tsc",
+    "dev": "npx ts-node-dev --respawn index.ts",
+    "go": "npm run build && npm run start"
   }
 }

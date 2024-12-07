@@ -35,7 +35,8 @@ export default function HelpRequests(){
             return (
                 <View key={index} style={styles.itemContainer}>
                     <Text style={styles.helpText}> {request.mom_name} needs help with: {request.category}</Text>
-                    <Button theme="primary" label="Accept Help Request" onPress={() => onSubmit(request.id)}/>
+                    <Text style={styles.descriptionText}>{request.description}</Text>
+                    <Button label="Accept Help Request" onPress={() => onSubmit(request.id)}/>
                 </View>
             )});
     }
@@ -48,6 +49,11 @@ export default function HelpRequests(){
         </View>)
 }
 const styles = StyleSheet.create({
+    descriptionText:{
+      color: 'white',
+      fontSize: 16,
+      margin: 5, 
+    },
     container:
     {
       flex: 1,

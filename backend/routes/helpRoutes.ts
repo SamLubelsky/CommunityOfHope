@@ -3,7 +3,6 @@ import { getHelpRequests, addHelpRequest, getActiveHelpRequests, deactivateReque
 import { requireAuth } from '../authMiddleware';
 
 const router = Router();
-
 // Protected routes
 router.get('/help_requests', requireAuth, getHelpRequests);
 router.get('/help_requests/active', requireAuth, getActiveHelpRequests);

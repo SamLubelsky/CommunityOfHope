@@ -1,6 +1,6 @@
 const request = require('supertest')
 import { expect } from 'chai';
-const app = require('./index.ts')
+import { app } from '../index';
 
 describe('User Routes', () => {
 
@@ -11,7 +11,7 @@ describe('User Routes', () => {
   // Test GET /api/users route
   it('should return all users', async () => {
     const res = await request(app).get('/api/users');
-    expect(res.status).to.equal(200);
+    expect(res.status).to.equal(201);
     expect(res.body).to.be.an('array');
     console.log(res.body)
   });
@@ -22,18 +22,18 @@ describe('User Routes', () => {
     const loginRes = await request(app)
       .post('/api/login')
       .send(root);
-    expect(loginRes.status).to.equal(200);
+    expect(loginRes.status).to.equal(201);
     expect(loginRes.body).to.have.property('message').that.equals('Login successful');
 
     const cookies = loginRes.headers['set-cookie'];
   
-    const user = { user: 'testuser', password: 'testpassword' };
+    const user = { user: 'testuser', password: 'testpassword', firstName: 'Test', lastName: 'User', role: 'mom' };
     const res = await request(app)
       .post('/api/users')
       .set('Cookie', cookies)
       .send(user);
   
-    expect(res.status).to.equal(201);
+    expect(res.status).to.equal(200);
     expect(res.body).to.have.property('message').that.includes('User testuser added');
   });
 
@@ -51,13 +51,22 @@ describe('User Routes', () => {
     const res = await request(app)
       .post('/api/login')
       .send(user);
-    expect(res.status).to.equal(200);
+    expect(res.status).to.equal(201);
     expect(res.body).to.have.property('message').that.equals('Login successful');
   });
 
   it('should delete an existing user', async () => {
+    const root = { user: 'rootuser', password: 'rootpass' };
+    const loginRes = await request(app)
+      .post('/api/login')
+      .send(root);
+    expect(loginRes.status).to.equal(201);
+    expect(loginRes.body).to.have.property('message').that.equals('Login successful');
+
+    const cookies = loginRes.headers['set-cookie'];
     const res = await request(app)
       .delete('/api/users/testuser')
+      .set('Cookie', cookies)
     expect(res.status).to.equal(201);
     expect(res.body).to.have.property('message').that.equals('User testuser deleted');
   });

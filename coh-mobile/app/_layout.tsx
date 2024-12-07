@@ -18,7 +18,7 @@ function AuthNavigator() {
 	console.log("isSignedIn: ", isSignedIn);
 	useEffect(() => {
 		if (isSignedIn) {
-			router.replace("/(tabs)");
+			router.replace("/(tabs)/");
 		} else {
 			router.replace("/login");
 		}
