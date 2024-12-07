@@ -12,5 +12,5 @@ router.post('/logout', logoutUser);
 router.delete('/users/:id',requireAuth('admin'), deleteUser);
 router.delete('/logout', logoutUser);
 router.put('/users/:id', requireAuth('admin'), editUser);
-router.get('/users/:id', requireAuth('admin'), getUser)
+router.get('/users/:id', requireAuth('admin'), getUser) 
 export default router;

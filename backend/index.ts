@@ -1,4 +1,5 @@
 import { Express, Request, Response } from 'express'
+import { Server, Socket } from 'socket.io'
 const express = require('express')
 const session = require('express-session')
 const dotenv = require('dotenv')
@@ -7,7 +8,6 @@ const cors = require('cors')
 const SQLiteStore = require('connect-sqlite3')(session);
 import userRoutes from './routes/userRoutes';
 import helpRoutes from './routes/helpRoutes';
-import {Server} from 'socket.io'
 const http = require('http')
 
 type UserRequest = {
@@ -51,20 +51,22 @@ app.post('/', (req: Request, res: Response) => {
   })
 })
 
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3001  // Change to 3001 or another available port
 const httpServer = http.createServer(app)  
 httpServer.listen(port)
-const io = new Server(httpServer,{
-  cors:{
-    // origin: process.env.NODE_ENV === 'production' ? false : ["http://localhost:3000"],
+const io = new Server(httpServer, {
+  cors: {
     origin: "http://localhost:8081", 
   }
 });
-io.on('connection', (socket) => {
+
+export { io }; // Add this export
+
+io.on('connection', (socket: Socket) => {
   console.log(`User ${socket.id} connected`)
-  socket.on('chat message', msg => {
+  socket.on('chat message', (msg: string) => {
     console.log('message: ' + msg);
-    io.emit('chat message', `${socket.id.substring(0,5)}:   ${msg}`)
+    io.emit('chat message', `${socket.id.substring(0,5)}: ${msg}`)
   });
 }); 
 export {app, httpServer};

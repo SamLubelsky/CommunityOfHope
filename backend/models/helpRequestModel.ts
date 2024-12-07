@@ -1,41 +1,39 @@
 import db from '../config/database';
+import { HelpRequest } from '../types/helpRequest';
 
-interface HelpRequest {
-  id?: number;
-  mom_id: number;
-  title: string; 
-  description: string;
-  status: string;
-  created_at?: string;
-}
-
-// Get all help requests
 export const getAllHelpRequests = (): Promise<HelpRequest[]> => {
   return new Promise((resolve, reject) => {
-    db.all('SELECT * FROM help_requests', [], (err, rows) => {
+    db.all('SELECT id, mom_name, category FROM help_requests', (err, rows) => {
       if (err) reject(err);
       resolve(rows as HelpRequest[]);
     });
   });
 };
 
-// Get help request by ID
-export const getHelpRequestById = (id: number): Promise<HelpRequest> => {
+export const getAllActiveHelpRequests = (): Promise<HelpRequest[]> => {
   return new Promise((resolve, reject) => {
-    db.get('SELECT * FROM help_requests WHERE id = ?', [id], (err, row) => {
+    db.all('SELECT * FROM help_requests WHERE active = 1', (err, rows) => {
       if (err) reject(err);
-      resolve(row as HelpRequest);
+      resolve(rows as HelpRequest[]);
     });
   });
 };
 
-// Create new help request
-export const createHelpRequest = (request: HelpRequest): Promise<number> => {
+export const deactivateHelpRequest = (id: number): Promise<void> => {
   return new Promise((resolve, reject) => {
-    const { mom_id, title, description } = request;
+    db.run('UPDATE help_requests SET active = 0 WHERE id = ?', [id], (err) => {
+      if (err) reject(err);
+      resolve();
+    });
+  });
+};
+
+export const createHelpRequest = (data: Partial<HelpRequest>): Promise<number> => {
+  const { mom_id, mom_name, category, request } = data;
+  return new Promise((resolve, reject) => {
     db.run(
-      'INSERT INTO help_requests (mom_id, title, description, status) VALUES (?, ?, ?, ?)',
-      [mom_id, title, description, 'pending'],
+      'INSERT INTO help_requests (mom_id, mom_name, category, request, active) VALUES (?, ?, ?, ?, 1)',
+      [mom_id, mom_name, category, request],
       function(err) {
         if (err) reject(err);
         resolve(this.lastID);
@@ -44,27 +42,4 @@ export const createHelpRequest = (request: HelpRequest): Promise<number> => {
   });
 };
 
-// Update help request
-export const updateHelpRequest = (id: number, updates: Partial<HelpRequest>): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    const { title, description, status } = updates;
-    db.run(
-      'UPDATE help_requests SET title = COALESCE(?, title), description = COALESCE(?, description), status = COALESCE(?, status) WHERE id = ?',
-      [title, description, status, id],
-      (err) => {
-        if (err) reject(err);
-        resolve();
-      }
-    );
-  });
-};
-
-// Delete help request
-export const deleteHelpRequest = (id: number): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    db.run('DELETE FROM help_requests WHERE id = ?', [id], (err) => {
-      if (err) reject(err);
-      resolve();
-    });
-  });
-};
+// Add other model functions (getById, update, delete)...
