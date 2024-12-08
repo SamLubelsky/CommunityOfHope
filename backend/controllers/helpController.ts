@@ -1,15 +1,17 @@
 import { Request, Response } from 'express';
 import { getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest } from '../models/helpRequestModel';
-import { getUserData } from '../models/userModel';
+import { getUserData, getAllUsers } from '../models/userModel';
 export const getHelpRequests = async (req: Request, res: Response): Promise<void> => {
   try {
     const requests = await getAllHelpRequests();
-    requests.map(async (request) => {
+    const requestsWithNames = await Promise.all(requests.map(async (request) => {
       const momData = await getUserData(request.mom_id);
-      const volunteerData = await getUserData(request.volunteer_id)
-
       const mom_name = momData.firstName + ' ' + momData.lastName;
-      const volunteer_name = volunteerData.firstName + ' ' + volunteerData.lastName;
+      let volunteer_name = null;
+      if(request.volunteer_id){
+        const volunteerData = await getUserData(request.volunteer_id);
+        volunteer_name = volunteerData.firstName + ' ' + volunteerData.lastName;
+      }
 
       const requestWithNames = {
         id: request.id,
@@ -20,9 +22,11 @@ export const getHelpRequests = async (req: Request, res: Response): Promise<void
         mom_name,
         volunteer_name,
       };
+      console.log("requestWithNames(singular): ", requestWithNames);
       return requestWithNames;
-    });
-    res.json({ Requests: requests });
+    }));
+    console.log("requestsWithNames(plural):", requestsWithNames);
+    res.json({ Requests: requestsWithNames });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }

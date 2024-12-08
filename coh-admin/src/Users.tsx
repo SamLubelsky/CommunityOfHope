@@ -96,7 +96,7 @@ export default function Users(){
             <h2 className="text-3xl font-bold text-center text-gray-700">List of All Users</h2>
             {getFormattedList()}
                 <div className="flex flex-col gap-y-5">
-            <div className="m-auto">
+                <div className="m-auto">
                     <Link to="/dashboard">
                         <button className="m-auto bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded text-2xl">
                             Back to Dashboard

@@ -26,10 +26,11 @@ function AuthNavigator() {
 		});
 		const responseData = await response.json();
 		console.log(responseData);
-		const {firstName, lastName, id} = responseData;
+		const {firstName, lastName, userId} = responseData;
 		setFirstName(firstName);
 		setLastName(lastName);
-		setId(id);
+		setId(userId);
+		console.log("setting id: ", userId);
 		if(response.ok){
 		   return true;
 		} else{

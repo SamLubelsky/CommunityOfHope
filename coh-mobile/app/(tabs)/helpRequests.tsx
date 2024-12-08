@@ -28,6 +28,7 @@ export default function HelpRequests(){
           credentials: 'include',
         });
         const json = await response.json();
+        console.log(json);
         setRequests(json.Requests);
     }
     function getRequestsList(){

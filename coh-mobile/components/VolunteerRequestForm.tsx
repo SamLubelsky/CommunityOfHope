@@ -20,17 +20,17 @@ export default function VolunteerRequestForm({isVisible, onClose}: Props){
             description: '',
         }
     });
+    console.log("hello there");
     const firstName = useBoundStore((state) => state.firstName);
     const id = useBoundStore((state) => state.id);
     const onSubmit: SubmitHandler<FormData> = async (data) => {
-
         const description = data.description;
         const mom_id = id;
         const mom_name = firstName;
         const response = await fetch('http://localhost:3000/api/help_requests', {
-            method: 'POST',
+            method: 'POST', 
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mom_id, description }),
+            body: JSON.stringify({ mom_id, description, }),
             credentials: 'include',
         }); 
         const json = await response.json();

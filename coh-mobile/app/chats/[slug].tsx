@@ -17,15 +17,21 @@ export default function Page(){
     const chatId = Number(useLocalSearchParams().slug);
     const [messages, setMessages] = useState<Message[]>([]);
     const[curMessage, setCurMessage] = useState<string>('');
+    useEffect(() => {
+        const loadMessages = async () => {
+            fetch("http://localhost:3000/api/messages", {
+            }
+            )
+        }
+        loadMessages();
+    }, []);
     socket.on("chat message", (data)=>{
         console.log(`Received message: ${data}`);
     })
     socket.on('connect', () => {
         console.log('connected');
     });     
-    function getMessages(chatId: Number){
-        return placeholder2.messages;
-    }
+
     function sendMessage(){
         if(curMessage === ''){
             return;
@@ -38,28 +44,24 @@ export default function Page(){
         return messages.map((message: any, index: any) => {
             if(message.user === "You"){
                 return (
-                    <View key={index} style={styles.itemContainerYou}>
-                        <Text style={styles.helpText}> {message.user}: {message.message}</Text>
+                    <View key={index} style={[styles.messageContainer, styles.you]}>
+                        <Text style={styles.messageText}> {message.user}: {message.message}</Text>
                     </View>
                 ); 
             }
             else{
                 return (
-                    <View key={index} style={styles.itemContainerThem}>
-                        <Text style={styles.helpText}> {message.user}: {message.message}</Text>
+                    <View key={index} style={[styles.messageContainer, styles.them]}>
+                        <Text style={styles.messageText}> {message.user}: {message.message}</Text>
                     </View>
                 );
             }});
     }
-    useEffect(() => {
-        const messages = getMessages(chatId);
-        setMessages(messages);
-    }, []);
     return (
         <View style={styles.container}>
         <Text>ChatId: {chatId}</Text>
         {displayMessages(messages)}
-        <View key={-1} style={styles.itemContainerYou}>
+        <View key={-1} style={styles.messageContainer}>
             <TextInput editable multiline onChangeText={msg=>setCurMessage(msg)} style={styles.inputText} value={curMessage}> You: </TextInput>
         </View>
         <Button label="Send Message" onPress={()=>sendMessage()}></Button>
@@ -77,7 +79,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
-    itemContainerYou: {
+    messageContainer:{
         alignItems: 'center',
         justifyContent: 'center',
         borderWidth: 5,
@@ -85,15 +87,14 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-end',
         width: '60%',
         margin: 5,
+        backgroundColor: 'white',
+        borderRadius: 20,
     },
-    itemContainerThem: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 5,
+    you: {
+        alignSelf: 'flex-end',
+    },
+    them: {
         alignSelf: 'flex-start',
-        borderColor: '#FFF',
-        width: '60%',
-        margin: 5,
     },
     text:{
       color: '#fff',
@@ -106,8 +107,9 @@ const styles = StyleSheet.create({
         width:"100%",
         padding: 5,
     },
-    helpText:{
-        color: 'white',
+    messageText:{
+        padding: 10,
+        color: 'black',
         fontSize: 24, 
     },
     titleContainer: {
