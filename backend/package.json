@@ -13,11 +13,11 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "@types/express-session": "^1.18.1",
     "@types/bcrypt": "^5.0.2",
     "@types/chai": "^5.0.1",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
-    "@types/mocha": "^10.0.10",
     "@types/nock": "^10.0.3",
     "@types/node": "^22.7.4",
     "@types/passport": "^1.0.17",
