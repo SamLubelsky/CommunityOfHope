@@ -12,7 +12,9 @@ export default function RootLayout() {
 
   return AuthNavigator();
 }
-
+function checkLogin(){
+	
+}
 function AuthNavigator() {
 	const isSignedIn = useBoundStore((state) => state.isSignedIn);
 	console.log("isSignedIn: ", isSignedIn);
@@ -20,6 +22,7 @@ function AuthNavigator() {
 		if (isSignedIn) {
 			router.replace("/(tabs)/");
 		} else {
+			checkLoggedIn();
 			router.replace("/login");
 		}
 	}, [isSignedIn]);

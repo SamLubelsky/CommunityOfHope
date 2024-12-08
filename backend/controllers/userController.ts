@@ -19,7 +19,7 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
   const {id} = req.params;
 
   try {
-    const user = await getUserData(id);
+    const user = await getUserData(Number(id));
     return res.status(201).json(user);
   } catch (error) {
     return res.status(500).json({ error: (error as Error).message });
@@ -62,7 +62,13 @@ export const deleteUser = async(req: Request, res: Response) => {
     res.status(500).json({ message: (error as Error).message })
   }
 }
-
+export const verifySession = async (req: Request, res: Response): Promise<any> => {
+  const { userId, role } = req.session;
+  if (!userId || !role) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  return res.status(201).json({ message: 'Session verified', userId, role });
+};
 export const loginUser = async (req: Request, res: Response): Promise<any> => {
   const { user, password } = req.body;
   if (!user || !password) {

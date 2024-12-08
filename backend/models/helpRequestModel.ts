@@ -3,7 +3,7 @@ import { HelpRequest } from '../types/helpRequest';
 
 export const getAllHelpRequests = (): Promise<HelpRequest[]> => {
   return new Promise((resolve, reject) => {
-    db.all('SELECT id, mom_name, category FROM help_requests', (err, rows) => {
+    db.all('SELECT id, mom_id, volunteer_id, description FROM help_requests', (err, rows) => {
       if (err) reject(err);
       resolve(rows as HelpRequest[]);
     });
@@ -29,11 +29,11 @@ export const deactivateHelpRequest = (id: number): Promise<void> => {
 };
 
 export const createHelpRequest = (data: Partial<HelpRequest>): Promise<number> => {
-  const { mom_id, mom_name, category, request } = data;
+  const { mom_id, description, request } = data;
   return new Promise((resolve, reject) => {
     db.run(
-      'INSERT INTO help_requests (mom_id, mom_name, category, request, active) VALUES (?, ?, ?, ?, 1)',
-      [mom_id, mom_name, category, request],
+      'INSERT INTO help_requests (mom_id, description, request, active) VALUES (?, ?, ?, 1)',
+      [mom_id, description, request],
       function(err) {
         if (err) reject(err);
         resolve(this.lastID);

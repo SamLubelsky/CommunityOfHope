@@ -16,8 +16,8 @@
     "@types/bcrypt": "^5.0.2",
     "@types/chai": "^5.0.1",
     "@types/express": "^5.0.0",
+    "@types/express-session": "^1.17.0",
     "@types/jest": "^29.5.14",
-    "@types/mocha": "^10.0.10",
     "@types/nock": "^10.0.3",
     "@types/node": "^22.7.4",
     "@types/passport": "^1.0.17",
@@ -45,7 +45,7 @@
     "test": "ts-mocha -p tsconfig.json tests/**/*.test.ts --timeout 10000",
     "test:watch": "ts-mocha -p tsconfig.json tests/**/*.test.ts --watch --timeout 10000",
     "start": "node index.js",
-    "build": "npx tsc",
+    "build": "npx tsc index.ts",
     "dev": "npx ts-node-dev --respawn index.ts",
     "go": "npm run build && npm run start"
   }

@@ -1,9 +1,28 @@
 import { Request, Response } from 'express';
 import { getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest } from '../models/helpRequestModel';
-
+import { getUserData } from '../models/userModel';
 export const getHelpRequests = async (req: Request, res: Response): Promise<void> => {
   try {
     const requests = await getAllHelpRequests();
+    requests.map(async (request) => {
+      const momData = await getUserData(request.mom_id);
+      const volunteerData = await getUserData(request.volunteer_id)
+
+      const mom_name = momData.firstName + ' ' + momData.lastName;
+      const volunteer_name = volunteerData.firstName + ' ' + volunteerData.lastName;
+
+      const requestWithNames = {
+        id: request.id,
+        mom_id: request.mom_id,
+        volunteer_id: request.volunteer_id,
+        description: request.description,
+        request: request.request,
+        active: request.active,
+        mom_name,
+        volunteer_name,
+      };
+      return requestWithNames;
+    });
     res.json({ Requests: requests });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
@@ -28,7 +47,7 @@ export const getActiveHelpRequests = async (req: Request, res: Response): Promis
   }
 };
 
-export const deactivateRequest = async (req: Request, res: Response): Promise<void> => {
+export const acceptRequest = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id } = req.params;
     await deactivateHelpRequest(parseInt(id));

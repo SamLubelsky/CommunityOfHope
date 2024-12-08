@@ -1,5 +1,4 @@
 import { Express, Request, Response } from 'express'
-import { Server, Socket } from 'socket.io'
 const express = require('express')
 const session = require('express-session')
 const dotenv = require('dotenv')
@@ -8,6 +7,7 @@ const cors = require('cors')
 const SQLiteStore = require('connect-sqlite3')(session);
 import userRoutes from './routes/userRoutes';
 import helpRoutes from './routes/helpRoutes';
+import {Server} from 'socket.io'
 const http = require('http')
 
 type UserRequest = {
@@ -15,8 +15,8 @@ type UserRequest = {
   password: string
 }
 
+console.log("HELLO WORLD 2");
 dotenv.config()
-
 const app = express()
 app.use(session({
   store: new SQLiteStore(),
@@ -51,25 +51,23 @@ app.post('/', (req: Request, res: Response) => {
   })
 })
 
-const port = process.env.PORT || 3001  // Change to 3001 or another available port
+const port = process.env.PORT || 3000
 const httpServer = http.createServer(app)  
 httpServer.listen(port)
-const io = new Server(httpServer, {
-  cors: {
+const io = new Server(httpServer,{
+  cors:{
+    // origin: process.env.NODE_ENV === 'production' ? false : ["http://localhost:3000"],
     origin: "http://localhost:8081", 
   }
 });
-
-export { io }; // Add this export
-
-io.on('connection', (socket: Socket) => {
+io.on('connection', (socket) => {
   console.log(`User ${socket.id} connected`)
-  socket.on('chat message', (msg: string) => {
+  socket.on('chat message', msg => {
     console.log('message: ' + msg);
-    io.emit('chat message', `${socket.id.substring(0,5)}: ${msg}`)
+    io.emit('chat message', `${socket.id.substring(0,5)}:   ${msg}`)
   });
 }); 
-export {app, httpServer};
+export default httpServer;
 
 
 // if (require.main == module) {

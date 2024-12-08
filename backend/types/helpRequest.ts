@@ -1,8 +1,8 @@
 export interface HelpRequest {
   id: number;
   mom_id: number;
-  mom_name: string;
-  category: string;
+  volunteer_id: number;
+  description: string;
   request: string;
   active: boolean;
 }

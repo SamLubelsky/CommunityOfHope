@@ -26,9 +26,10 @@ const db = new Database('database.db', (err) => {
         CREATE TABLE IF NOT EXISTS help_requests (
           id INTEGER PRIMARY KEY AUTOINCREMENT,
           mom_id INTEGER,
-          mom_name TEXT,
+          volunteer_id INTEGER,
           description TEXT,
           request TEXT,
+          active BOOLEAN DEFAULT 1, 
           FOREIGN KEY (mom_id) REFERENCES users(id)
         )
       `);
