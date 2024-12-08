@@ -2,57 +2,73 @@ import React, {useEffect, useState} from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import Button from '@/components/Button';
-import {io} from 'socket.io-client';
-const placeholder2 = {messages: [{user: "Them", message: "Hi, I need help with my groceries", messageId: 2},
-    {user: "You", message: "Ok, if you could come over in the next hour that would be great", messageId: 3,},
-    ]}
+// import { socket } from "../socket";
+import { useBoundStore } from '@/store/useBound';
+import { io } from 'socket.io-client';
+
 type Message = {
-    user: string;
+    senderId: number;
     message: string;
-    messageId: number;
 }
 export default function Page(){
-    const socket = io('ws://localhost:3000');
-    console.log(socket);
     const chatId = Number(useLocalSearchParams().slug);
+    const id = useBoundStore((state) => state.id);
     const [messages, setMessages] = useState<Message[]>([]);
     const[curMessage, setCurMessage] = useState<string>('');
+    const [socket, setSocket] = useState<ReturnType<typeof io>>();
     useEffect(() => {
         const loadMessages = async () => {
-            fetch("http://localhost:3000/api/messages", {
-            }
-            )
+            const response = await fetch(`http://localhost:3000/api/chats/${chatId}`, {
+                method: 'GET',
+                credentials: 'include',
+            })
+            const responseData = await response.json();
+            setMessages(responseData);
         }
         loadMessages();
+        const socket = io('http://localhost:3000');
+        setSocket(socket);
+        socket.on("message", (data)=>{
+            setMessages((prevMessages) => [...prevMessages, data])
+        })
+        socket.on('askId', () =>{
+            socket.emit('idResponse', String(id));
+            console.log(`Sent id: ${id} to server`);
+        })
+        socket.on('messageReceived', msg=>{
+            console.log("message successfully received by server");
+        })
+        socket.emit('idReady');
     }, []);
-    socket.on("chat message", (data)=>{
-        console.log(`Received message: ${data}`);
-    })
-    socket.on('connect', () => {
-        console.log('connected');
-    });     
-
     function sendMessage(){
         if(curMessage === ''){
             return;
         }
-        socket.emit('chat message', curMessage);
-        console.log(`Sent message: ${curMessage}`);
+        const data = {message: curMessage, senderId: id, chatId};
+        if(socket){
+            socket.emit('message', data);
+        }
+        console.log(`Sent message:`, data);
+        setMessages([...messages, data]);
+        console.log(messages);
         setCurMessage('');
     }
     function displayMessages(messages: any){
+        if(messages.length == 0){
+            return;
+        }
         return messages.map((message: any, index: any) => {
-            if(message.user === "You"){
+            if(message.senderId === id){
                 return (
                     <View key={index} style={[styles.messageContainer, styles.you]}>
-                        <Text style={styles.messageText}> {message.user}: {message.message}</Text>
+                        <Text style={styles.messageText}> {message.message}</Text>
                     </View>
                 ); 
             }
             else{
                 return (
                     <View key={index} style={[styles.messageContainer, styles.them]}>
-                        <Text style={styles.messageText}> {message.user}: {message.message}</Text>
+                        <Text style={styles.messageText}> {message.message}</Text>
                     </View>
                 );
             }});
@@ -62,7 +78,7 @@ export default function Page(){
         <Text>ChatId: {chatId}</Text>
         {displayMessages(messages)}
         <View key={-1} style={styles.messageContainer}>
-            <TextInput editable multiline onChangeText={msg=>setCurMessage(msg)} style={styles.inputText} value={curMessage}> You: </TextInput>
+            <TextInput editable multiline onChangeText={msg=>setCurMessage(msg)} style={styles.inputText} value={curMessage}></TextInput>
         </View>
         <Button label="Send Message" onPress={()=>sendMessage()}></Button>
         </View>
@@ -82,6 +98,7 @@ const styles = StyleSheet.create({
     messageContainer:{
         alignItems: 'center',
         justifyContent: 'center',
+        textAlign: 'left',
         borderWidth: 5,
         borderColor: '#FFF',
         alignSelf: 'flex-end',
@@ -102,12 +119,13 @@ const styles = StyleSheet.create({
       margin: 20,
     },  
     inputText:{
-        color: 'white',
+        color: 'black',
         fontSize: 24,
         width:"100%",
         padding: 5,
     },
     messageText:{
+        alignSelf: 'flex-start',
         padding: 10,
         color: 'black',
         fontSize: 24, 

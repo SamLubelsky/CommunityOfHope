@@ -17,7 +17,11 @@ const RequestAVolunteerScreen = () => {
     setIsModalVisible(false);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    await fetch("http://localhost:3000/api/logout", {
+      method: "POST",
+      credentials: "include",
+    });
     setIsSignedIn(false);
   };
 

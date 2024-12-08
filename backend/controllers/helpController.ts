@@ -22,10 +22,10 @@ export const getHelpRequests = async (req: Request, res: Response): Promise<void
         mom_name,
         volunteer_name,
       };
-      console.log("requestWithNames(singular): ", requestWithNames);
+      // console.log("requestWithNames(singular): ", requestWithNames);
       return requestWithNames;
     }));
-    console.log("requestsWithNames(plural):", requestsWithNames);
+    // console.log("requestsWithNames(plural):", requestsWithNames);
     res.json({ Requests: requestsWithNames });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });

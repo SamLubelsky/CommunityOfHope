@@ -13,14 +13,17 @@ export const getMessageData = (chatId: string) => {
       });
     });
   };
-export const getChatById = (volunteer_id: string, mom_id: string): Promise<Chat | null> => {
+export const getChatById = (chatId: number): Promise<Chat | null> => {
     return new Promise((resolve, reject) => {
-      db.all('SELECT * FROM chatIds where volunteerId=? AND momId=?', [volunteer_id, mom_id], (err, rows) => {
+      db.all('SELECT * FROM chatIds where id=?', [chatId], (err, rows) => {
         if (err) {
+          console.log("ERROR");
           reject(err);
         } else if(!rows){
+            console.log("no rows");
             resolve(null);
         }else {
+          console.log(rows[0]);
           resolve(rows[0] as Chat);
         }
       });

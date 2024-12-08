@@ -64,11 +64,11 @@ export const deleteUser = async(req: Request, res: Response) => {
 }
 export const verifySession = async (req: Request, res: Response): Promise<any> => {
   const { userId, role } = req.session;
-  const userData = await getUserData(userId);
-  const {firstName, lastName} = userData;
   if (!userId || !role) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
+  const userData = await getUserData(userId);
+  const {firstName, lastName} = userData;
   return res.status(201).json({ message: 'Session verified', userId, firstName, lastName, role});
 };
 export const loginUser = async (req: Request, res: Response): Promise<any> => {
@@ -91,7 +91,7 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
     const id = existingUser.id;
     const firstName = existingUser.firstName;
     const lastName = existingUser.lastName;
-    req.session.userId = existingUser.id;
+    req.session.userId = id;
     req.session.role = existingUser.role;
     return res.status(201).json({ message: 'Login successful', id, firstName, lastName });
 

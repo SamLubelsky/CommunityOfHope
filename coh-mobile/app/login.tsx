@@ -27,7 +27,6 @@
         console.log("signIn pressed");
     
         // update the sign in state in the authenticationSlice
-        setIsSignedIn(true);
         const response = await fetch("http://localhost:3000/api/login", {
           method: "POST",
           headers: {
@@ -37,6 +36,7 @@
             user: email,
             password: password,
           }),
+          credentials: "include",
         });
         if(response.ok){
           const json = await response.json();
@@ -44,6 +44,7 @@
           setFirstName(firstName);
           setLastName(lastName);
           setId(id);
+          setIsSignedIn(true);
           console.log("Login successful");
         }else{
           console.log("Login failed");

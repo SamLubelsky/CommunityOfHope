@@ -1,7 +1,7 @@
 export type Chat ={
     chatId: string;
-    volunteer_id: string;
-    mom_id: string;
+    volunteerId: string;
+    momId: string;
 }
 export type User = {
     id: number;

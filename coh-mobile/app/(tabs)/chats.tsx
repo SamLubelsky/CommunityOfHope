@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Button from '@/components/Button';
 import { router } from 'expo-router'
-const placeholder1 = {chats: [{name: "Sharon", chatId: 2},{name: "Jennifer", chatId: 3,},{name: "Alice", chatId: 1},]}
+const placeholder1 = {chats: [{name: "Sharon", chatId: 3},{name: "Jennifer", chatId: 4},{name: "Alice", chatId: 5},]}
 export default function Chats(){
     async function onSubmit(id: Number){
         router.push(`/chats/${id}`);
