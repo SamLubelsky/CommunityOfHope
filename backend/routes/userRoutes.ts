@@ -11,9 +11,9 @@ router.post('/users', requireAdmin, addUser);
 router.post('/login', loginUser);
 router.post('/logout', logoutUser);
 router.delete('/users/:id',requireAdmin, deleteUser);
-router.delete('/logout', logoutUser);
+router.post('/logout', logoutUser);
 router.put('/users/:id', requireAdmin, editUser);
 router.get('/users/:id', requireAdmin, getUser);
-router.put('/verify-session', requireAuth, verifySession);
+router.post('/verify-session', requireAuth, verifySession);
 
 export default router;

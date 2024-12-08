@@ -15,7 +15,7 @@ type UserRequest = {
   password: string
 }
 
-console.log("HELLO WORLD 2");
+console.log("HELLO WORLD 3");
 dotenv.config()
 const app = express()
 app.use(session({

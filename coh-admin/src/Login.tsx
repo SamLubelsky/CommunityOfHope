@@ -3,6 +3,7 @@ import InputField from './components/inputField';
 import SubmitButton from './components/submitButton';
 import { useNavigate } from 'react-router-dom';
 import "./index.css";
+import Cookies from 'js-cookie';
 export default function Login(){
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
@@ -32,7 +33,8 @@ export default function Login(){
             console.error(error);
             setError(error);
         }
-        else{                
+        else{            
+            Cookies.set('SignedIn', 'true');    
             console.log("redirecting");
             navigate("/");
             localStorage.setItem("SignedIn", "true");
