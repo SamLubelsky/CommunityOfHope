@@ -30,7 +30,7 @@ export default function VolunteerRequestForm({isVisible, onClose}: Props){
         const response = await fetch('http://localhost:3000/api/help_requests', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mom_id, mom_name, description }),
+            body: JSON.stringify({ mom_id, description }),
             credentials: 'include',
         }); 
         const json = await response.json();

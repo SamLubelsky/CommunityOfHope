@@ -16,7 +16,6 @@ export const getHelpRequests = async (req: Request, res: Response): Promise<void
         mom_id: request.mom_id,
         volunteer_id: request.volunteer_id,
         description: request.description,
-        request: request.request,
         active: request.active,
         mom_name,
         volunteer_name,

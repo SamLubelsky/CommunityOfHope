@@ -23,7 +23,10 @@ export default function HelpRequests(){
 
     }
     async function getRequests(){
-        const response = await fetch('http://localhost:3000/api/help_requests');
+        const response = await fetch('http://localhost:3000/api/help_requests',{
+          method: 'GET',
+          credentials: 'include',
+        });
         const json = await response.json();
         setRequests(json.Requests);
     }
@@ -45,7 +48,7 @@ export default function HelpRequests(){
         }, []);
     return (<View style={styles.container}>
         <Text style={styles.text}> All Current Help Requests</Text>
-        {getRequestsList(requests)}
+        {getRequestsList()}
         </View>)
 }
 const styles = StyleSheet.create({

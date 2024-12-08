@@ -12,17 +12,42 @@ export default function RootLayout() {
 
   return AuthNavigator();
 }
-function checkLogin(){
-	
-}
 function AuthNavigator() {
 	const isSignedIn = useBoundStore((state) => state.isSignedIn);
+	const setFirstName = useBoundStore((state) => state.setFirstName);
+	const setLastName = useBoundStore((state) => state.setLastName);
+	const setId = useBoundStore((state) => state.setId);
+	const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
+	async function verifySession(){
+		const response = await fetch('http://localhost:3000/api/verify-session',{
+		   headers: { 'Content-Type': 'application/json' },
+		   method: 'POST',
+		   credentials: 'include',
+		});
+		const responseData = await response.json();
+		console.log(responseData);
+		const {firstName, lastName, id} = responseData;
+		setFirstName(firstName);
+		setLastName(lastName);
+		setId(id);
+		if(response.ok){
+		   return true;
+		} else{
+		   return false;
+		}
+	 }
 	console.log("isSignedIn: ", isSignedIn);
 	useEffect(() => {
+		const checkAuth = async () =>{
+			if(!isSignedIn){
+				const signedIn = await verifySession();
+				setIsSignedIn(signedIn);
+			}
+		}
 		if (isSignedIn) {
 			router.replace("/(tabs)/");
 		} else {
-			checkLoggedIn();
+			checkAuth();
 			router.replace("/login");
 		}
 	}, [isSignedIn]);

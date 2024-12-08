@@ -1,4 +1,4 @@
-import React, { FC} from 'react';
+import React, { FC, useEffect} from 'react';
 import { useLocation } from 'react-router-dom';
 import {Navigate, Route} from 'react-router-dom';
 import Login from "./Login.tsx";
@@ -20,7 +20,7 @@ const RequireAuth: FC<{ children: React.ReactElement }> = ({ children }) => {
          return false;
       }
    }
-    React.useEffect(() => {
+    useEffect(() => {
         const checkAuth = async () => {
             console.log("authenticating...");
             if (Cookies.get('SignedIn')) {
@@ -32,7 +32,7 @@ const RequireAuth: FC<{ children: React.ReactElement }> = ({ children }) => {
             }
         };
         checkAuth();
-    }, []);
+    }, []);    
 
     if (isAuthenticated === null) {
         return <div>Loading...</div>;

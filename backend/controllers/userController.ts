@@ -64,10 +64,12 @@ export const deleteUser = async(req: Request, res: Response) => {
 }
 export const verifySession = async (req: Request, res: Response): Promise<any> => {
   const { userId, role } = req.session;
+  const userData = await getUserData(userId);
+  const {firstName, lastName} = userData;
   if (!userId || !role) {
     return res.status(401).json({ message: 'Unauthorized' });
   }
-  return res.status(201).json({ message: 'Session verified', userId, role });
+  return res.status(201).json({ message: 'Session verified', userId, firstName, lastName, role});
 };
 export const loginUser = async (req: Request, res: Response): Promise<any> => {
   const { user, password } = req.body;
