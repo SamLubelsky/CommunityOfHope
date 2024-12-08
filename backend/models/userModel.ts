@@ -1,5 +1,6 @@
 import db from '../config/database'
 import { validateUserInput } from '../utils/functions'
+import {User} from "../utils/definitions"
 const bcrypt = require('bcrypt')
 
 export const getAllUsers = () => {
@@ -13,13 +14,13 @@ export const getAllUsers = () => {
     });
   });
 };
-export const getUserData = (id: string) => {
+export const getUserData = (id: number): Promise<User> => {
   return new Promise((resolve, reject) => {
     db.all('SELECT id, username, firstName, lastName, role FROM users where id=?', [id], (err, rows) => {
       if (err) {
         reject(err);
       } else {
-        resolve(rows[0]);
+        resolve(rows[0] as User);
       }
     });
   });

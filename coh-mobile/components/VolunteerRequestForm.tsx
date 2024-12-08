@@ -31,6 +31,7 @@ export default function VolunteerRequestForm({isVisible, onClose}: Props){
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ mom_id, mom_name, description }),
+            credentials: 'include',
         }); 
         const json = await response.json();
         console.log(json);

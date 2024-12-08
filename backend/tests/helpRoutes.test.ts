@@ -1,10 +1,8 @@
 import { expect } from 'chai';
 import { app } from '../index';
-
 import nock from 'nock';
 import { Express } from 'express';
 const request = require('supertest');
-const app = require('../index.ts');
 
 describe('Help Request Routes', () => {
   beforeEach(() => {

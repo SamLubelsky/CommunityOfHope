@@ -27,11 +27,11 @@ export default function HelpRequests(){
         const json = await response.json();
         setRequests(json.Requests);
     }
-    function getRequestsList(data: HelpRequest[]){
-        if (data.length === 0){
+    function getRequestsList(){
+        if (!requests){
             return <Text style={styles.helpText}>No requests found</Text>;
         }
-        return data.map((request: any, index: any) => {
+        return requests.map((request: any, index: any) => {
             return (
                 <View key={index} style={styles.itemContainer}>
                     <Text style={styles.helpText}> {request.mom_name} needs help with: {request.category}</Text>
