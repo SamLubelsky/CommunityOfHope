@@ -12,6 +12,7 @@
       const setId = useBoundStore((state) => state.setId);
       const setFirstName = useBoundStore((state) => state.setFirstName);
       const setLastName = useBoundStore((state) => state.setLastName);
+      const setRole = useBoundStore((state) => state.setRole);
       const email = useBoundStore((state) => state.email);
       const password = useBoundStore((state) => state.password);
       const firstName = useBoundStore((state) => state.firstName);
@@ -40,11 +41,12 @@
         });
         if(response.ok){
           const json = await response.json();
-          const {firstName, lastName, id} = json;
+          const {firstName, lastName, id, role} = json;
           setFirstName(firstName);
           setLastName(lastName);
           setId(id);
           setIsSignedIn(true);
+          setRole(role);
           console.log("Login successful");
         }else{
           console.log("Login failed");

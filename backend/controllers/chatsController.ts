@@ -1,25 +1,19 @@
 import { Request, Response } from 'express'
-import { getMessageData, getChatById, createChat, createMessage } from '../models/chatsModel'
+import { getMessageData, getChatById, createChat, createMessage, getChats } from '../models/chatsModel'
 import {Chat} from '../utils/definitions';
+import { getUserData } from '../models/userModel';
 //gets all chats for associated chat id
 export const getMessages = async (req: Request, res: Response): Promise<any> =>{
     const {chatId} = req.params;
     const {userId, role} = req.session;
-    console.log("userId: ", userId);
-    console.log("chatId: ", chatId);
     try{
         const chat = await getChatById(Number(chatId));
         if(!chat){
-            return res.status(400).json({message: 'Chat not found'});
+            return res.status(400).json({error: 'Chat not found'});
         }
         const {momId, volunteerId} = chat;
         if(userId !== momId &&  userId !== volunteerId && role !== 'Admin'){
-            console.log(req.session.userId);
-            console.log(req.session.role);
-            console.log(chat.volunteerId);
-            console.log(chat.momId);
-            console.log(chat.chatId);
-            return res.status(401).json({message: 'You are unauthorized to view this chat'});
+            return res.status(401).json({error: 'You are unauthorized to view this chat'});
         }   
         const messages = await getMessageData(chatId);
         return res.status(200).json(messages);
@@ -33,6 +27,38 @@ export const sendChat = async(req: Request, res: Response): Promise<any> =>{
     try{
         await createMessage(chatId, senderId, message, dateSent);
         return res.status(201).json({message: 'Message sent'});
+    } catch (error) {
+        return res.status(500).json({ error: (error as Error).message });
+    }
+}
+export const getAllChats = async (req: Request, res: Response): Promise<any> =>{
+    const {userId, role} = req.session;
+    try{
+        const chats = await getChats(Number(userId), role);
+        if(!chats){
+            return res.status(400).json({message: 'No chats found'});
+        }
+        const chatsWithNames = await Promise.all(chats.map(async (chat) => {
+            let otherName = "";
+            if(role === 'Mom'){
+                const volunteerData = await getUserData(Number(chat.volunteerId));
+                const volunteer_name = volunteerData.firstName + ' ' + volunteerData.lastName;
+                otherName = volunteer_name;
+            } else{
+                const momData = await getUserData(Number(chat.momId));
+                const mom_name = momData.firstName + ' ' + momData.lastName;
+                otherName = mom_name;
+            }
+            const chatWithNames = {
+                chatId: chat.id,
+                momId: chat.momId,
+                volunteerId: chat.volunteerId,
+                otherName,
+            };
+            // console.log("requestWithNames(singular): ", requestWithNames);
+            return chatWithNames;
+          }));
+        return res.status(200).json(chatsWithNames);
     } catch (error) {
         return res.status(500).json({ error: (error as Error).message });
     }

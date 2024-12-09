@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
-import { getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest } from '../models/helpRequestModel';
+import { getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest } from '../models/helpRequestModel';
 import { getUserData, getAllUsers } from '../models/userModel';
+import { createChat } from '../models/chatsModel';
+import { getHeapSnapshot } from 'v8';
 export const getHelpRequests = async (req: Request, res: Response): Promise<void> => {
   try {
     const requests = await getAllHelpRequests();
@@ -52,9 +54,13 @@ export const getActiveHelpRequests = async (req: Request, res: Response): Promis
 
 export const acceptRequest = async (req: Request, res: Response): Promise<void> => {
   try {
+    const volunteer_id = req.session.userId;
     const { id } = req.params;
+    const helpRequest = await getHelpRequest(Number(id));
+    const {mom_id} = helpRequest
+    await createChat(volunteer_id, mom_id);
     await deactivateHelpRequest(parseInt(id));
-    res.status(200).json({ message: 'Help request deactivated successfully' });
+    res.status(200).json({ message: 'Help request accepted successfully' });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }

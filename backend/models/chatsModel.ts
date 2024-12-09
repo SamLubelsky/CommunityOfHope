@@ -17,19 +17,60 @@ export const getChatById = (chatId: number): Promise<Chat | null> => {
     return new Promise((resolve, reject) => {
       db.all('SELECT * FROM chatIds where id=?', [chatId], (err, rows) => {
         if (err) {
-          console.log("ERROR");
           reject(err);
         } else if(!rows){
-            console.log("no rows");
             resolve(null);
         }else {
-          console.log(rows[0]);
           resolve(rows[0] as Chat);
         }
       });
     });
 }
-export const createChat = (volunteer_id: string, mom_id: string) => {
+export const getChats = (userId: number, role: string): Promise<Chat[] | null> => {
+  if(role == 'Mom'){
+    return new Promise((resolve, reject) => {
+      db.all('SELECT * FROM chatIds where momId=?', [userId], (err, rows) => {
+        if (err) {
+          reject(err);
+        } else if(!rows){
+            resolve(null);
+        }else {
+          resolve(rows as Chat[]);
+        }
+      });
+    });
+  }
+  if(role == 'Mom'){
+    return new Promise((resolve, reject) => {
+      db.all('SELECT * FROM chatIds where volunteerId=?', [userId], (err, rows) => {
+        if (err) {
+          reject(err);
+        } else if(!rows){
+            resolve(null);
+        }else {
+          resolve(rows as Chat[]);
+        }
+      });
+    });
+  }
+  if(role == 'Admin'){
+    return new Promise((resolve, reject) => {
+      db.all('SELECT * FROM chatIds', (err, rows) => {
+        if (err) {
+          reject(err);
+        } else if(!rows){
+            resolve(null);
+        }else {
+          resolve(rows as Chat[]);
+        }
+      });
+    });
+  } else{
+    return Promise.reject(null);
+  }
+
+}
+export const createChat = (volunteer_id: number, mom_id: number) => {
     return new Promise((resolve, reject) => {
       db.run(
         'INSERT INTO chatIds (volunteerId, momId) VALUES (?, ?)',

@@ -88,12 +88,10 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
     if (!passwordMatch) {
       return res.status(406).json({ message: 'Invalid username or password.' });
     }
-    const id = existingUser.id;
-    const firstName = existingUser.firstName;
-    const lastName = existingUser.lastName;
+    const {id, firstName, lastName, role} = existingUser;
     req.session.userId = id;
     req.session.role = existingUser.role;
-    return res.status(201).json({ message: 'Login successful', id, firstName, lastName });
+    return res.status(201).json({ message: 'Login successful', id, firstName, lastName, role});
 
   } catch (error) {
     return res.status(500).json({ message: 'Error logging in', error: (error as Error).message });

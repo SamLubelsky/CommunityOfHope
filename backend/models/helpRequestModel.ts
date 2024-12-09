@@ -18,6 +18,15 @@ export const getAllActiveHelpRequests = (): Promise<HelpRequest[]> => {
     });
   });
 };
+export const getHelpRequest = (id: number): Promise<HelpRequest> => {
+  return new Promise((resolve, reject) => {
+    db.all('SELECT * FROM help_requests WHERE id=?', (err, rows) => {
+      if (err) reject(err);
+      resolve(rows[0] as HelpRequest);
+    });
+  });
+};
+
 
 export const deactivateHelpRequest = (id: number): Promise<void> => {
   return new Promise((resolve, reject) => {

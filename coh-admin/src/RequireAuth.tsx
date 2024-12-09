@@ -1,6 +1,4 @@
 import React, { FC, useEffect} from 'react';
-import { useLocation } from 'react-router-dom';
-import {Navigate, Route} from 'react-router-dom';
 import Login from "./Login.tsx";
 import Cookies from 'js-cookie';
 const RequireAuth: FC<{ children: React.ReactElement }> = ({ children }) => {

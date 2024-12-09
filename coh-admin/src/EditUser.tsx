@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef,} from 'react';
 import InputField from './components/inputField';
 import SubmitButton from './components/submitButton';
-import { useNavigate, Link, useSearchParams} from 'react-router-dom';
+import { Link, useSearchParams} from 'react-router-dom';
 type User = {
     username: string;
     firstName: string;
@@ -12,8 +12,7 @@ export default function EditUser(){
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
-    const navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
     const [userData, setUserData] = useState<User | null>(null);
     const id = searchParams.get("id");
     const [success, setSuccess] = useState(null);

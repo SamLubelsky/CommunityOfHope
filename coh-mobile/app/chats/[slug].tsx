@@ -25,12 +25,14 @@ export default function Page(){
                 credentials: 'include',
             })
             const responseData = await response.json();
-            setMessages(responseData);
+            if(!responseData.error){
+                setMessages(responseData);
+            }
         }
         loadMessages();
         const socket = io('http://localhost:3000');
         setSocket(socket);
-        socket.on("message", (data)=>{
+        socket.on("message", (data)=>{  
             setMessages((prevMessages) => [...prevMessages, data])
         })
         socket.on('askId', () =>{
@@ -55,7 +57,8 @@ export default function Page(){
         console.log(messages);
         setCurMessage('');
     }
-    function displayMessages(messages: any){
+    function displayMessages(){
+        console.log(messages);
         if(messages.length == 0){
             return;
         }
@@ -79,7 +82,7 @@ export default function Page(){
         <View style={styles.container}>
         <ScrollView contentContainerStyle={styles.scrollView}>
         <Text>ChatId: {chatId}</Text>
-        {displayMessages(messages)}
+        {displayMessages()}
         <View key={-1} style={styles.messageContainer}>
             <TextInput style={[styles.inputText, {height: Math.min(height, 200)}]} 
             editable 

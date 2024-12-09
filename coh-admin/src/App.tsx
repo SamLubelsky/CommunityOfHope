@@ -1,10 +1,7 @@
-import { useState } from 'react'
 import './index.css'
-import SubmitButton from './components/submitButton'
 import { Link } from 'react-router-dom'
 import Button from './components/Button'
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <div className="flex justify-center items-center w-full">

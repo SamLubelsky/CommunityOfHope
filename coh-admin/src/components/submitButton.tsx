@@ -1,4 +1,3 @@
-import { ComponentType } from "react";
 import { ArrowRightIcon } from "@heroicons/react/20/solid";
 
 type Props = { 

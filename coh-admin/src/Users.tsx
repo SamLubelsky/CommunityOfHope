@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import {useState, useEffect} from 'react';
 import {Link, useNavigate} from 'react-router-dom'
 import {
     PencilSquareIcon,
@@ -39,8 +39,8 @@ export default function Users(){
         setUsersList(responseData);
         console.log(responseData);
     }
-    function deleteUser(id: string){
-        const response = fetch(`http://localhost:3000/api/users/${id}`,{
+    async function deleteUser(id: string){
+        await fetch(`http://localhost:3000/api/users/${id}`,{
             method:'delete',
             credentials:'include'
         })

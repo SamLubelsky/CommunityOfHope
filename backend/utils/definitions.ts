@@ -1,5 +1,5 @@
 export type Chat ={
-    chatId: string;
+    id: string;
     volunteerId: string;
     momId: string;
 }

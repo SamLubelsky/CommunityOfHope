@@ -1,40 +1,48 @@
 import { View, Text, StyleSheet } from "react-native";
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useBoundStore } from '@/store/useBound';
-import { useRouter } from 'expo-router';
+import { Redirect, Slot, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { Slot } from 'expo-router';
+import Button from "@/components/Button";
+import VolunteerRequestForm from "@/components/VolunteerRequestForm";
 
 export default function RootLayout() {
   return (
     <View style={styles.container}>
-      {/* <Slot /> */}
+      <Page />
       <StatusBar style="light" />
     </View>
   );
 }
 
 export function Page() {
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const isSignedIn = useBoundStore((state) => state.isSignedIn);
+  const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
+  const role = useBoundStore((state) => state.role);
   const router = useRouter();
   console.log("we are signed in");
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (isSignedIn) {
-        router.replace('/(tabs)/requestAVolunteer');
-      } else {
-        router.replace('/login');
-      }
-    }, 0);
+  // useEffect(() => {
+  //   const timer = setTimeout(() => {
+  //     if (isSignedIn) {
+  //       if(role == 'Mom'){
+  //         router.replace('/requestAVolunteer');
+  //       } else{
+  //         router.replace('/helpRequests')
+  //       }
+  //     } else {
+  //       router.replace('/login');
+  //     }
+  //   }, 0);
 
-    return () => clearTimeout(timer);
-  }, [isSignedIn]);
+  //   return () => clearTimeout(timer);
+  // }, [isSignedIn]);
 
+  
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Loading...</Text>
-    </View>
-  );
+    <Redirect href="/requestAVolunteer"/>
+  )
+    
 }
 
 const styles = StyleSheet.create({
@@ -45,8 +53,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   }, 
+  textContainer: {
+    marginBottom: 20,
+  },
   text: {
     color: '#fff',
     fontSize: 24,
+  },
+  logoutButton: {
+    marginTop: 20,
+    backgroundColor: '#ff4d4d',
   },
 });

@@ -1,7 +1,7 @@
-import React, {useEffect, useState, useRef} from 'react';
+import React, {useState, useRef} from 'react';
 import InputField from './components/inputField';
 import SubmitButton from './components/submitButton';
-import { useNavigate, Link} from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import SelectField from './components/selectField';
 export default function AddUser(){
     const [error, setError] = useState<string | null>(null);
@@ -9,7 +9,6 @@ export default function AddUser(){
     const [addSuccess, setAddSuccess] = useState(false);
     const roleOptions = ['Mom','Volunteer','Admin']
     const formRef = useRef<HTMLFormElement>(null);
-    const navigate = useNavigate();
     function resetForm(){
         setAddSuccess(false);
         if(formRef.current){

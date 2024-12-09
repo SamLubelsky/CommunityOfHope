@@ -1,4 +1,4 @@
-import React, {createElement, ComponentType} from 'react';
+import {ComponentType} from 'react';
 type IconProps = {
     className?: string;
 }
