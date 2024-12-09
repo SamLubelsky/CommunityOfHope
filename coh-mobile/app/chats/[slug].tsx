@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { useLocalSearchParams } from 'expo-router';
-import {View, Text, TextInput, StyleSheet} from 'react-native';
+import {ScrollView, View, Text, TextInput, StyleSheet} from 'react-native';
 import Button from '@/components/Button';
 // import { socket } from "../socket";
 import { useBoundStore } from '@/store/useBound';
@@ -10,12 +10,14 @@ type Message = {
     senderId: number;
     message: string;
 }
+
 export default function Page(){
     const chatId = Number(useLocalSearchParams().slug);
     const id = useBoundStore((state) => state.id);
     const [messages, setMessages] = useState<Message[]>([]);
     const[curMessage, setCurMessage] = useState<string>('');
     const [socket, setSocket] = useState<ReturnType<typeof io>>();
+    const [height, setHeight] = useState<number>(50);
     useEffect(() => {
         const loadMessages = async () => {
             const response = await fetch(`http://localhost:3000/api/chats/${chatId}`, {
@@ -75,25 +77,37 @@ export default function Page(){
     }
     return (
         <View style={styles.container}>
+        <ScrollView contentContainerStyle={styles.scrollView}>
         <Text>ChatId: {chatId}</Text>
         {displayMessages(messages)}
         <View key={-1} style={styles.messageContainer}>
-            <TextInput editable multiline onChangeText={msg=>setCurMessage(msg)} style={styles.inputText} value={curMessage}></TextInput>
+            <TextInput style={[styles.inputText, {height: Math.min(height, 200)}]} 
+            editable 
+            multiline 
+            onChangeText={msg=>setCurMessage(msg)}  
+            onContentSizeChange={(event) => {
+                setHeight(event.nativeEvent.contentSize.height);
+            }}
+            value={curMessage}
+            placeholder="Type a message...">
+            </TextInput>
         </View>
-        <Button label="Send Message" onPress={()=>sendMessage()}></Button>
+        <Button label="Send" onPress={sendMessage}/>
+        </ScrollView>
         </View>
     );
 }
 const styles = StyleSheet.create({
     button: {
-        width:"100%",
     },
-    container:
-    {
-      flex: 1,
-      backgroundColor: '#F7ACCF',
-      alignItems: 'center',
-      justifyContent: 'center',
+    container: {
+        flex: 1,
+        backgroundColor: '#F7ACCF',
+    },
+    scrollView: {
+        flexGrow: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     messageContainer:{
         alignItems: 'center',
@@ -102,7 +116,7 @@ const styles = StyleSheet.create({
         borderWidth: 5,
         borderColor: '#FFF',
         alignSelf: 'flex-end',
-        width: '60%',
+        width: '80%',
         margin: 5,
         backgroundColor: 'white',
         borderRadius: 20,
