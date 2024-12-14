@@ -7,9 +7,10 @@ type HelpRequest = {
 }
 export default function HelpRequests(){
     const [HelpRequests, setHelpRequests] = useState<HelpRequest[] | null>(null);
+    const BACKEND_URL = process.env.BACKEND_URL;
     useEffect(()=>{
         async function loadRequests(){
-            const response = await fetch('http://localhost:3000/api/help_requests',{
+            const response = await fetch(`${BACKEND_URL}/api/help_requests`,{
                 headers: { 'Content-Type': 'application/json' },
                 method: 'GET',
                 credentials: 'include'

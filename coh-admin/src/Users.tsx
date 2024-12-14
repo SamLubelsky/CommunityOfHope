@@ -15,10 +15,10 @@ type User = {
 export default function Users(){
     const [usersList, setUsersList] = useState([]);
     const navigate = useNavigate();
-    
+    const BACKEND_URL = process.env.BACKEND_URL;
     useEffect(()=>{
         async function loadUsers(){
-            const response = await fetch('http://localhost:3000/api/users',{
+            const response = await fetch(`${BACKEND_URL}/api/users`,{
                 headers: { 'Content-Type': 'application/json' },
                 method: 'GET',
                 credentials: 'include'

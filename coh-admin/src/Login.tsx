@@ -8,6 +8,7 @@ export default function Login(){
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const BACKEND_URL = process.env.BACKEND_URL;
     useEffect(()=>{
         if(localStorage.getItem("SignedIn")){
             console.log("you are already logged in");
@@ -21,7 +22,7 @@ export default function Login(){
         const formData = new FormData(event.currentTarget)
         const user = formData.get('username');
         const password = formData.get('password');
-        const response = await fetch('http://localhost:3000/api/login', {
+        const response = await fetch(`${BACKEND_URL}/api/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ user, password }),    

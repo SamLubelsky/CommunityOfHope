@@ -3,8 +3,9 @@ import Login from "./Login.tsx";
 import Cookies from 'js-cookie';
 const RequireAuth: FC<{ children: React.ReactElement }> = ({ children }) => {
     const [isAuthenticated, setIsAuthenticated] = React.useState<boolean | null>(null);
+    const BACKEND_URL = process.env.BACKEND_URL;
     async function verifySession(){
-      const response = await fetch('http://localhost:3000/api/verify-session',{
+      const response = await fetch(`${BACKEND_URL}/api/verify-session`,{
          headers: { 'Content-Type': 'application/json' },
          method: 'POST',
          credentials: 'include',

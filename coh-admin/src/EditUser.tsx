@@ -2,6 +2,7 @@ import React, {useEffect, useState, useRef,} from 'react';
 import InputField from './components/inputField';
 import SubmitButton from './components/submitButton';
 import { Link, useSearchParams} from 'react-router-dom';
+import dotenv from 'dotenv';
 type User = {
     username: string;
     firstName: string;
@@ -16,9 +17,10 @@ export default function EditUser(){
     const [userData, setUserData] = useState<User | null>(null);
     const id = searchParams.get("id");
     const [success, setSuccess] = useState(null);
+    const BACKEND_URL = process.env.BACKEND_URL;
     useEffect(()=>{
         const loadUserData = async () =>{
-            const response = await fetch(`http://localhost:3000/api/users/${id}`,{
+            const response = await fetch(`${BACKEND_URL}/api/users/${id}`,{
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
                 credentials:"include",
