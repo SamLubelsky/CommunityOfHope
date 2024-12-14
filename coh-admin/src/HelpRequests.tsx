@@ -1,5 +1,6 @@
 import {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
+import { BACKEND_URL } from '../config';
 type HelpRequest = {
     mom_name: string;
     volunteer_name: string;
@@ -7,7 +8,6 @@ type HelpRequest = {
 }
 export default function HelpRequests(){
     const [HelpRequests, setHelpRequests] = useState<HelpRequest[] | null>(null);
-    const BACKEND_URL = process.env.BACKEND_URL;
     useEffect(()=>{
         async function loadRequests(){
             const response = await fetch(`${BACKEND_URL}/api/help_requests`,{

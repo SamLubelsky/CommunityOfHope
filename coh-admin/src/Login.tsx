@@ -2,13 +2,13 @@ import React, {useState, useEffect} from 'react';
 import InputField from './components/inputField';
 import SubmitButton from './components/submitButton';
 import { useNavigate } from 'react-router-dom';
+import { BACKEND_URL } from '../config';
 import "./index.css";
 import Cookies from 'js-cookie';
 export default function Login(){
     const navigate = useNavigate();
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
-    const BACKEND_URL = process.env.BACKEND_URL;
     useEffect(()=>{
         if(localStorage.getItem("SignedIn")){
             console.log("you are already logged in");

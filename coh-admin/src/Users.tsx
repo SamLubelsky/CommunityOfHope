@@ -4,7 +4,7 @@ import {
     PencilSquareIcon,
     TrashIcon
 } from '@heroicons/react/24/outline';
-
+import { BACKEND_URL } from '../config';
 type User = {
     username: string;
     firstName: string;
@@ -15,7 +15,6 @@ type User = {
 export default function Users(){
     const [usersList, setUsersList] = useState([]);
     const navigate = useNavigate();
-    const BACKEND_URL = process.env.BACKEND_URL;
     useEffect(()=>{
         async function loadUsers(){
             const response = await fetch(`${BACKEND_URL}/api/users`,{
