@@ -1,4 +1,4 @@
-import db from '../config/database';
+import db from '../src/config/database';
 
 db.run(`ALTER TABLE help_requests ADD COLUMN active INTEGER DEFAULT 1;`, (err) => {
     if (err) {

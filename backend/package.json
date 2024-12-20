@@ -6,6 +6,8 @@
     "dotenv": "^16.4.5",
     "express": "^4.21.0",
     "express-session": "^1.18.1",
+    "firebase-admin": "^13.0.2",
+    "firebase-functions": "^6.1.2",
     "jest": "^29.7.0",
     "jsonwebtoken": "^9.0.2",
     "nock": "^13.5.6",
@@ -44,9 +46,14 @@
     "dev2": "nodemon --watch \"./**/*.ts\" --exec ts-node index.ts",
     "test": "ts-mocha -p tsconfig.json tests/**/*.test.ts --timeout 10000",
     "test:watch": "ts-mocha -p tsconfig.json tests/**/*.test.ts --watch --timeout 10000",
-    "start": "node index.js",
-    "build": "npx tsc index.ts",
+    "start": "node src/index.js",
+    "build": "npx tsc src/index.ts",
     "dev": "npx ts-node-dev --respawn index.ts",
-    "go": "npm run build && npm run start"
-  }
+    "go": "npm run build && npm run start",
+    "deploy": "firebase deploy --only functions:api"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "src/index.ts"
 }
