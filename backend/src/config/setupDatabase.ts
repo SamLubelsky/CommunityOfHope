@@ -6,32 +6,37 @@ const instanceConnectionName = "fl24-community-of-hope:us-central1:coh-postgres"
 const dbUser = "quickstart-user"
 const dbPassword = "Sara6162816357492"
 const dbName = "coh-data"
-async function connectToCloudSQL(){
-    const connector = new Connector();
+const connector = new Connector()
+let pool: Pool;
+
+const initializePool = async () => {
+  if(!pool){
     const clientOpts = await connector.getOptions({
-        instanceConnectionName
+      instanceConnectionName
     });
     const dbConfig = {
-        ...clientOpts,
-        user: dbUser,
-        password: dbPassword,
-        database: dbName,
+      ...clientOpts,
+      user: dbUser,
+      password: dbPassword,
+      database: dbName,
     }
-    return new Pool(dbConfig);
-}
+    pool = new Pool(dbConfig);
+  }
+} 
 
 const executeQuery = async (query: string, values: string[]) => {
     try {
-      const pool = await connectToCloudSQL();
-  
-      // Test the connection
+      if(!pool) await initializePool();
       const client = await pool.connect();
-      const res = await client.query(query, values);
-      return res.rows;
-      client.release();
+      try{
+        const res = await client.query(query, values);
+        return res.rows; 
+      } finally{
+        client.release();
+      }
     } catch (error) {
-      console.error('Error connecting to PostgreSQL:', error);
-      return;
+      console.error('Error executing query:', error);
+      throw error;
     }
   };
 const createTables = async () => {
