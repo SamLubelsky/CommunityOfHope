@@ -41,11 +41,11 @@ export const getAllChats = async (req: Request, res: Response): Promise<any> =>{
         const chatsWithNames = await Promise.all(chats.map(async (chat) => {
             let otherName = "";
             if(role === 'Mom'){
-                const volunteerData = await getUserData(Number(chat.volunteerId));
+                const volunteerData = await getUserData(chat.volunteerId);
                 const volunteer_name = volunteerData.firstName + ' ' + volunteerData.lastName;
                 otherName = volunteer_name;
             } else{
-                const momData = await getUserData(Number(chat.momId));
+                const momData = await getUserData(chat.momId);
                 const mom_name = momData.firstName + ' ' + momData.lastName;
                 otherName = mom_name;
             }

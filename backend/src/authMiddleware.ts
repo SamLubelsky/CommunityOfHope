@@ -26,13 +26,13 @@ interface SessionData {
 // };
 export const requireAuth = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   if (!req.session || !req.session.userId) {
-    return res.status(401).json({ message: 'Unauthorized' });
+    return res.status(401).json({ message: 'Unauthorized'});
   }
   next();
 };
 export const requireAdmin = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  if (!req.session || !req.session.userId || !req.session.role || req.session.role !== 'admin') {
-    return res.status(401).json({ message: 'Unauthorized' });
+  if (!req.session || !req.session.userId || !req.session.role || req.session.role !== 'Admin') {
+    return res.status(401).json({ message: 'Unauthorized'});
   }
   next();
 };

@@ -3,11 +3,11 @@ import InputField from './components/inputField';
 import SubmitButton from './components/submitButton';
 import {Link} from 'react-router-dom';
 import SelectField from './components/selectField';
+const roleOptions = ['Mom','Volunteer','Admin']
 export default function AddUser(){
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [addSuccess, setAddSuccess] = useState(false);
-    const roleOptions = ['Mom','Volunteer','Admin']
     const formRef = useRef<HTMLFormElement>(null);
     function resetForm(){
         setAddSuccess(false);

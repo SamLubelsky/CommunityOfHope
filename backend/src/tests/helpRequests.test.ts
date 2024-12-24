@@ -1,6 +1,7 @@
 import { expect } from 'chai';
 import request from 'supertest';
-import { app } from '../../index';  // Remove .js extension
+import { app } from '../index';  // Remove .js extension
+import { before } from 'node:test';
 
 describe('Help Request API', () => {
   let authToken: string;

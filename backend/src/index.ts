@@ -13,16 +13,13 @@ import {Server} from 'socket.io'
 import { connected } from 'process'
 import { getChatById } from './models/chatsModel'
 import {createMessage} from './models/chatsModel'
+import { createTables } from './config/setupDatabase'
 const http = require('http')
 
-type UserRequest = {
-  user: string
-  password: string
-}
-
-console.log("STARTING SERVER");
+createTables();
 dotenv.config()
 const app = express()
+
 app.use(session({
   store: new SQLiteStore(),
   secret: process.env.SESSION_SECRET || 'your_secret_key',  // Replace with a secure key
@@ -35,7 +32,14 @@ app.use(session({
   }  // Set secure: true in production when using HTTPS
 }));
 
-app.use(cors({origin: ["http://localhost:8081", "http://localhost:5173"], credentials: true}));
+const isDevelopment = process.env.NODE_ENV == 'development'
+if(isDevelopment){
+  console.log("In Development Mode");
+  app.use(cors({origin: ["http://localhost:8081", "http://localhost:5173"], credentials: true}));
+} else{
+  console.log("In Production Mode");
+  app.use(cors({origin: ["https://fl24-community-of-hope.web.app"], credentials: true}));
+}
 app.use(express.json())
 app.use('/api', userRoutes)
 app.use('/api', helpRoutes);
@@ -45,21 +49,11 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server')
 })
 
-app.post('/', (req: Request, res: Response) => {
-  const body = req.body as UserRequest
-
-  const user = body.user
-
-  const hashedPass = bcrypt.hashSync(body.password, 10)
-
-  res.send({
-    message: `Hello ${user}! Your hashed password is ${hashedPass}`,
-  })
-})
-
 const port = process.env.PORT || 3000
 const httpServer = http.createServer(app)  
-// httpServer.listen(port)
+httpServer.listen(port, () => {
+  console.log(`[server]: Server is running at http://localhost:${port}`)
+});
 const io = new Server(httpServer,{
   cors:{
     // origin: process.env.NODE_ENV === 'production' ? false : ["http://localhost:3000"],
@@ -106,7 +100,7 @@ app.get('/timestamp', (req: Request, res: Response) => {
   res.send(`${Date.now()}`);
 });
 exports.api = functions.https.onRequest(app);
-
+export {app};
 // if (require.main == module) {
 //   app.listen(port, () => {
 //     console.log(`[server]: Server is running at http://localhost:${port}`)

@@ -3,11 +3,14 @@ import InputField from './components/inputField';
 import SubmitButton from './components/submitButton';
 import { Link, useSearchParams} from 'react-router-dom';
 import {BACKEND_URL} from '../config';
+import SelectField from './components/selectField';
+const roleOptions = ['Mom','Volunteer','Admin']
 type User = {
     username: string;
     firstName: string;
     lastName: string;
     id: string;
+    role: string;
 }
 export default function EditUser(){
     const [error, setError] = useState<string | null>(null);
@@ -40,11 +43,12 @@ export default function EditUser(){
         const password = formData.get('password');
         const firstName = formData.get('firstName');
         const lastName = formData.get('lastName');
+        const role = formData.get('role');
         const response = await fetch(`http://localhost:3000/api/users/${id}`,{
             method:'PUT',
             headers: { 'Content-Type': 'application/json' },
             credentials:"include",
-            body: JSON.stringify({ user, password, firstName, lastName}),
+            body: JSON.stringify({ user, password, firstName, lastName, role}),
         });
         const responseData = await response.json();
         if (!response.ok) {
@@ -69,6 +73,7 @@ export default function EditUser(){
                 <InputField fieldName="password" fieldType="password" required displayName="Password" placeholder={"You must make a new password"}/>
                 <InputField fieldName="firstName" fieldType="text" required displayName="First Name" defaultValue={userData.firstName}/>
                 <InputField fieldName="lastName" fieldType="text" required displayName="Last Name" defaultValue={userData.lastName}/>
+                <SelectField fieldName='role' required displayName='Role' options={roleOptions} defaultValue={userData.role}/>
                 <SubmitButton label="Edit User Info" isLoading={isLoading} />
             </form>
             }

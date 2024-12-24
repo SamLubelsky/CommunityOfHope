@@ -7,11 +7,11 @@ export const getHelpRequests = async (req: Request, res: Response): Promise<void
   try {
     const requests = await getAllHelpRequests();
     const requestsWithNames = await Promise.all(requests.map(async (request) => {
-      const momData = await getUserData(request.mom_id);
+      const momData = await getUserData(String(request.mom_id));
       const mom_name = momData.firstName + ' ' + momData.lastName;
       let volunteer_name = null;
       if(request.volunteer_id){
-        const volunteerData = await getUserData(request.volunteer_id);
+        const volunteerData = await getUserData(String(request.volunteer_id));
         volunteer_name = volunteerData.firstName + ' ' + volunteerData.lastName;
       }
 
