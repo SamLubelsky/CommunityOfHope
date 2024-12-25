@@ -7,7 +7,7 @@ export const getMessages = async (req: Request, res: Response): Promise<any> =>{
     const {chatId} = req.params;
     const {userId, role} = req.session;
     try{
-        const chat = await getChatById(Number(chatId));
+        const chat = await getChatById(chatId);
         if(!chat){
             return res.status(400).json({error: 'Chat not found'});
         }
@@ -32,9 +32,12 @@ export const sendChat = async(req: Request, res: Response): Promise<any> =>{
     }
 }
 export const getAllChats = async (req: Request, res: Response): Promise<any> =>{
+    if(!req.session || !req.session.userId || !req.session.role){
+        return res.status(401).json({error: 'You are not logged in'});
+    }
     const {userId, role} = req.session;
     try{
-        const chats = await getChats(Number(userId), role);
+        const chats = await getChats(userId, role);
         if(!chats){
             return res.status(400).json({message: 'No chats found'});
         }

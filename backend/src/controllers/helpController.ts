@@ -52,7 +52,10 @@ export const getActiveHelpRequests = async (req: Request, res: Response): Promis
   }
 };
 
-export const acceptRequest = async (req: Request, res: Response): Promise<void> => {
+export const acceptRequest = async (req: Request, res: Response): Promise<any> => {
+  if(!req.session || !req.session.userId || !req.session.role){
+    return res.status(401).json({error: 'You are not logged in'});
+  } 
   try {
     const volunteer_id = req.session.userId;
     const { id } = req.params;

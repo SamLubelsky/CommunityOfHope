@@ -113,29 +113,11 @@ export const createUser = async (username: string, password: string, firstName: 
   });
 };
 
-export const deleteUserByUsername = (username: string): Promise<void> => {
+export const deleteUserByUsername = (username: string) => {
   executeQuery('DELETE FROM users WHERE username=$1', [username]);
-  return new Promise((resolve, reject) => {
-    const query = 'DELETE FROM users WHERE username = ?';
-    db.run(query, [username], function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  });
+  return;
 };
-export const deleteUserById = (id: string): Promise<void> => {
+export const deleteUserById = (id: string) => {
   executeQuery('DELETE FROM users WHERE id=$1', [id]);
-  return new Promise((resolve, reject) => {
-    const query = 'DELETE FROM users WHERE id = ?';
-    db.run(query, [id], function (err) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve();
-      }
-    });
-  });
+  return;
 };

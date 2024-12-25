@@ -1,6 +1,9 @@
 import db from '../config/database'
 import {Chat} from '../utils/definitions'
+import {executeQuery} from '../config/setupDatabase'
 export const getMessageData = (chatId: string) => {
+  executeQuery('SELECT * FROM chats where chatId=$1', [chatId]);
+  return;
     return new Promise((resolve, reject) => {
       db.all('SELECT * FROM chats where chatId=?', [chatId], (err, rows) => {
         if (err) {
@@ -13,7 +16,13 @@ export const getMessageData = (chatId: string) => {
       });
     });
   };
-export const getChatById = (chatId: number): Promise<Chat | null> => {
+export const getChatById = async (chatId: string): Promise<Chat | null> => {
+  const rows = await executeQuery('SELECT * FROM chatIds where id=$1', [chatId]);
+  if(rows){
+    return rows[0];
+  } else{
+    return Promise.reject(new Error('Chat not found'));
+  }
     return new Promise((resolve, reject) => {
       db.all('SELECT * FROM chatIds where id=?', [chatId], (err, rows) => {
         if (err) {
@@ -26,8 +35,14 @@ export const getChatById = (chatId: number): Promise<Chat | null> => {
       });
     });
 }
-export const getChats = (userId: number, role: string): Promise<Chat[] | null> => {
-  if(role == 'Mom'){
+export const getChats = async (userId: string, role: string): Promise<Chat[] | null> => {
+  if(role == 'Mom' || role=='Volunteer'){
+    const rows = await executeQuery('SELECT * FROM chatIds where momId=$1 OR volunteerId=$1', [userId]);
+    if(rows){
+      return rows[0];
+    } else{
+      return Promise.reject(new Error('Chat not found'));
+    }
     return new Promise((resolve, reject) => {
       db.all('SELECT * FROM chatIds where momId=?', [userId], (err, rows) => {
         if (err) {
@@ -40,20 +55,13 @@ export const getChats = (userId: number, role: string): Promise<Chat[] | null> =
       });
     });
   }
-  if(role == 'Mom'){
-    return new Promise((resolve, reject) => {
-      db.all('SELECT * FROM chatIds where volunteerId=?', [userId], (err, rows) => {
-        if (err) {
-          reject(err);
-        } else if(!rows){
-            resolve(null);
-        }else {
-          resolve(rows as Chat[]);
-        }
-      });
-    });
-  }
   if(role == 'Admin'){
+    const rows = await executeQuery('SELECT * FROM chatIds', []);
+    if(rows){
+      return rows[0];
+    } else{
+      return Promise.reject(new Error('Chat not found'));
+    }
     return new Promise((resolve, reject) => {
       db.all('SELECT * FROM chatIds', (err, rows) => {
         if (err) {
@@ -66,11 +74,13 @@ export const getChats = (userId: number, role: string): Promise<Chat[] | null> =
       });
     });
   } else{
-    return Promise.reject(null);
+    return Promise.reject(new Error('Invalid role provided'));
   }
 
 }
-export const createChat = (volunteer_id: number, mom_id: number) => {
+export const createChat = (volunteer_id: string, mom_id: string) => {
+  executeQuery('INSERT INTO chatIds (volunteerId, momId) VALUES ($1, $2)', [volunteer_id, mom_id]);
+  return;
     return new Promise((resolve, reject) => {
       db.run(
         'INSERT INTO chatIds (volunteerId, momId) VALUES (?, ?)',
@@ -83,6 +93,8 @@ export const createChat = (volunteer_id: number, mom_id: number) => {
     });
 }
 export const createMessage = (chatId: string, senderId: string, message: string, dateSent: string) => {
+  executeQuery('INSERT INTO chats (chatId, senderId, message, dateSent) VALUES ($1, $2, $3, $4)', [chatId, senderId, message, dateSent]);
+  return;
     return new Promise((resolve, reject) => {
       db.run(
         'INSERT INTO chats (chatId, senderId, message, dateSent) VALUES (?, ?, ?, ?)',

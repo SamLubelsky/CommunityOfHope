@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { getAllUsers, createUser, findUserByUsername, deleteUserById, editUserInfo, getUserData} from '../models/userModel'
+import { verifySessionRequest } from '../utils/functions';
 const bcrypt = require('bcrypt')
 
 
@@ -58,7 +59,7 @@ export const deleteUser = async(req: Request, res: Response) => {
   }
 }
 export const verifySession = async (req: Request, res: Response): Promise<any> => {
-  if(!req.session || !req.session.userId || !req.session.role){
+  if(!verifySessionRequest(req)){
     return res.status(400).json({message: 'Session could not be verified'});
   }
   const { userId, role } = req.session;
@@ -92,7 +93,6 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
 };
 
 export const logoutUser = (req: Request, res: Response): void => {
-  
     req.session.destroy((err: any) => {
       if (err) {
         return res.status(500).json({ message: 'Error logging out' });
