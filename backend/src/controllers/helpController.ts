@@ -59,10 +59,10 @@ export const acceptRequest = async (req: Request, res: Response): Promise<any> =
   try {
     const volunteer_id = req.session.userId;
     const { id } = req.params;
-    const helpRequest = await getHelpRequest(Number(id));
+    const helpRequest = await getHelpRequest(id);
     const {mom_id} = helpRequest
     await createChat(volunteer_id, mom_id);
-    await deactivateHelpRequest(parseInt(id));
+    await deactivateHelpRequest(id  );
     res.status(200).json({ message: 'Help request accepted successfully' });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });

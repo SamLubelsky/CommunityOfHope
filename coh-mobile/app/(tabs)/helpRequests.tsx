@@ -1,6 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Button from '@/components/Button';
+import { useBoundStore } from '@/store/useBound';
+import { router } from 'expo-router';
 const placeholder = {"Requests": [{"Name": "Sharon", "Category": "Hospital Stay", "requestId": 2},
  {"Name": "Jennifer", "Category": "Grocery Shopping", "requestId": 3,},
  {"Name": "Alice", "Category": "Help At Home", "requestId": 1},]}
@@ -11,6 +13,21 @@ type HelpRequest ={
 }
 export default function HelpRequests(){
     const [requests, setRequests] = useState<HelpRequest[]>([]);
+    const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
+      const role = useBoundStore((state) => state.role);
+      useEffect(() => {
+        if(role == "Mom"){
+          router.replace('/requestAVolunteer')
+        }
+        getRequests();
+      },[]);
+    const handleLogout = async () => {
+      await fetch("http://localhost:3000/api/logout", {
+        method: "POST",
+        credentials: "include",
+      });
+      setIsSignedIn(false);
+    };
     async function onSubmit(id: Number){
         setRequests(requests.filter(request => request.id !== id));
         // const response = await fetch('/api/acceptRequest', {
@@ -44,12 +61,10 @@ export default function HelpRequests(){
                 </View>
             )});
     }
-    useEffect(() => {
-          getRequests();
-        }, []);
     return (<View style={styles.container}>
         <Text style={styles.text}> All Current Help Requests</Text>
         {getRequestsList()}
+        <Button label="Logout" onPress={handleLogout} />
         </View>)
 }
 const styles = StyleSheet.create({

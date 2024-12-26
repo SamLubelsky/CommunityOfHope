@@ -2,7 +2,7 @@ import db from '../config/database'
 import {Chat} from '../utils/definitions'
 import {executeQuery} from '../config/setupDatabase'
 export const getMessageData = (chatId: string) => {
-  executeQuery('SELECT * FROM chats where chatId=$1', [chatId]);
+  executeQuery('SELECT id, chatid as "chatId", message, senderid as "senderId", datesent as "dateSent" FROM chats where chatId=$1', [chatId]);
   return;
     return new Promise((resolve, reject) => {
       db.all('SELECT * FROM chats where chatId=?', [chatId], (err, rows) => {
@@ -17,7 +17,7 @@ export const getMessageData = (chatId: string) => {
     });
   };
 export const getChatById = async (chatId: string): Promise<Chat | null> => {
-  const rows = await executeQuery('SELECT * FROM chatIds where id=$1', [chatId]);
+  const rows = await executeQuery('SELECT id, momid as "momId", volunteerid as "volunteerId" FROM chatIds where id=$1', [chatId]);
   if(rows){
     return rows[0];
   } else{
@@ -37,12 +37,8 @@ export const getChatById = async (chatId: string): Promise<Chat | null> => {
 }
 export const getChats = async (userId: string, role: string): Promise<Chat[] | null> => {
   if(role == 'Mom' || role=='Volunteer'){
-    const rows = await executeQuery('SELECT * FROM chatIds where momId=$1 OR volunteerId=$1', [userId]);
-    if(rows){
-      return rows[0];
-    } else{
-      return Promise.reject(new Error('Chat not found'));
-    }
+    const rows = await executeQuery('SELECT id, momid as "momId", volunteerid as "volunteerId" FROM chatIds where momId=$1 OR volunteerId=$1', [userId]);
+    return rows;
     return new Promise((resolve, reject) => {
       db.all('SELECT * FROM chatIds where momId=?', [userId], (err, rows) => {
         if (err) {
@@ -56,12 +52,8 @@ export const getChats = async (userId: string, role: string): Promise<Chat[] | n
     });
   }
   if(role == 'Admin'){
-    const rows = await executeQuery('SELECT * FROM chatIds', []);
-    if(rows){
-      return rows[0];
-    } else{
-      return Promise.reject(new Error('Chat not found'));
-    }
+    const rows = await executeQuery('SELECT id, momid as "momId", volunteerid as "volunteerId" FROM chatIds', []);
+    return rows;
     return new Promise((resolve, reject) => {
       db.all('SELECT * FROM chatIds', (err, rows) => {
         if (err) {

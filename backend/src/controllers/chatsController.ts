@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import { getMessageData, getChatById, createChat, createMessage, getChats } from '../models/chatsModel'
 import {Chat} from '../utils/definitions';
-import { getUserData } from '../models/userModel';
+import { getAllUsers, getUserData } from '../models/userModel';
 //gets all chats for associated chat id
 export const getMessages = async (req: Request, res: Response): Promise<any> =>{
     const {chatId} = req.params;
@@ -39,7 +39,7 @@ export const getAllChats = async (req: Request, res: Response): Promise<any> =>{
     try{
         const chats = await getChats(userId, role);
         if(!chats){
-            return res.status(400).json({message: 'No chats found'});
+            return res.status(400).json([]);
         }
         const chatsWithNames = await Promise.all(chats.map(async (chat) => {
             let otherName = "";
@@ -49,6 +49,7 @@ export const getAllChats = async (req: Request, res: Response): Promise<any> =>{
                 otherName = volunteer_name;
             } else{
                 const momData = await getUserData(chat.momId);
+                const users = await getAllUsers();
                 const mom_name = momData.firstName + ' ' + momData.lastName;
                 otherName = mom_name;
             }
@@ -63,6 +64,7 @@ export const getAllChats = async (req: Request, res: Response): Promise<any> =>{
           }));
         return res.status(200).json(chatsWithNames);
     } catch (error) {
+        console.log(error);
         return res.status(500).json({ error: (error as Error).message });
     }
 }

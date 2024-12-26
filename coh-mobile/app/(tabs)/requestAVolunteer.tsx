@@ -1,18 +1,23 @@
 import * as React from 'react';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import Button from '@/components/Button';
 import VolunteerRequestForm from "@/components/VolunteerRequestForm";
 import { useBoundStore } from '@/store/useBound';
+import { router } from 'expo-router';
 
 const RequestAVolunteerScreen = () => {
   const [isModalVisible, setIsModalVisible] = React.useState<boolean>(false);
   const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
-
+  const role = useBoundStore((state) => state.role);
+  useEffect(() => {
+    if(role == "Volunteer"){
+      router.replace('/helpRequests')
+    }
+  },[]);
   const requestVolunteer = () => {
     setIsModalVisible(true);
   };
-
   const onModalClose = () => {
     setIsModalVisible(false);
   };
