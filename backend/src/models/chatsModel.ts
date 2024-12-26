@@ -2,8 +2,8 @@ import db from '../config/database'
 import {Chat} from '../utils/definitions'
 import {executeQuery} from '../config/setupDatabase'
 export const getMessageData = (chatId: string) => {
-  executeQuery('SELECT id, chatid as "chatId", message, senderid as "senderId", datesent as "dateSent" FROM chats where chatId=$1', [chatId]);
-  return;
+  const rows = executeQuery('SELECT id, chatid as "chatId", message, senderid as "senderId", datesent as "dateSent" FROM chats where chatId=$1', [chatId]);
+  return rows;
     return new Promise((resolve, reject) => {
       db.all('SELECT * FROM chats where chatId=?', [chatId], (err, rows) => {
         if (err) {
