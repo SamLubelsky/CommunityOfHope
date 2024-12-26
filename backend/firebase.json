@@ -18,7 +18,7 @@
   // },
   "functions": [
     {
-      "source": "src",
+      "source": "dist",
       "codebase": "default",
       "ignore": [
         "node_modules",

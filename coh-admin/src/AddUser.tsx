@@ -53,7 +53,7 @@ export default function AddUser(){
                 <InputField fieldName="password" fieldType="password" required displayName="Password"/>
                 <InputField fieldName="firstName" fieldType="text" required displayName="First Name"/>
                 <InputField fieldName="lastName" fieldType="text" required displayName="Last Name"/>
-                <SelectField fieldName='role' required displayName='Role' options={roleOptions}/>
+                <SelectField fieldName='role' required displayName='Role' defaultValue="Mom" options={roleOptions}/>
                 <SubmitButton label="Add New User" isLoading={isLoading} />
             </form>
             <div className="flex flex-col gap-y-5">

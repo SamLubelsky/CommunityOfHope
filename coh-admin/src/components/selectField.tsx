@@ -3,8 +3,9 @@ type Props = {
     options: string[];
     displayName: string;
     required: boolean;
+    defaultValue: string;
 }
-export default function SelectField({fieldName, options, displayName, required}: Props){
+export default function SelectField({fieldName, options, displayName, defaultValue, required}: Props){
     const optionsList = options.map((option, index) => {
         return <option key={index}>{option}</option>
     });
@@ -20,6 +21,7 @@ export default function SelectField({fieldName, options, displayName, required}:
             required={required}
             name={fieldName}
             id={fieldName}
+            defaultValue={defaultValue}
             className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-sky-600 sm:max-w-xs sm:text-sm sm:leading-6'
           >
             {optionsList}

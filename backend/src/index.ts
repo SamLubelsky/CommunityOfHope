@@ -20,6 +20,15 @@ const http = require('http')
 dotenv.config()
 const app = express()
 
+const isDevelopment = process.env.node_env == 'development'
+if(isDevelopment){
+  console.log("In Development Mode");
+  app.use(cors({origin: ["http://localhost:8081", "http://localhost:5173"], credentials: true}));
+} else{
+  console.log("In Production Mode");
+  app.use(cors({origin: ["https://fl24-community-of-hope.web.app"], credentials: true}));
+}
+
 app.use(session({
   store: new SQLiteStore(),
   secret: process.env.SESSION_SECRET || 'your_secret_key',  // Replace with a secure key
@@ -32,14 +41,7 @@ app.use(session({
   }  // Set secure: true in production when using HTTPS
 }));
 
-const isDevelopment = process.env.node_env == 'development'
-if(isDevelopment){
-  console.log("In Development Mode");
-  app.use(cors({origin: ["http://localhost:8081", "http://localhost:5173"], credentials: true}));
-} else{
-  console.log("In Production Mode");
-  app.use(cors({origin: ["https://fl24-community-of-hope.web.app"], credentials: true}));
-}
+
 app.use(express.json())
 app.use('/api', userRoutes)
 app.use('/api', helpRoutes);
@@ -104,7 +106,8 @@ io.on('connection', (socket) => {
 app.get('/timestamp', (req: Request, res: Response) => {
   res.send(`${Date.now()}`);
 });
-exports.api = functions.https.onRequest(app);
+exports.api = functions.https.onRequest({cors: true}, (req,res) => app(req, res));
+console.log("hello there");
 // export {app};
 // if (require.main == module) {
 //   app.listen(port, () => {

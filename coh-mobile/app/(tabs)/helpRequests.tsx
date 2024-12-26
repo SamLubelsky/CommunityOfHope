@@ -28,19 +28,18 @@ export default function HelpRequests(){
       });
       setIsSignedIn(false);
     };
-    async function onSubmit(id: Number){
+    async function submitHelpRequest(id: Number){
         setRequests(requests.filter(request => request.id !== id));
-        // const response = await fetch('/api/acceptRequest', {
-        //     method: 'PATCH',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({id}),
-        // });
-        // const json = await response.json();
-        console.log(`Request ${id} accepted`);
+        const response = await fetch(`http://localhost:3000/api/help_requests/${id}`, {
+          method: 'POST',
+          credentials: 'include',
+        });
+        const responseData = await response.json();
+        console.log(responseData.message);
 
     }
     async function getRequests(){
-        const response = await fetch('http://localhost:3000/api/help_requests',{
+        const response = await fetch('http://localhost:3000/api/help_requests/active',{
           method: 'GET',
           credentials: 'include',
         });
@@ -57,7 +56,7 @@ export default function HelpRequests(){
                 <View key={index} style={styles.itemContainer}>
                     <Text style={styles.helpText}> {request.mom_name} needs help with: {request.category}</Text>
                     <Text style={styles.descriptionText}>{request.description}</Text>
-                    <Button label="Accept Help Request" onPress={() => onSubmit(request.id)}/>
+                    <Button label="Accept Help Request" onPress={() => submitHelpRequest(request.id)}/>
                 </View>
             )});
     }
