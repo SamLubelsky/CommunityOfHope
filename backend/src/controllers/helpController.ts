@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest } from '../models/helpRequestModel';
 import { getUserData, getAllUsers } from '../models/userModel';
-import { createChat } from '../models/chatsModel';
+import { createChat, getChat } from '../models/chatsModel';
 import { getHeapSnapshot } from 'v8';
 export const getHelpRequests = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -61,8 +61,16 @@ export const acceptRequest = async (req: Request, res: Response): Promise<any> =
     const { id } = req.params;
     const helpRequest = await getHelpRequest(id);
     const {mom_id} = helpRequest
-    await createChat(volunteer_id, mom_id);
-    await deactivateHelpRequest(id  );
+    //create chat if none exists
+    try{
+      const chat = await getChat(mom_id, volunteer_id); //will throw an error if chat does not exist
+      console.log(chat);
+      console.log("Chat already exists");
+    } catch{
+      console.log("Chat does not exist, creating chat");
+      await createChat(volunteer_id, mom_id);
+    }
+    await deactivateHelpRequest(id);
     res.status(200).json({ message: 'Help request accepted successfully' });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });

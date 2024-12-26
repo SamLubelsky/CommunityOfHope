@@ -16,7 +16,7 @@ import {createMessage} from './models/chatsModel'
 import { createTables } from './config/setupDatabase'
 const http = require('http')
 
-createTables();
+// createTables();
 dotenv.config()
 const app = express()
 
@@ -32,7 +32,7 @@ app.use(session({
   }  // Set secure: true in production when using HTTPS
 }));
 
-const isDevelopment = process.env.NODE_ENV == 'development'
+const isDevelopment = process.env.node_env == 'development'
 if(isDevelopment){
   console.log("In Development Mode");
   app.use(cors({origin: ["http://localhost:8081", "http://localhost:5173"], credentials: true}));
@@ -51,9 +51,14 @@ app.get('/', (req: Request, res: Response) => {
 
 const port = process.env.PORT || 3000
 const httpServer = http.createServer(app)  
-httpServer.listen(port, () => {
-  console.log(`[server]: Server is running at http://localhost:${port}`)
-});
+if(isDevelopment){
+  console.log(isDevelopment);
+  httpServer.listen(port, () => {
+    console.log(`[server]: Server is running at http://localhost:${port}`)
+  }); 
+} else{
+  console.log("Not running server");
+}
 const io = new Server(httpServer,{
   cors:{
     // origin: process.env.NODE_ENV === 'production' ? false : ["http://localhost:3000"],
@@ -100,7 +105,7 @@ app.get('/timestamp', (req: Request, res: Response) => {
   res.send(`${Date.now()}`);
 });
 exports.api = functions.https.onRequest(app);
-export {app};
+// export {app};
 // if (require.main == module) {
 //   app.listen(port, () => {
 //     console.log(`[server]: Server is running at http://localhost:${port}`)

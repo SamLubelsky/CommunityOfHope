@@ -35,36 +35,49 @@ export const getChatById = async (chatId: string): Promise<Chat | null> => {
       });
     });
 }
+export const getChat = async(momId: string, volunteerId: string): Promise<Chat | null> => {
+  const rows = await executeQuery('SELECT id, momid as "momId", volunteerid as "volunteerId" FROM chatIds where momId=$1 AND volunteerId=$2', [momId, volunteerId]);
+  if(rows.length === 0){
+    return Promise.reject(new Error('Chat not found'));
+  }
+  return rows[0];
+}
 export const getChats = async (userId: string, role: string): Promise<Chat[] | null> => {
-  if(role == 'Mom' || role=='Volunteer'){
-    const rows = await executeQuery('SELECT id, momid as "momId", volunteerid as "volunteerId" FROM chatIds where momId=$1 OR volunteerId=$1', [userId]);
+  if(role == 'Mom'){
+    const rows = await executeQuery(`SELECT chats.id, chats.momid as "momId", chats.volunteerid as "volunteerId", users.firstName || ' ' || users.lastName as "otherName"
+                                     FROM 
+                                        chatIds chats
+                                        INNER JOIN users users
+                                          ON chats.volunteerid = users.id
+                                     WHERE
+                                        momId=$1 OR 
+                                        volunteerId=$1`, 
+                                       [userId]);
     return rows;
-    return new Promise((resolve, reject) => {
-      db.all('SELECT * FROM chatIds where momId=?', [userId], (err, rows) => {
-        if (err) {
-          reject(err);
-        } else if(!rows){
-            resolve(null);
-        }else {
-          resolve(rows as Chat[]);
-        }
-      });
-    });
+  }
+  else if(role == 'Volunteer'){
+    const rows = await executeQuery(`SELECT chats.id, chats.momid as "momId", chats.volunteerid as "volunteerId", users.firstName || ' ' || users.lastName as "otherName"
+      FROM 
+         chatIds chats
+         INNER JOIN users users
+           ON chats.momid = users.id
+      WHERE
+         momId=$1 OR 
+         volunteerId=$1`, 
+        [userId]);
+    return rows;
   }
   if(role == 'Admin'){
-    const rows = await executeQuery('SELECT id, momid as "momId", volunteerid as "volunteerId" FROM chatIds', []);
+    const rows = await executeQuery(`SELECT chats.id, chats.momid as "momId", chats.volunteerid as "volunteerId", users.firstName || ' ' || users.lastName as "otherName"
+      FROM 
+         chatIds chats
+         INNER JOIN users users
+           ON chats.volunteerid = users.id
+      WHERE
+         momId=$1 OR 
+         volunteerId=$1`, 
+        [userId]);
     return rows;
-    return new Promise((resolve, reject) => {
-      db.all('SELECT * FROM chatIds', (err, rows) => {
-        if (err) {
-          reject(err);
-        } else if(!rows){
-            resolve(null);
-        }else {
-          resolve(rows as Chat[]);
-        }
-      });
-    });
   } else{
     return Promise.reject(new Error('Invalid role provided'));
   }

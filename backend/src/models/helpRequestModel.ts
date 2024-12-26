@@ -3,25 +3,30 @@ import { executeQuery } from '../config/setupDatabase';
 import { HelpRequest } from '../types/helpRequest';
 
 export const getAllHelpRequests = async(): Promise<HelpRequest[]> => {
-  const rows = await executeQuery('SELECT id, mom_id, volunteer_id, description FROM help_requests', []);
+  const rows = await executeQuery(`SELECT help.id, help.mom_id, help.volunteer_id, help.description,
+                                   vol.firstName || ' ' || vol.lastName as volunteer_name,
+                                   mom.firstName || ' ' || mom.lastName as mom_name
+                                    FROM help_requests help
+                                      LEFT JOIN users vol
+                                        ON vol.id = help.volunteer_id
+                                      LEFT JOIN users mom
+                                        ON mom.id = help.mom_id
+                                    ORDER BY help.dateCreated DESC`, []);
   return rows;
-  return new Promise((resolve, reject) => {
-    db.all('SELECT id, mom_id, volunteer_id, description FROM help_requests', (err, rows) => {
-      if (err) reject(err);
-      resolve(rows as HelpRequest[]);
-    });
-  });
 };
 
 export const getAllActiveHelpRequests = async(): Promise<HelpRequest[]> => {
-  const rows = await executeQuery('SELECT * FROM help_requests WHERE active = 1',[])
+  const rows = await executeQuery(`SELECT help.id, help.mom_id, help.volunteer_id, help.description,
+    vol.firstName || ' ' || vol.lastName as volunteer_name,
+    mom.firstName || ' ' || mom.lastName as mom_name
+     FROM help_requests help
+       LEFT JOIN users vol
+         ON vol.id = help.volunteer_id
+       LEFT JOIN users mom
+         ON mom.id = help.mom_id
+      WHERE help.active = TRUE
+     ORDER BY help.dateCreated DESC`, []);
   return rows;
-  return new Promise((resolve, reject) => {
-    db.all('SELECT * FROM help_requests WHERE active = 1', (err, rows) => {
-      if (err) reject(err);
-      resolve(rows as HelpRequest[]);
-    });
-  });
 };
 export const getHelpRequest = async(id: string): Promise<HelpRequest> => {
   const rows = await executeQuery('SELECT * FROM help_requests WHERE id=$1', [id]);

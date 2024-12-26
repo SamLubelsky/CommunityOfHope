@@ -1,11 +1,11 @@
 import {Connector} from '@google-cloud/cloud-sql-connector'
-import { database } from 'firebase-admin'
 import { Pool } from 'pg'
-
-const instanceConnectionName = "fl24-community-of-hope:us-central1:coh-postgres"
-const dbUser = "quickstart-user"
-const dbPassword = "Sara6162816357492"
-const dbName = "coh-data"
+const dotenv = require('dotenv')
+dotenv.config();
+const instanceConnectionName = process.env.db_instance || "fl24-community-of-hope:us-central1:coh-postgres";
+const dbUser = process.env.db_user || "quickstart-user";
+const dbPassword = process.env.db_password || "password";
+const dbName = process.env.db_name || "coh-data"; 
 const connector = new Connector()
 let pool: Pool;
 
@@ -42,12 +42,13 @@ const executeQuery = async (query: string, values: string[]) => {
 const createTables = async () => {
   await executeQuery(`
           CREATE TABLE IF NOT EXISTS users (
-          id SERIAL PRIMARY KEY ,
+          id SERIAL PRIMARY KEY,
           username TEXT,
           password TEXT,
           firstName TEXT,
           lastName TEXT,
-          role TEXT
+          role TEXT,
+          dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
         )`,[]);
   await executeQuery(`
           CREATE TABLE IF NOT EXISTS help_requests (
@@ -56,7 +57,8 @@ const createTables = async () => {
           volunteer_id INTEGER,
           description TEXT,
           request TEXT,
-          active BOOLEAN DEFAULT TRUE, 
+          active BOOLEAN DEFAULT TRUE,
+          dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
           FOREIGN KEY (mom_id) REFERENCES users(id)
           )
         `,[]);
@@ -65,6 +67,7 @@ const createTables = async () => {
           id SERIAL PRIMARY KEY,
           momId INTEGER,
           volunteerId INTEGER,
+          dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (momId) REFERENCES users(id),
           FOREIGN KEY (volunteerId) REFERENCES users(id)
           )
