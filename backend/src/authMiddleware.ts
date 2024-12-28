@@ -32,6 +32,10 @@ export const requireAuth = async (req: Request, res: Response, next: NextFunctio
 };
 export const requireAdmin = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
   if (!req.session || !req.session.userId || !req.session.role || req.session.role !== 'Admin') {
+    // console.log("printing stuff");
+    console.log(req.session);
+    // console.log(req.session.userId);
+    // console.log(req.session.role);
     return res.status(401).json({ message: 'Unauthorized'});
   }
   next();

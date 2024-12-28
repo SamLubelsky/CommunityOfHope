@@ -23,23 +23,22 @@ export default function Users(){
                 credentials: 'include'
             });
             const responseData = await response.json();
-            setUsersList(responseData);
-            console.log(responseData);
+            setUsersList(responseData.users);
+            console.log("responseData:", responseData.users);
         }
         loadUsers();
     },[]);
     async function reloadUsers(){
-        const response = await fetch('http://localhost:3000/api/users',{
+        const response = await fetch(`${BACKEND_URL}/api/users`,{
             headers: { 'Content-Type': 'application/json' },
             method: 'GET',
             credentials: 'include'
         });
         const responseData = await response.json();
-        setUsersList(responseData);
-        console.log(responseData);
+        setUsersList(responseData.users);
     }
     async function deleteUser(id: string){
-        await fetch(`http://localhost:3000/api/users/${id}`,{
+        await fetch(`${BACKEND_URL}/api/users/${id}`,{
             method:'delete',
             credentials:'include'
         })

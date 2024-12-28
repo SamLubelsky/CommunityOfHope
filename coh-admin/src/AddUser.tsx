@@ -3,6 +3,7 @@ import InputField from './components/inputField';
 import SubmitButton from './components/submitButton';
 import {Link} from 'react-router-dom';
 import SelectField from './components/selectField';
+import { BACKEND_URL } from '../config';
 const roleOptions = ['Mom','Volunteer','Admin']
 export default function AddUser(){
     const [error, setError] = useState<string | null>(null);
@@ -25,7 +26,7 @@ export default function AddUser(){
         const firstName = formData.get('firstName');
         const lastName = formData.get('lastName');
         const role = formData.get('role');
-        const response = await fetch('http://localhost:3000/api/users',{
+        const response = await fetch(`${BACKEND_URL}/api/users`,{
             method:'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials:"include",

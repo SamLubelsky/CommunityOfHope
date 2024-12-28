@@ -2,10 +2,10 @@ import {Connector} from '@google-cloud/cloud-sql-connector'
 import { Pool } from 'pg'
 const dotenv = require('dotenv')
 dotenv.config();
-const instanceConnectionName = process.env.db_instance || "fl24-community-of-hope:us-central1:coh-postgres";
-const dbUser = process.env.db_user || "quickstart-user";
-const dbPassword = process.env.db_password || "password";
-const dbName = process.env.db_name || "coh-data"; 
+const instanceConnectionName = process.env.DB_INSTANCE || "fl24-community-of-hope:us-central1:coh-postgres";
+const dbUser = process.env.DB_USER || "quickstart-user";
+const dbPassword = process.env.DB_PASSWORD || "password";
+const dbName = process.env.DB_NAME || "coh-data"; 
 const connector = new Connector()
 let pool: Pool;
 
@@ -82,5 +82,15 @@ const createTables = async () => {
           FOREIGN KEY (senderId) REFERENCES users(id)
           )
         `,[]);
+  //create session database for express-session
+  await executeQuery(`CREATE TABLE IF NOT EXISTS session (
+                      sid VARCHAR NOT NULL PRIMARY KEY,
+                      sess JSON NOT NULL,
+                      expire TIMESTAMP(6) NOT NULL
+                      )
+                      WITH (OIDS=FALSE);
+                      CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON session ("expire");
+  `,[]);
+  
 }
 export {executeQuery, createTables};

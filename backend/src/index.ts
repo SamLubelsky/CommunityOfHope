@@ -14,30 +14,49 @@ import { connected } from 'process'
 import { getChatById } from './models/chatsModel'
 import {createMessage} from './models/chatsModel'
 import { createTables } from './config/setupDatabase'
+import  {Pool} from 'pg'
+import PgSimple from 'connect-pg-simple'
 const http = require('http')
 
 // createTables();
 dotenv.config()
 const app = express()
 
-const isDevelopment = process.env.node_env == 'development'
+const isDevelopment = process.env.NODE_ENV == 'development'
 if(isDevelopment){
   console.log("In Development Mode");
   app.use(cors({origin: ["http://localhost:8081", "http://localhost:5173"], credentials: true}));
 } else{
   console.log("In Production Mode");
-  app.use(cors({origin: ["https://fl24-community-of-hope.web.app"], credentials: true}));
+  app.set('trust proxy', true);
+  app.use(cors({origin: ["https://fl24-community-of-hope.web.app","http://localhost:5173"], credentials: true}));
 }
 
+const pool = new Pool({
+  host: process.env.DB_HOST || `/cloudsql/${process.env.DB_INSTANCE}`,
+  user: process.env.DB_USER || 'quickstart-user',
+  password: process.env.DB_PASSWORD || 'password',
+  database: process.env.DB_NAME || 'coh-data',
+  // ssl: process.env.NODE_ENV === 'production' ? {rejectUnauthorized: false} : false
+})
+const pgSession = PgSimple(session);
+console.log(!isDevelopment);
 app.use(session({
-  store: new SQLiteStore(),
+  store: new pgSession({
+    pool,
+    tableName: 'session'
+  }),
+  proxy: !isDevelopment,
   secret: process.env.SESSION_SECRET || 'your_secret_key',  // Replace with a secure key
   resave: false,
   saveUninitialized: false,
   cookie: { 
     httpOnly: true,
-    secure: false,
-    maxAge: 1000 * 60 * 60 * 24 * 90 //3 months
+    secure: !isDevelopment,
+    sameSite: isDevelopment ? 'lax' : 'none',
+    // domain: isDevelopment ? 'localhost' : 'https://api-v4j57qn4oq-uc.a.run.app',
+    // secure: !isDevelopment,
+    maxAge: 1000 * 60 * 60 * 24 * 90, //3 months
   }  // Set secure: true in production when using HTTPS
 }));
 
@@ -51,10 +70,9 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server')
 })
 
-const port = process.env.PORT || 3000
+const port = process.env.LOCAL_PORT || 3000
 const httpServer = http.createServer(app)  
 if(isDevelopment){
-  console.log(isDevelopment);
   httpServer.listen(port, () => {
     console.log(`[server]: Server is running at http://localhost:${port}`)
   }); 
@@ -106,8 +124,7 @@ io.on('connection', (socket) => {
 app.get('/timestamp', (req: Request, res: Response) => {
   res.send(`${Date.now()}`);
 });
-exports.api = functions.https.onRequest({cors: true}, (req,res) => app(req, res));
-console.log("hello there");
+exports.api = functions.https.onRequest(app);
 // export {app};
 // if (require.main == module) {
 //   app.listen(port, () => {
