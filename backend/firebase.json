@@ -1,21 +1,4 @@
-{
-  // "emulators": {
-  //   "functions":{
-  //     "source": "src",
-  //     "codebase": "default",
-  //     "ignore": [
-  //       "node_modules",
-  //       ".git",
-  //       "firebase-debug.log",
-  //       "firebase-debug.*.log",
-  //       "*.local"
-  //     ],
-  //     "predeploy": [
-  //       "npm run build"
-  //     ],
-  //     "port": 3000
-  //   }
-  // },
+{ 
   "functions": [
     {
       "source": "dist",
@@ -29,7 +12,8 @@
       ],
       "predeploy": [
         "npm run build"
-      ]
+      ],
+      "concurrency": 80
     }
   ]
 }

@@ -2,10 +2,11 @@ import React, {useEffect, useState} from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import {ScrollView, View, Text, TextInput, StyleSheet} from 'react-native';
 import Button from '@/components/Button';
+import { AppState } from 'react-native';
 // import { socket } from "../socket";
 import { useBoundStore } from '@/store/useBound';
 import { io } from 'socket.io-client';
-
+import { BACKEND_URL } from '../config';
 type Message = {
     senderId: number;
     message: string;
@@ -18,9 +19,10 @@ export default function Page(){
     const[curMessage, setCurMessage] = useState<string>('');
     const [socket, setSocket] = useState<ReturnType<typeof io>>();
     const [height, setHeight] = useState<number>(50);
+    const [appState, setAppState] = useState(AppState.currentState);
     useEffect(() => {
         const loadMessages = async () => {
-            const response = await fetch(`http://localhost:3000/api/chats/${chatId}`, {
+            const response = await fetch(`${BACKEND_URL}/api/chats/${chatId}`, {
                 method: 'GET',
                 credentials: 'include',
             })
@@ -30,19 +32,33 @@ export default function Page(){
             }
         }
         loadMessages();
-        const socket = io('http://localhost:3000');
+        const socket = io(BACKEND_URL);
         setSocket(socket);
         socket.on("message", (data)=>{  
             setMessages((prevMessages) => [...prevMessages, data])
         })
         socket.on('askId', () =>{
             socket.emit('idResponse', String(id));
-            console.log(`Sent id: ${id} to server`);
+            // console.log(`Sent id: ${id} to server`);
         })
         socket.on('messageReceived', msg=>{
-            console.log("message successfully received by server");
+            // console.log("message successfully received by server");
         })
         socket.emit('idReady');
+        //RELOAD MESSAGES 
+        const subscription = AppState.addEventListener('change', nextAppState => {
+            if (appState.match(/inactive|background/) && nextAppState === 'active') {
+              // App has come to the foreground
+              console.log('App has been reopened');
+              loadMessages();
+            }
+      
+            setAppState(nextAppState);
+          });
+      
+          return () => {
+            subscription.remove();
+          };
     }, []);
     function sendMessage(){
         if(curMessage === ''){
@@ -52,13 +68,13 @@ export default function Page(){
         if(socket){
             socket.emit('message', data);
         }
-        console.log(`Sent message:`, data);
+        // console.log(`Sent message:`, data);
         setMessages([...messages, data]);
-        console.log(messages);
+        // console.log(messages);
         setCurMessage('');
     }
     function displayMessages(){
-        console.log(messages);
+        // console.log(messages);
         if(messages.length == 0){
             return;
         }

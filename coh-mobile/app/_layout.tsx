@@ -2,7 +2,7 @@ import { useBoundStore } from '@/store/useBound';
 import { router, Slot, Stack, Tabs } from 'expo-router';
 import { setStatusBarStyle } from 'expo-status-bar';
 import { useEffect } from 'react';
-
+import {BACKEND_URL} from './config';
 export default function RootLayout() {
   useEffect(() => {
     setTimeout(() => {
@@ -21,7 +21,7 @@ function AuthNavigator() {
 	const setRole = useBoundStore((state) => state.setRole);
 	async function verifySession(){
 
-		const response = await fetch('http://localhost:3000/api/verify-session',{
+		const response = await fetch(`${BACKEND_URL}/api/verify-session`,{
 		   headers: { 'Content-Type': 'application/json' },
 		   method: 'POST',
 		   credentials: 'include',
@@ -57,7 +57,7 @@ function AuthNavigator() {
 
 		if (isSignedIn) {
 
-			router.replace("/(tabs)/");
+			router.replace("/(tabs)");
 
 		} else {
 			

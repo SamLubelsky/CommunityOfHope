@@ -5,7 +5,7 @@ import Button from '@/components/Button';
 import VolunteerRequestForm from "@/components/VolunteerRequestForm";
 import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';
-
+import { BACKEND_URL } from '../config';
 const RequestAVolunteerScreen = () => {
   const [isModalVisible, setIsModalVisible] = React.useState<boolean>(false);
   const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
@@ -23,7 +23,7 @@ const RequestAVolunteerScreen = () => {
   };
 
   const handleLogout = async () => {
-    await fetch("http://localhost:3000/api/logout", {
+    await fetch(`${BACKEND_URL}/api/logout`, {
       method: "POST",
       credentials: "include",
     });

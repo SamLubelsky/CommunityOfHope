@@ -2,13 +2,13 @@ import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import Button from '@/components/Button';
 import { router } from 'expo-router'
-const placeholder1 = {chats: [{name: "Sharon", chatId: 3},{name: "Jennifer", chatId: 4},{name: "Alice", chatId: 5},]}
+import { BACKEND_URL } from '../config';
 import {Chat} from '../../types';
 export default function Chats(){
     const [chats, setChats] = useState<Chat[]>([]);
     useEffect(() => {
         const loadChats = async () => {
-            const response = await fetch('http://localhost:3000/api/chats', {
+            const response = await fetch(`${BACKEND_URL}/api/chats`, {
                 method: 'GET',
                 credentials: 'include',
             });
@@ -27,11 +27,11 @@ export default function Chats(){
         if(chats.length == 0){
             return <Text style={styles.helpText}> You don't have any chats open yet</Text>
         }
-        return chats.map((chat: any, index: any) => {
+        return chats.map((chat: any, index: any) => {   
             return (
                 <View key={index} style={styles.itemContainer}>
                     <Text style={styles.text}> {chat.otherName}</Text>
-                    <Button label="Open Chat" onPress={() => onSubmit(chat.chatId)}/>
+                    <Button label="Open Chat" onPress={() => onSubmit(chat.id)}/>
                 </View>
             )});
     }       

@@ -5,6 +5,7 @@ import {useForm, Controller, SubmitHandler} from 'react-hook-form';
 import {SafeAreaView,SafeAreaProvider } from 'react-native-safe-area-context'
 import Input from './Input';
 import { useBoundStore } from '@/store/useBound';
+import { BACKEND_URL } from '../app/config';
 type Props = {
     isVisible: boolean;
     onClose: () => void;
@@ -27,7 +28,7 @@ export default function VolunteerRequestForm({isVisible, onClose}: Props){
         const description = data.description;
         const mom_id = id;
         const mom_name = firstName;
-        const response = await fetch('http://localhost:3000/api/help_requests', {
+        const response = await fetch(`${BACKEND_URL}/api/help_requests`, {
             method: 'POST', 
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ mom_id, description, }),

@@ -3,9 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import Button from '@/components/Button';
 import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';
-const placeholder = {"Requests": [{"Name": "Sharon", "Category": "Hospital Stay", "requestId": 2},
- {"Name": "Jennifer", "Category": "Grocery Shopping", "requestId": 3,},
- {"Name": "Alice", "Category": "Help At Home", "requestId": 1},]}
+import { BACKEND_URL } from '../config';
 type HelpRequest ={
   name: string;
   category: string;
@@ -13,6 +11,7 @@ type HelpRequest ={
 }
 export default function HelpRequests(){
     const [requests, setRequests] = useState<HelpRequest[]>([]);
+    const [refreshCounter, setRefreshCounter] = useState(0);
     const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
       const role = useBoundStore((state) => state.role);
       useEffect(() => {
@@ -20,9 +19,16 @@ export default function HelpRequests(){
           router.replace('/requestAVolunteer')
         }
         getRequests();
+        const intervalId = setInterval(() => {
+          setRefreshCounter(prevCounter => prevCounter + 1);
+          console.log("refreshing");
+          getRequests();
+        }, 60000); // 60000 milliseconds = 1 minute
+    
+        return () => clearInterval(intervalId); 
       },[]);
     const handleLogout = async () => {
-      await fetch("http://localhost:3000/api/logout", {
+      await fetch(`${BACKEND_URL}/api/logout`, {
         method: "POST",
         credentials: "include",
       });
@@ -30,21 +36,19 @@ export default function HelpRequests(){
     };
     async function submitHelpRequest(id: Number){
         setRequests(requests.filter(request => request.id !== id));
-        const response = await fetch(`http://localhost:3000/api/help_requests/${id}`, {
+        const response = await fetch(`${BACKEND_URL}/api/help_requests/${id}`, {
           method: 'POST',
           credentials: 'include',
         });
         const responseData = await response.json();
-        console.log(responseData.message);
 
     }
     async function getRequests(){
-        const response = await fetch('http://localhost:3000/api/help_requests/active',{
+        const response = await fetch(`${BACKEND_URL}/api/help_requests/active`,{
           method: 'GET',
           credentials: 'include',
         });
         const json = await response.json();
-        console.log(json);
         setRequests(json.Requests);
     }
     function getRequestsList(){
