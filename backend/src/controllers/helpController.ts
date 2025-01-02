@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest } from '../models/helpRequestModel';
+import { acceptHelpRequest, getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest} from '../models/helpRequestModel';
 import { getUserData, getAllUsers } from '../models/userModel';
 import { createChat, getChat } from '../models/chatsModel';
 import { getHeapSnapshot } from 'v8';
@@ -61,7 +61,10 @@ export const acceptRequest = async (req: Request, res: Response): Promise<any> =
     const { id } = req.params;
     const helpRequest = await getHelpRequest(id);
     const {mom_id} = helpRequest
-    //create chat if none exists
+    const acceptedHelpRequests = (await getAllActiveHelpRequests()).filter((request)=> request.volunteer_id === volunteer_id);
+    if(acceptedHelpRequests.length > 0){
+      return res.status(400).json({error: 'You have already accepted a help request'});
+    }
     try{
       const chat = await getChat(mom_id, volunteer_id); //will throw an error if chat does not exist
       console.log(chat);
@@ -70,11 +73,54 @@ export const acceptRequest = async (req: Request, res: Response): Promise<any> =
       console.log("Chat does not exist, creating chat");
       await createChat(volunteer_id, mom_id);
     }
-    await deactivateHelpRequest(id);
+    await acceptHelpRequest(id, volunteer_id);
     res.status(200).json({ message: 'Help request accepted successfully' });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }
 };
-
+export const deactivateRequest = async (req: Request, res: Response): Promise<any> => {
+  if(!req.session || !req.session.userId || !req.session.role){
+    return res.status(401).json({error: 'You are not logged in'});
+  } 
+  try {
+    const acceptedHelpRequests = (await getAllActiveHelpRequests()).filter((request)=> request.volunteer_id === req.session.userId);
+    if(acceptedHelpRequests.length === 0){
+      return res.status(400).json({error: 'You have not accepted any help requests'});
+    }
+    const acceptedHelpRequest = acceptedHelpRequests[0];
+    await deactivateHelpRequest(acceptedHelpRequest.id);
+    res.status(200).json({ message: 'Help request accepted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+export const getRequestStatus = async (req: Request, res: Response): Promise<any> => {
+  if(!req.session || !req.session.userId || !req.session.role){
+    return res.status(401).json({error: 'You are not logged in'});
+  }
+  if(req.session.role !== "Mom"){
+    return res.status(401).json({error: 'Only moms are authorized to access this route'});
+  }
+  try {
+    const { userId } = req.session;
+    const activeHelpRequests = await getAllActiveHelpRequests();
+    const userRequests = activeHelpRequests.filter(request => request.mom_id === userId);
+    if(userRequests.length > 0){
+      const helpRequest = userRequests[0];
+      const {volunteer_id} = helpRequest;
+      if(volunteer_id){
+        const volunteer_data = await getUserData(volunteer_id);
+        const volunteer_name = volunteer_data.firstName + ' ' + volunteer_data.lastName;
+        res.status(200).json({ status: 'Accepted', volunteerName: volunteer_name });
+      } else{
+        res.status(200).json({ status: 'Requested'});
+      }
+    } else{
+      res.status(200).json({ status: 'Not Requested' });
+    }
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
 // Add other controller functions (getById, update, delete)...

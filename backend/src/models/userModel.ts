@@ -4,11 +4,11 @@ import {executeQuery} from '../config/setupDatabase'
 const bcrypt = require('bcrypt')
 
 export const getAllUsers = async() => {
-  const rows = await executeQuery('SELECT id, username, firstName AS "firstName", lastName AS "lastName", role FROM users', []);
+  const rows = await executeQuery('SELECT id, username, firstName AS "firstName", lastName AS "lastName", role, profileLink AS "profileLink" FROM users', []);
   return rows;
 };
 export const getUserData = async (id: string): Promise<User> => {
-  const row = await executeQuery('SELECT id, password, username, firstName AS "firstName", lastName AS "lastName", role FROM users where id=$1', [id]);
+  const row = await executeQuery('SELECT id, password, username, firstName AS "firstName", lastName AS "lastName", role, profileLink AS "profileLink" FROM users where id=$1', [id]);
   if(row){
     return row[0];
   } else{
@@ -24,7 +24,7 @@ export const findUserByUsername = async (username: string): Promise<User> => {
     return Promise.reject(new Error('User not found'));
   }
 };
-export const editUserInfo = async(username: string, password: string, firstName: string, lastName: string, role: string, id:string) => {
+export const editUserInfo = async(username: string, password: string, firstName: string, lastName: string, role: string, id:string, profileLink: string) => {
   const validationError = validateUserInput({ user: username, password, firstName, lastName, role });
   if(validationError){
     return Promise.reject(new Error(validationError));
@@ -34,11 +34,11 @@ export const editUserInfo = async(username: string, password: string, firstName:
     return Promise.reject(new Error('User not found in database, try adding a user instead'));
   }
   const hashedPass = bcrypt.hashSync(password, 10);
-  const query = 'UPDATE users SET username=$1, password=$2, firstName=$3, lastName=$4, role=$5 WHERE id=$6'
-  const values = [username, hashedPass, firstName, lastName, role, id]
+  const query = 'UPDATE users SET username=$1, password=$2, firstName=$3, lastName=$4, role=$5, profileLink=$6 WHERE id=$7'
+  const values = [username, hashedPass, firstName, lastName, role, profileLink, id]
   return await executeQuery(query, values);
 }
-export const createUser = async (username: string, password: string, firstName: string, lastName: string, role: string) => {
+export const createUser = async (username: string, password: string, firstName: string, lastName: string, role: string, profileLink: string) => {
   const validationError = validateUserInput({ user: username, password, firstName, lastName, role });
   if (validationError) {
     return Promise.reject(new Error(validationError));
@@ -50,8 +50,8 @@ export const createUser = async (username: string, password: string, firstName: 
   }
   
   const hashedPass = bcrypt.hashSync(password, 10);
-  const query = 'INSERT INTO users (username, password, firstName, lastName, role) VALUES ($1, $2, $3, $4, $5)'
-  const values = [username, hashedPass, firstName, lastName, role]
+  const query = 'INSERT INTO users (username, password, firstName, lastName, role, profileLink) VALUES ($1, $2, $3, $4, $5, $6)'
+  const values = [username, hashedPass, firstName, lastName, role, profileLink]
   executeQuery(query, values);
   return;
 };

@@ -4,6 +4,7 @@ import SubmitButton from './components/submitButton';
 import {Link} from 'react-router-dom';
 import SelectField from './components/selectField';
 import { BACKEND_URL } from '../config';
+import ImageField from './components/imageField';
 const roleOptions = ['Mom','Volunteer','Admin']
 export default function AddUser(){
     const [error, setError] = useState<string | null>(null);
@@ -21,16 +22,10 @@ export default function AddUser(){
         setIsLoading(true);
         setError(null);
         const formData = new FormData(event.currentTarget)
-        const user = formData.get('username');
-        const password = formData.get('password');
-        const firstName = formData.get('firstName');
-        const lastName = formData.get('lastName');
-        const role = formData.get('role');
         const response = await fetch(`${BACKEND_URL}/api/users`,{
             method:'POST',
-            headers: { 'Content-Type': 'application/json' },
             credentials:"include",
-            body: JSON.stringify({ user, password, firstName, lastName, role }),
+            body: formData,
         });
         const responseData = await response.json();
         if (!response.ok) {
@@ -54,6 +49,7 @@ export default function AddUser(){
                 <InputField fieldName="password" fieldType="password" required displayName="Password"/>
                 <InputField fieldName="firstName" fieldType="text" required displayName="First Name"/>
                 <InputField fieldName="lastName" fieldType="text" required displayName="Last Name"/>
+                <ImageField fieldName="profilePic" required displayName="Profile Picture"/>
                 <SelectField fieldName='role' required displayName='Role' defaultValue="Mom" options={roleOptions}/>
                 <SubmitButton label="Add New User" isLoading={isLoading} />
             </form>

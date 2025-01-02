@@ -20,12 +20,12 @@ export default function Login(){
         setIsLoading(true);
         setError(null);
         const formData = new FormData(event.currentTarget)
-        const user = formData.get('username');
+        const username = formData.get('username');
         const password = formData.get('password');
         const response = await fetch(`${BACKEND_URL}/api/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user, password }),    
+            body: JSON.stringify({ username, password }),    
             credentials: 'include'
         });
         const responseData = await response.json();
@@ -37,7 +37,7 @@ export default function Login(){
         else{            
             Cookies.set('SignedIn', 'true');    
             console.log("redirecting");
-            navigate("/");
+            window.location.reload();
             localStorage.setItem("SignedIn", "true");
             console.log("you're logged in");
         }

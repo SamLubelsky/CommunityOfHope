@@ -1,25 +1,20 @@
-import { Express, Request, Response } from 'express'
-const express = require('express')
-const session = require('express-session')
-const dotenv = require('dotenv')
-const bcrypt =require('bcrypt')
-const cors = require('cors')
-const SQLiteStore = require('connect-sqlite3')(session);
-const functions = require('firebase-functions');
+import { Request, Response } from 'express'
+import express from 'express'
+import session from 'express-session'
+import dotenv from 'dotenv'
+import cors from 'cors'
 import userRoutes from './routes/userRoutes';
 import helpRoutes from './routes/helpRoutes';
 import chatRoutes from './routes/chatRoutes';
-import {Server} from 'socket.io'
-import { connected } from 'process'
-import { getChatById } from './models/chatsModel'
-import {createMessage} from './models/chatsModel'
 import { createTables } from './config/setupDatabase'
 import  {Pool} from 'pg'
 import PgSimple from 'connect-pg-simple'
 import { initializeWebSocket } from './websocket'
-const http = require('http')
+import http from 'http'
+import path from 'path'
+import bodyParser from 'body-parser'
 
-// createTables();
+createTables();
 dotenv.config()
 const app = express()
 
@@ -35,7 +30,7 @@ if(isDevelopment){
 
 const pool = new Pool({
   host: process.env.DB_HOST || `/cloudsql/${process.env.DB_INSTANCE}`,
-  user: process.env.DB_USER || 'quickstart-user-test',
+  user: process.env.DB_USER || 'quickstart-user',
   password: process.env.DB_PASSWORD || 'password',
   database: process.env.DB_NAME || 'coh-data',
   // ssl: process.env.NODE_ENV === 'production' ? {rejectUnauthorized: false} : false
@@ -63,6 +58,9 @@ app.use(session({
 
 
 app.use(express.json())
+app.use(express.static(path.join(__dirname, '../public')));
+// app.use(bodyParser.urlencoded({extended: false}));
+
 app.use('/api', userRoutes)
 app.use('/api', helpRoutes);
 app.use('/api', chatRoutes);
@@ -84,7 +82,7 @@ httpServer.listen(port, () => {
 //   console.log("Not running server");
 // }
 initializeWebSocket(httpServer);
-exports.api = functions.https.onRequest(app);
+// exports.api = functions.https.onRequest(app);
 // export {app};
 // if (require.main == module) {
 //   app.listen(port, () => {

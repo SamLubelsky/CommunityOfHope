@@ -11,6 +11,7 @@ type User = {
     lastName: string;
     role: string;
     id: string;
+    profileLink: string;
 }
 export default function Users(){
     const [usersList, setUsersList] = useState<null  | User[]>(null);
@@ -58,6 +59,9 @@ export default function Users(){
             })
             return <>
                 {row}
+                <div className="pr-5">
+                <img className="w-1/2 mx-auto" title="profile picture" src={BACKEND_URL + user.profileLink} />
+                </div>
                 <div>
                 <Link key={`link-1-${index}`}className="inline-block" to={{
                     pathname: "/edit-user",
@@ -78,13 +82,14 @@ export default function Users(){
                 </div>
             </>
         });
-        return  <div className="grid grid-cols-6    ">
+        return  <div className="grid grid-cols-7">
                 <p key='th-1' className="p-2 text-gray-700 text-xl font-semibold">Username</p>
                 <p key='th-2' className="p-2 text-gray-700 text-xl font-semibold">First Name</p>
                 <p key='th-3' className="p-2 text-gray-700 text-xl font-semibold">Last Name</p>
                 <p key='th-4' className="p-2 text-gray-700 text-xl font-semibold">Role</p>
-                <p key='th-5' className="p-2 text-gray-700 text-xl font-semibold">Edit User</p>
-                <p key='th-6' className="p-2 text-gray-700 text-xl font-semibold">Delete User</p>
+                <p key='th-5' className="p-2 text-gray-700 text-xl font-semibold">Profile Picture</p>
+                <p key='th-6' className="p-2 text-gray-700 text-xl font-semibold">Edit User</p>
+                <p key='th-7' className="p-2 text-gray-700 text-xl font-semibold">Delete User</p>
                 {formattedList}
                 </div>
     }

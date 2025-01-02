@@ -10,4 +10,5 @@ export type User = {
     lastName: string;
     role: string;
     password?: string;
+    profileLink: string;
 }

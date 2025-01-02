@@ -27,8 +27,8 @@ export default function HelpRequests(){
                 return <>
                     <p key={`user-${index}-0`} className="p-2 text-gray-700 text-xl font-semibold">{helpRequest.mom_name}</p>
                     <p key={`user-${index}-1`} className="p-2 text-gray-700 text-xl font-semibold">{helpRequest.volunteer_name}</p>
-                    helpRequest.active ? <p key={`user-${index}-2`} className="p-2 text-red-700 text-xl font-semibold">Yes</p> 
-                    : <p key={`user-${index}-2`} className="p-2 text-red-700 text-xl font-semibold">No</p>
+                    {helpRequest.active ? <p key={`user-${index}-2`} className="p-2 text-red-700 text-xl font-semibold">No</p> 
+                    : <p key={`user-${index}-2`} className="p-2 text-green-700 text-xl font-semibold">Yes</p>}
                 </>
         })
             return  <div className="grid grid-cols-3">
@@ -40,7 +40,7 @@ export default function HelpRequests(){
                     {formattedList}
                     </div>
         } else{
-            return <p className="font-semibold text-xl"> No help requests have been created yet</p>
+            return <p className="font-semibold text-xl text-slate-700">Loading help requests...</p>
         }
     }
     return (

@@ -5,13 +5,15 @@ import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';
 import { BACKEND_URL } from '../config';
 type HelpRequest ={
-  name: string;
+  mom_name: string;
   category: string;
   id: number;
 }
 export default function HelpRequests(){
     const [requests, setRequests] = useState<HelpRequest[]>([]);
-    const [refreshCounter, setRefreshCounter] = useState(0);
+    const[helping, setHelping] = useState<boolean>(false);
+    const [momName, setMomName] = useState<string | null>(null);
+    const [helpId, setHelpId] = useState<number | null>(null);
     const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
       const role = useBoundStore((state) => state.role);
       useEffect(() => {
@@ -20,13 +22,25 @@ export default function HelpRequests(){
         }
         getRequests();
         const intervalId = setInterval(() => {
-          setRefreshCounter(prevCounter => prevCounter + 1);
-          console.log("refreshing");
           getRequests();
-        }, 60000); // 60000 milliseconds = 1 minute
-    
-        return () => clearInterval(intervalId); 
+        }, 20000); // 20000 milliseconds = 20 seconds
+        return ()=> clearInterval(intervalId);
       },[]);
+    async function deactivateHelpRequest(){
+      setHelping(false);
+      await fetch(`${BACKEND_URL}/api/help_requests/deactivate/${helpId}`, {
+        method: 'POST',
+        credentials: 'include',
+      })
+    }
+    function HelpCard(){
+        return (
+            <View style={styles.helpCard}>
+                <Text style={styles.helpText}> You are currently helping {momName}</Text>
+                <Button label={`Finish Helping ${momName}`} onPress={deactivateHelpRequest}/>
+            </View>
+        );
+    }
     const handleLogout = async () => {
       await fetch(`${BACKEND_URL}/api/logout`, {
         method: "POST",
@@ -35,13 +49,17 @@ export default function HelpRequests(){
       setIsSignedIn(false);
     };
     async function submitHelpRequest(id: Number){
-        setRequests(requests.filter(request => request.id !== id));
-        const response = await fetch(`${BACKEND_URL}/api/help_requests/${id}`, {
-          method: 'POST',
-          credentials: 'include',
-        });
-        const responseData = await response.json();
-
+      const submittedHelpRequest = requests.filter(request => request.id === id)[0];
+      setRequests(requests.filter(request => request.id !== id));
+      const response = await fetch(`${BACKEND_URL}/api/help_requests/${id}`, {
+        method: 'POST',
+        credentials: 'include',
+      });
+      if(response.ok){
+        setHelping(true);
+        setMomName(submittedHelpRequest.mom_name);
+        setHelpId(submittedHelpRequest.id);
+      }
     }
     async function getRequests(){
         const response = await fetch(`${BACKEND_URL}/api/help_requests/active`,{
@@ -58,15 +76,21 @@ export default function HelpRequests(){
         return requests.map((request: any, index: any) => {
             return (
                 <View key={index} style={styles.itemContainer}>
-                    <Text style={styles.helpText}> {request.mom_name} needs help with: {request.category}</Text>
-                    <Text style={styles.descriptionText}>{request.description}</Text>
+                    <Text style={styles.helpText}> {request.mom_name} needs help with {request.description}</Text>
                     <Button label="Accept Help Request" onPress={() => submitHelpRequest(request.id)}/>
                 </View>
             )});
     }
+    function MainContent(){
+        if(helping){
+            return <HelpCard />
+        } else{
+            return getRequestsList();
+        }
+    }
     return (<View style={styles.container}>
         <Text style={styles.text}> All Current Help Requests</Text>
-        {getRequestsList()}
+        <MainContent />
         <Button label="Logout" onPress={handleLogout} />
         </View>)
 }
@@ -96,9 +120,16 @@ const styles = StyleSheet.create({
       fontSize: 50,
       margin: 20,
     },  
-    helpText:{
-        color: 'white',
-        fontSize: 24, 
+    helpCard:{
+      backgroundColor: '#ff4d4d',
+      padding: 20,
+      margin: 20,
+      borderRadius: 20,
+    },
+    helpText: {
+      color: 'white',
+      fontSize: 24,
+      margin: 5,
     },
     titleContainer: {
       flexDirection: 'row',

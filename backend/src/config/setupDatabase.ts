@@ -48,6 +48,7 @@ const createTables = async () => {
           firstName TEXT,
           lastName TEXT,
           role TEXT,
+          profileLink TEXT,
           dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
         )`,[]);
   await executeQuery(`
@@ -56,7 +57,7 @@ const createTables = async () => {
           mom_id INTEGER,
           volunteer_id INTEGER,
           description TEXT,
-          request TEXT,
+          emergency BOOLEAN DEFAULT FALSE,
           active BOOLEAN DEFAULT TRUE,
           dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
           FOREIGN KEY (mom_id) REFERENCES users(id)

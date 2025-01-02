@@ -3,13 +3,15 @@ import { TextInput, StyleSheet } from 'react-native';
 type Props={
     name: string;
     control: any;
+    required: boolean;
+    lines: number;
 }
-export default function Input({name, control}: Props){
+export default function TextareaInput({name, control, required, lines}: Props){
     return (
         <Controller 
         control={control}
         rules={{
-            required: true,
+            required: required,
         }}
         render={({field: {onChange, onBlur, value}}) => (
             <TextInput 
@@ -18,6 +20,8 @@ export default function Input({name, control}: Props){
             onChangeText={onChange}
             onBlur={onBlur}
             style={styles.input}
+            multiline={true}
+            numberOfLines={lines}
             placeholderTextColor="#64748b"
             />
         )}

@@ -4,6 +4,7 @@ import SubmitButton from './components/submitButton';
 import { Link, useSearchParams} from 'react-router-dom';
 import {BACKEND_URL} from '../config';
 import SelectField from './components/selectField';
+import ImageField from './components/imageField';
 const roleOptions = ['Mom','Volunteer','Admin']
 type User = {
     username: string;
@@ -39,16 +40,10 @@ export default function EditUser(){
         setIsLoading(true);
         setError(null);
         const formData = new FormData(event.currentTarget)
-        const user = formData.get('username');
-        const password = formData.get('password');
-        const firstName = formData.get('firstName');
-        const lastName = formData.get('lastName');
-        const role = formData.get('role');
         const response = await fetch(`${BACKEND_URL}/api/users/${id}`,{
             method:'PUT',
-            headers: { 'Content-Type': 'application/json' },
             credentials:"include",
-            body: JSON.stringify({ user, password, firstName, lastName, role}),
+            body: formData,
         });
         const responseData = await response.json();
         if (!response.ok) {
@@ -73,6 +68,7 @@ export default function EditUser(){
                 <InputField fieldName="password" fieldType="password" required displayName="Password" placeholder={"You must make a new password"}/>
                 <InputField fieldName="firstName" fieldType="text" required displayName="First Name" defaultValue={userData.firstName}/>
                 <InputField fieldName="lastName" fieldType="text" required displayName="Last Name" defaultValue={userData.lastName}/>
+                <ImageField fieldName="profilePic" required displayName="Profile Picture"/>
                 <SelectField fieldName='role' required displayName='Role' options={roleOptions} defaultValue={userData.role}/>
                 <SubmitButton label="Edit User Info" isLoading={isLoading} />
             </form>

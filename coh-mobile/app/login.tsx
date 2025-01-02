@@ -34,7 +34,7 @@ export const LoginScreen = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user: email,
+        username: email,
         password: password,
       }),
       credentials: "include",
