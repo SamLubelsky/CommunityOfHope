@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import Button from '@/components/Button';
+import MyButton from '@/components/MyButton';
 import { router } from 'expo-router'
 import { BACKEND_URL } from '../config';
 import {Chat} from '../../types';
@@ -31,7 +31,7 @@ export default function Chats(){
             return (
                 <View key={index} style={styles.itemContainer}>
                     <Text style={styles.text}> {chat.otherName}</Text>
-                    <Button label="Open Chat" onPress={() => onSubmit(chat.id)}/>
+                    <MyButton label="Open Chat" onPress={() => onSubmit(chat.id)}/>
                 </View>
             )});
     }       

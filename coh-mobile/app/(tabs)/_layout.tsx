@@ -6,7 +6,6 @@ type Props = {
 }
 export default function TabLayout() {
   const role = useBoundStore((state) => state.role);
-  console.log("Role here: ", role);
   // console.log(getCustomTabs(role));
   if(role == 'Mom'){
     return (

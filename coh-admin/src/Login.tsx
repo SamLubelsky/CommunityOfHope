@@ -29,10 +29,15 @@ export default function Login(){
             credentials: 'include'
         });
         const responseData = await response.json();
+        const {role} = responseData;
         if (!response.ok) {
             const error = responseData.message;
             console.error(error);
             setError(error);
+        }
+        else if(role !== "Admin"){
+            console.error("ONly admins can login to the admin site");
+            setError(`Only admin users can login.  Your role is ${role}`)
         }
         else{            
             Cookies.set('SignedIn', 'true');    

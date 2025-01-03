@@ -6,7 +6,7 @@ type Props = {
     onPress?: () => void;
 }
 
-export default function Button({label, onPress}: Props){
+export default function MyButton({label, onPress}: Props){
     return (
         <Pressable style={styles.button} onPress={onPress}>
             <Text style={styles.text}>{label}</Text>

@@ -6,6 +6,7 @@ import cors from 'cors'
 import userRoutes from './routes/userRoutes';
 import helpRoutes from './routes/helpRoutes';
 import chatRoutes from './routes/chatRoutes';
+import notificationRoutes from './routes/notificationRoutes';
 import { createTables } from './config/setupDatabase'
 import  {Pool} from 'pg'
 import PgSimple from 'connect-pg-simple'
@@ -64,6 +65,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/api', userRoutes)
 app.use('/api', helpRoutes);
 app.use('/api', chatRoutes);
+app.use('/api', notificationRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server')

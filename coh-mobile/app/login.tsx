@@ -25,8 +25,6 @@ export const LoginScreen = () => {
     // validate the user credentials
     // call the api for the login
 
-    console.log("signIn pressed");
-
     // update the sign in state in the authenticationSlice
     const response = await fetch(`${BACKEND_URL}/api/login`, {
       method: "POST",
@@ -47,10 +45,8 @@ export const LoginScreen = () => {
       setId(id);
       setIsSignedIn(true);
       setRole(role);
-      console.log("Login successful");
       router.push("/(tabs)");
     }else{
-      console.log("Login failed");
       Alert.alert("Login failed", "Please try again", [{ text: "OK" }]);
     }
   };
@@ -62,7 +58,7 @@ export const LoginScreen = () => {
           <Card.Title title="Community of Hope Login" />
           <Card.Content>
             <TextInput 
-              label="Email" 
+              label="Username" 
               value={email}
               keyboardType="email-address"
               onChangeText={setEmail} 

@@ -3,8 +3,6 @@ import { useContext, useEffect, useState } from 'react';
 import { useBoundStore } from '@/store/useBound';
 import { Redirect, Slot, useRouter } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import Button from "@/components/Button";
-import VolunteerRequestForm from "@/components/VolunteerRequestForm";
 
 export default function RootLayout() {
   return (
@@ -21,7 +19,6 @@ export function Page() {
   const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
   const role = useBoundStore((state) => state.role);
   const router = useRouter();
-  console.log("we are signed in");
   // useEffect(() => {
   //   const timer = setTimeout(() => {
   //     if (isSignedIn) {

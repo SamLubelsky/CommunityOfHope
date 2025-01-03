@@ -1,5 +1,5 @@
 import {Modal, StyleSheet, Text, TextInput, View, Pressable} from 'react-native';
-import Button from './Button';
+import Button from './MyButton';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form'; 
 import {SafeAreaView,SafeAreaProvider } from 'react-native-safe-area-context'
@@ -31,7 +31,6 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus}
 
     const onSubmit: SubmitHandler<FormData> = async (data) => {
         const description = data.description;
-        console.log("data:", data);
         const mom_id = id;
         const mom_name = firstName;
         const response = await fetch(`${BACKEND_URL}/api/help_requests`, {

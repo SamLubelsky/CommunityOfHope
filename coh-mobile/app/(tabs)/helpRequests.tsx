@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import Button from '@/components/Button';
+import MyButton from '@/components/MyButton';
 import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';
 import { BACKEND_URL } from '../config';
@@ -37,7 +37,7 @@ export default function HelpRequests(){
         return (
             <View style={styles.helpCard}>
                 <Text style={styles.helpText}> You are currently helping {momName}</Text>
-                <Button label={`Finish Helping ${momName}`} onPress={deactivateHelpRequest}/>
+                <MyButton label={`Finish Helping ${momName}`} onPress={deactivateHelpRequest}/>
             </View>
         );
     }
@@ -77,7 +77,7 @@ export default function HelpRequests(){
             return (
                 <View key={index} style={styles.itemContainer}>
                     <Text style={styles.helpText}> {request.mom_name} needs help with {request.description}</Text>
-                    <Button label="Accept Help Request" onPress={() => submitHelpRequest(request.id)}/>
+                    <MyButton label="Accept Help Request" onPress={() => submitHelpRequest(request.id)}/>
                 </View>
             )});
     }
@@ -91,7 +91,7 @@ export default function HelpRequests(){
     return (<View style={styles.container}>
         <Text style={styles.text}> All Current Help Requests</Text>
         <MainContent />
-        <Button label="Logout" onPress={handleLogout} />
+        <MyButton label="Logout" onPress={handleLogout} />
         </View>)
 }
 const styles = StyleSheet.create({

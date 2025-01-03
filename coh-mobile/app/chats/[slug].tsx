@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { useLocalSearchParams } from 'expo-router';
 import {ScrollView, View, Text, TextInput, StyleSheet} from 'react-native';
-import Button from '@/components/Button';
+import MyButton from '@/components/MyButton';
 import { AppState } from 'react-native';
 // import { socket } from "../socket";
 import { useBoundStore } from '@/store/useBound';
@@ -111,7 +111,7 @@ export default function Page(){
             placeholder="Type a message...">
             </TextInput>
         </View>
-        <Button label="Send" onPress={sendMessage}/>
+        <MyButton label="Send" onPress={sendMessage}/>
         </ScrollView>
         </View>
     );

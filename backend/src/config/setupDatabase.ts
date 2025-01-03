@@ -49,7 +49,8 @@ const createTables = async () => {
           lastName TEXT,
           role TEXT,
           profileLink TEXT,
-          dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP 
+          dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          pushToken TEXT DEFAULT NULL
         )`,[]);
   await executeQuery(`
           CREATE TABLE IF NOT EXISTS help_requests (

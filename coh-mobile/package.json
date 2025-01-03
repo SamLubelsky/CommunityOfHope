@@ -17,7 +17,8 @@
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
     "expo": "52",
-    "expo-constants": "17.0.3",
+    "expo-constants": "^17.0.3",
+    "expo-device": "^7.0.1",
     "expo-font": "13.0.2",
     "expo-image": "2.0.3",
     "expo-image-picker": "16.0.3",

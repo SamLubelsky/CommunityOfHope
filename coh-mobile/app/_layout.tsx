@@ -44,7 +44,7 @@ function AuthNavigator() {
 		}
 
 	 }
-	console.log("isSignedIn: ", isSignedIn);
+	// console.log("isSignedIn: ", isSignedIn);
 	useEffect(() => {
 		
 		const checkAuth = async () =>{

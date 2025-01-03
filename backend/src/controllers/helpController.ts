@@ -3,6 +3,7 @@ import { acceptHelpRequest, getAllHelpRequests, createHelpRequest, getAllActiveH
 import { getUserData, getAllUsers } from '../models/userModel';
 import { createChat, getChat } from '../models/chatsModel';
 import { getHeapSnapshot } from 'v8';
+import { sendNotification } from "../notifications/notifications";
 export const getHelpRequests = async (req: Request, res: Response): Promise<void> => {
   try {
     const requests = await getAllHelpRequests();
@@ -74,6 +75,15 @@ export const acceptRequest = async (req: Request, res: Response): Promise<any> =
       await createChat(volunteer_id, mom_id);
     }
     await acceptHelpRequest(id, volunteer_id);
+
+    const notificationData = {
+      sound: 'default',
+      body: 'Your help request has been accepted',
+      data: {},
+    }
+    sendNotification(mom_id, notificationData);
+
+
     res.status(200).json({ message: 'Help request accepted successfully' });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
