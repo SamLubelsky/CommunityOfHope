@@ -9,6 +9,7 @@ ENV DB_HOST=/cloudsql/fl24-community-of-hope:us-central1:coh-postgres
 WORKDIR /app
 
 COPY package*.json ./
+COPY tsconfig.json ./
 
 RUN npm install --only=production
 RUN npm run build
