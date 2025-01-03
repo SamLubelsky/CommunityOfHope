@@ -68,5 +68,6 @@ node_modules/
 # dataconnect generated files
 .dataconnect
 
-.jpg
-.png
+*.jpg
+*.png
+cloud-sql-proxy

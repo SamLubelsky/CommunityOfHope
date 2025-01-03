@@ -28,7 +28,7 @@ export default function HelpRequests(){
       },[]);
     async function deactivateHelpRequest(){
       setHelping(false);
-      await fetch(`${BACKEND_URL}/api/help_requests/deactivate/${helpId}`, {
+      await fetch(`${BACKEND_URL}/api/help_requests/deactivate/`, {
         method: 'POST',
         credentials: 'include',
       })
