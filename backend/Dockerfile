@@ -10,8 +10,11 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm install
+RUN NODE_ENV=development npm install
+
 RUN npm run build
+
+RUN npm prune --production
 
 EXPOSE 8080
 
