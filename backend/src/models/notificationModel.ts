@@ -6,7 +6,7 @@ export const uploadPushToken = async(userId: string, pushToken: string): Promise
 };
 
 export const getPushToken = async(userId: string): Promise<string> => {
-    const rows = await executeQuery('SELECT pushToken FROM users WHERE id=$1', [userId]);
+    const rows = await executeQuery('SELECT pushToken AS "pushToken" FROM users WHERE id=$1', [userId]);
     if(rows){
         return rows[0].pushToken;
     } else{
