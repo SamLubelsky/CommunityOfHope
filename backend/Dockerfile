@@ -10,7 +10,7 @@ WORKDIR /app
 
 COPY . .
 
-RUN npm install --only=production
+RUN npm install
 RUN npm run build
 
 EXPOSE 8080
