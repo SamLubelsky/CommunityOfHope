@@ -12,7 +12,10 @@ export const sendNotification = async(userId: string, data: NotificationMessage)
 
     const chunks = expo.chunkPushNotifications([{ to: expoPushToken, ...data }]);
     const tickets = [];
-
+    console.log("chunks", chunks);
+    console.log("Data to send:", { to: expoPushToken, ...data });
+    console.log("expoPustToken", expoPushToken);
+    console.log("Data:", data);
     for (const chunk of chunks) {
         try {
             const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
