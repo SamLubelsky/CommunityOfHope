@@ -164,6 +164,7 @@ export default function HelpRequests(){
       await fetch(`${BACKEND_URL}/api/logout`, {
         method: "POST",
         credentials: "include",
+        body: JSON.stringify({ expoPushToken }),
       });
       setIsSignedIn(false);
     };

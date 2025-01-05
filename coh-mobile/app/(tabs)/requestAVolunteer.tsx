@@ -63,7 +63,6 @@ async function uploadPushToken(expoPushToken: string) {
 }
 function handleRegistrationError(errorMessage: string) {
   alert(errorMessage);
-  throw new Error(errorMessage);
 }
 
 async function registerForPushNotificationsAsync() {
@@ -97,7 +96,7 @@ async function registerForPushNotificationsAsync() {
         await Notifications.getExpoPushTokenAsync({
           projectId,
         })
-      ).data;
+      ).data; 
       console.log("pushTokenString:", pushTokenString);
       await uploadPushToken(pushTokenString);
       return pushTokenString;
@@ -169,9 +168,11 @@ const RequestAVolunteerScreen = () => {
 
   }, []);
   const handleLogout = async () => {
+    const body = expoPushToken ? { expoPushToken } : {};
     await fetch(`${BACKEND_URL}/api/logout`, {
       method: "POST",
       credentials: "include",
+      body: JSON.stringify(body),
     });
     setIsSignedIn(false);
   };
