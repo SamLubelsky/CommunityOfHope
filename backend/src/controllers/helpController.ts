@@ -15,6 +15,14 @@ export const getHelpRequests = async (req: Request, res: Response): Promise<any>
 };
 
 export const addHelpRequest = async (req: Request, res: Response): Promise<any> => {
+  if(req.session.role !== "Mom"){
+    return res.status(401).json({error: 'Only moms can create help requests'});
+  }
+  const activeHelpRequests = await getAllActiveHelpRequests();
+  const userRequests = activeHelpRequests.filter(request => request.mom_id === req.session.userId);
+  if(userRequests.length > 0){
+    return res.status(400).json({error: 'You already have an active help request'});
+  }
   try {
     const id = await createHelpRequest(req.body);
     let messageBody = "New help request has been created!";
@@ -55,9 +63,6 @@ export const getUnclaimedHelpRequests = async (req: Request, res: Response): Pro
 
 
 export const acceptRequest = async (req: Request, res: Response): Promise<any> => {
-  if(!req.session || !req.session.userId || !req.session.role){
-    return res.status(401).json({error: 'You are not logged in'});
-  } 
   try {
     const volunteer_id = req.session.userId;
     const { id } = req.params;
@@ -91,9 +96,6 @@ export const acceptRequest = async (req: Request, res: Response): Promise<any> =
   }
 };
 export const deactivateRequest = async (req: Request, res: Response): Promise<any> => {
-  if(!req.session || !req.session.userId || !req.session.role){
-    return res.status(401).json({error: 'You are not logged in'});
-  } 
   try {
     const acceptedHelpRequests = (await getAllActiveHelpRequests()).filter((request)=> request.volunteer_id === req.session.userId);
     if(acceptedHelpRequests.length === 0){
@@ -107,9 +109,6 @@ export const deactivateRequest = async (req: Request, res: Response): Promise<an
   }
 };
 export const getRequestStatus = async (req: Request, res: Response): Promise<any> => {
-  if(!req.session || !req.session.userId || !req.session.role){
-    return res.status(401).json({error: 'You are not logged in'});
-  }
   if(req.session.role === "Volunteer" || req.session.role === "Admin"){
     try {
       const { userId } = req.session;

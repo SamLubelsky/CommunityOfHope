@@ -20,14 +20,16 @@ export default function HelpRequests(){
         if(role == "Mom"){
           router.replace('/requestAVolunteer')
         }
-        getRequests();
+        fetchData();
         const intervalId = setInterval(() => {
-          getRequests();
-        }, 20000); // 20000 milliseconds = 20 seconds
+          fetchData();
+        }, 10000); // 10000 milliseconds = 20 seconds
         return ()=> clearInterval(intervalId);
       },[]);
     async function deactivateHelpRequest(){
       setHelping(false);
+      setMomName(null);
+      setHelpId(null);
       await fetch(`${BACKEND_URL}/api/help_requests/deactivate/`, {
         method: 'POST',
         credentials: 'include',
@@ -48,7 +50,7 @@ export default function HelpRequests(){
       });
       setIsSignedIn(false);
     };
-    async function submitHelpRequest(id: Number){
+    async function acceptHelpRequest(id: Number){
       const submittedHelpRequest = requests.filter(request => request.id === id)[0];
       setRequests(requests.filter(request => request.id !== id));
       const response = await fetch(`${BACKEND_URL}/api/help_requests/${id}`, {
@@ -59,10 +61,12 @@ export default function HelpRequests(){
         setHelping(true);
         setMomName(submittedHelpRequest.mom_name);
         setHelpId(submittedHelpRequest.id);
+        setRequests(requests.filter(request => request.id !== id));
       }
     }
     async function fetchData(){
         await getRequests();
+        await getHelpStatus();
 
     }
     async function getHelpStatus(){
@@ -73,12 +77,12 @@ export default function HelpRequests(){
         const data = await response.json();
         if(data.status === 'Accepted'){
           setHelping(true);
-          setMomName(data.mom_name);
-          setHelpId(data.help_id);
+          setMomName(data.momName);
+          setHelpId(data.helpId);
         }
     }
     async function getRequests(){
-        const response = await fetch(`${BACKEND_URL}/api/help_requests/active`,{
+        const response = await fetch(`${BACKEND_URL}/api/help_requests/unclaimed`,{
           method: 'GET',
           credentials: 'include',
         });
@@ -93,7 +97,7 @@ export default function HelpRequests(){
             return (
                 <View key={index} style={styles.itemContainer}>
                     <Text style={styles.helpText}> {request.mom_name} needs help with {request.description}</Text>
-                    <MyButton label="Accept Help Request" onPress={() => submitHelpRequest(request.id)}/>
+                    <MyButton label="Accept Help Request" onPress={() => acceptHelpRequest(request.id)}/>
                 </View>
             )});
     }
