@@ -9,7 +9,13 @@ export const sendNotification = async(userId: string, data: NotificationMessage)
     sendNotifications([userId], data);
 }
 export const sendNotifications = async(userIds: string[], data: NotificationMessage) => {
-    const expoPushTokens = await getAllPushTokens(userIds);
+    let expoPushTokens;
+    try{
+        expoPushTokens = await getAllPushTokens(userIds);
+    } catch(error){
+        console.error(error);
+        return;
+    }
 
     const expo = new Expo({})
     const chunks = expo.chunkPushNotifications(expoPushTokens.map(token => ({ to: token, ...data })));
