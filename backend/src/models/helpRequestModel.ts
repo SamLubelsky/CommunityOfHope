@@ -29,6 +29,8 @@ export const getAllActiveHelpRequests = async(): Promise<HelpRequest[]> => {
 };
 
 export const getAllUnclaimedHelpRequests = async(): Promise<HelpRequest[]> => {
+  //get all help requests that are active and have no volunteer assigned yet, put longest waiting first, put all emergency requests first
+  
   const rows = await executeQuery(`SELECT help.id, help.mom_id, help.volunteer_id, help.description,
     vol.firstName || ' ' || vol.lastName as volunteer_name,
     mom.firstName || ' ' || mom.lastName as mom_name
@@ -38,7 +40,9 @@ export const getAllUnclaimedHelpRequests = async(): Promise<HelpRequest[]> => {
        LEFT JOIN users mom
          ON mom.id = help.mom_id
       WHERE help.active = TRUE AND help.volunteer_id IS NULL
-     ORDER BY help.dateCreated ASC`, []);
+      ORDER BY 
+        help.emergency DESC,
+        help.dateCreated ASC`, []);
   return rows;
 };
 export const getHelpRequest = async(id: string): Promise<HelpRequest> => {
