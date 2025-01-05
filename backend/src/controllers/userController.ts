@@ -152,13 +152,13 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
 };
 
 export const logoutUser = (req: Request, res: Response): void => {
+  const { userId } = req.session;
     req.session.destroy((err: any) => {
       if (err) {
         return res.status(500).json({ message: 'Error logging out' });
       }
       res.clearCookie('connect.sid');
       const { expoPushToken } = req.body;
-      const { userId } = req.session;
       if(expoPushToken){
         removePushToken(userId, expoPushToken);
       }
