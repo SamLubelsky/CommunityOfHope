@@ -25,3 +25,7 @@ export const removePushToken = async(userId: string, pushToken: string): Promise
     await executeQuery('DELETE FROM pushTokens WHERE userId = $1 AND token = $2', [userId, pushToken]);
     return;
 }
+export const removePushTokenAllUsers = async(pushToken: string): Promise<void> => {
+    await executeQuery('DELETE FROM pushTokens WHERE token = $1', [pushToken]);
+    return;
+}

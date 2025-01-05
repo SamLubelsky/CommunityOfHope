@@ -1,5 +1,5 @@
 import {Expo} from 'expo-server-sdk';
-import { getPushTokens, getAllPushTokens } from '../models/notificationModel';
+import { getPushTokens, getAllPushTokens, removePushToken, removePushTokenAllUsers } from '../models/notificationModel';
 type NotificationMessage = {
     sound: string;
     body: string;
@@ -8,7 +8,7 @@ type NotificationMessage = {
 export const sendNotification = async(userId: string, data: NotificationMessage) => {
     sendNotifications([userId], data);
 }
-export const sendNotifications = async(userIds: string[], data: NotificationMessage) => {
+export const sendNotifications = async(userIds: string[], data: NotificationMessage): Promise<string[]> => {
     let expoPushTokens;
     try{
         expoPushTokens = await getAllPushTokens(userIds);
@@ -29,37 +29,45 @@ export const sendNotifications = async(userIds: string[], data: NotificationMess
         }
     }
 
-    let response = "";
-
+    let receiptIds = [];
     for (const ticket of tickets) {
         if (ticket.status === "error") {
             if (ticket.details && ticket.details.error === "DeviceNotRegistered") {
-                response = "DeviceNotRegistered";
+                await removePushToken(ticket.to, ticket.pushToken);
             }
         }
-
-        if (ticket.status === "ok") {
-            response = ticket.id;
+        if(ticket.status === "ok"){
+            receiptIds.push(ticket.id);
         }
     }
 
-    return response;
+    return receiptIds;
 }
 
-const getReceipt = async (receiptId: string) => {
+export const processReceipts = async (receiptIds: string[]) => {
     const expo = new Expo({ });
-
-    let receiptIdChunks = expo.chunkPushNotificationReceiptIds([receiptId]);
-
-    let receipt;
-
+    console.log("Processing receipts");
+    let receiptIdChunks = expo.chunkPushNotificationReceiptIds(receiptIds); 
     for (const chunk of receiptIdChunks) {
         try {
-            receipt = await expo.getPushNotificationReceiptsAsync(chunk);
+            let receipts = await expo.getPushNotificationReceiptsAsync(chunk);
+            console.log(receipts);
+            for(let receiptId in receipts){
+                let {status, details} = receipts[receiptId];
+                if(status === 'ok'){
+                    continue;
+                } else if(status === 'error'){
+                    console.error('There was an error sending a notification: ', details);
+                    if(details && typeof details === 'object' && 'error' in details){
+                        if(details.error === 'DeviceNotRegistered'){
+                            console.log("Removing token: ", details.expoPushToken);
+                            await removePushTokenAllUsers(details.expoPushToken);
+                        }                        
+                    }
+                }
+            }
         } catch (error) {
             console.error(error);
         }
     }
-
-    return receipt ? receipt[receiptId] : null;
 }

@@ -161,11 +161,13 @@ export default function HelpRequests(){
         );
     }
     const handleLogout = async () => {
+      const body = expoPushToken ? { expoPushToken: expoPushToken } : {};
       await fetch(`${BACKEND_URL}/api/logout`, {
         method: "POST",
         credentials: "include",
-        body: JSON.stringify({ expoPushToken }),
+        body: JSON.stringify(body),
       });
+      console.log(body);
       setIsSignedIn(false);
     };
     async function acceptHelpRequest(id: Number){

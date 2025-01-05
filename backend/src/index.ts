@@ -13,7 +13,7 @@ import PgSimple from 'connect-pg-simple'
 import { initializeWebSocket } from './websocket'
 import http from 'http'
 import path from 'path'
-import bodyParser from 'body-parser'
+import {processReceipts} from './notifications/notifications';
 
 createTables();
 dotenv.config()
@@ -70,6 +70,8 @@ app.use('/api', notificationRoutes);
 app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server')
 })
+
+setInterval(processReceipts, 1000 * 60 * 15) //process receipts every 15 minutes
 
 const port = process.env.PORT || 3000
 const httpServer = http.createServer(app)  

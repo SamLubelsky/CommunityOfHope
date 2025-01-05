@@ -168,7 +168,7 @@ const RequestAVolunteerScreen = () => {
 
   }, []);
   const handleLogout = async () => {
-    const body = expoPushToken ? { expoPushToken } : {};
+    const body = expoPushToken ? { expoPushToken: expoPushToken } : {};
     await fetch(`${BACKEND_URL}/api/logout`, {
       method: "POST",
       credentials: "include",

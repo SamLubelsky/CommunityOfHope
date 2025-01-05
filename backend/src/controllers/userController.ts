@@ -159,6 +159,7 @@ export const logoutUser = (req: Request, res: Response): void => {
       }
       res.clearCookie('connect.sid');
       const { expoPushToken } = req.body;
+      console.log("req:", req);
       console.log("Expo Push Token:", expoPushToken);
       console.log("User Id:", userId);
       if(expoPushToken){
