@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { acceptHelpRequest, getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest} from '../models/helpRequestModel';
+import { acceptHelpRequest, getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest, getAllUnclaimedHelpRequests} from '../models/helpRequestModel';
 import { getUserData, getAllUsers, getAllVolunteers } from '../models/userModel';
 import { createChat, getChat } from '../models/chatsModel';
 import { getHeapSnapshot } from 'v8';
@@ -27,7 +27,7 @@ export const addHelpRequest = async (req: Request, res: Response): Promise<any> 
     const id = await createHelpRequest(req.body);
     let messageBody = "New help request has been created!";
     if(req.body.emergency){
-      let messageBody = "New EMERGENCY help request has been created!";
+      messageBody = "New EMERGENCY help request has been created!";
     }
     const volunteers = await getAllVolunteers();
     const volunteerIds = volunteers.map((volunteer) => volunteer.id);
@@ -54,7 +54,7 @@ export const getActiveHelpRequests = async (req: Request, res: Response): Promis
 
 export const getUnclaimedHelpRequests = async (req: Request, res: Response): Promise<void> => {
   try {
-    const requests = await getAllActiveHelpRequests();
+    const requests = await getAllUnclaimedHelpRequests();
     res.json({ Requests: requests });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
