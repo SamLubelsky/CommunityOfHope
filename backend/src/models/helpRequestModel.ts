@@ -24,7 +24,21 @@ export const getAllActiveHelpRequests = async(): Promise<HelpRequest[]> => {
        LEFT JOIN users mom
          ON mom.id = help.mom_id
       WHERE help.active = TRUE
-     ORDER BY help.dateCreated DESC`, []);
+     ORDER BY help.dateCreated ASC`, []);
+  return rows;
+};
+
+export const getAllUnclaimedHelpRequests = async(): Promise<HelpRequest[]> => {
+  const rows = await executeQuery(`SELECT help.id, help.mom_id, help.volunteer_id, help.description,
+    vol.firstName || ' ' || vol.lastName as volunteer_name,
+    mom.firstName || ' ' || mom.lastName as mom_name
+     FROM help_requests help
+       LEFT JOIN users vol
+         ON vol.id = help.volunteer_id
+       LEFT JOIN users mom
+         ON mom.id = help.mom_id
+      WHERE help.active = TRUE AND help.volunteer_id IS NULL
+     ORDER BY help.dateCreated ASC`, []);
   return rows;
 };
 export const getHelpRequest = async(id: string): Promise<HelpRequest> => {

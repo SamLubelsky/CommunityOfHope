@@ -61,6 +61,22 @@ export default function HelpRequests(){
         setHelpId(submittedHelpRequest.id);
       }
     }
+    async function fetchData(){
+        await getRequests();
+
+    }
+    async function getHelpStatus(){
+        const response = await fetch(`${BACKEND_URL}/api/help_status`,{
+          method: 'GET',
+          credentials: 'include',
+        });
+        const data = await response.json();
+        if(data.status === 'Accepted'){
+          setHelping(true);
+          setMomName(data.mom_name);
+          setHelpId(data.help_id);
+        }
+    }
     async function getRequests(){
         const response = await fetch(`${BACKEND_URL}/api/help_requests/active`,{
           method: 'GET',

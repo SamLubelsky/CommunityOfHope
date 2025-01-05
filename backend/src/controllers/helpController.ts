@@ -44,6 +44,16 @@ export const getActiveHelpRequests = async (req: Request, res: Response): Promis
   }
 };
 
+export const getUnclaimedHelpRequests = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const requests = await getAllActiveHelpRequests();
+    res.json({ Requests: requests });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+
+
 export const acceptRequest = async (req: Request, res: Response): Promise<any> => {
   if(!req.session || !req.session.userId || !req.session.role){
     return res.status(401).json({error: 'You are not logged in'});
@@ -100,28 +110,45 @@ export const getRequestStatus = async (req: Request, res: Response): Promise<any
   if(!req.session || !req.session.userId || !req.session.role){
     return res.status(401).json({error: 'You are not logged in'});
   }
-  if(req.session.role !== "Mom"){
-    return res.status(401).json({error: 'Only moms are authorized to access this route'});
-  }
-  try {
-    const { userId } = req.session;
-    const activeHelpRequests = await getAllActiveHelpRequests();
-    const userRequests = activeHelpRequests.filter(request => request.mom_id === userId);
-    if(userRequests.length > 0){
-      const helpRequest = userRequests[0];
-      const {volunteer_id} = helpRequest;
-      if(volunteer_id){
-        const volunteer_data = await getUserData(volunteer_id);
-        const volunteer_name = volunteer_data.firstName + ' ' + volunteer_data.lastName;
-        res.status(200).json({ status: 'Accepted', volunteerName: volunteer_name });
+  if(req.session.role === "Volunteer" || req.session.role === "Admin"){
+    try {
+      const { userId } = req.session;
+      const activeHelpRequests = await getAllActiveHelpRequests();
+      const userRequests = activeHelpRequests.filter(request => request.volunteer_id === userId);
+      if(userRequests.length > 0){
+        const helpRequest = userRequests[0];
+        const {mom_id} = helpRequest;
+        const mom_data = await getUserData(mom_id);
+        const mom_name = mom_data.firstName + ' ' + mom_data.lastName;
+        res.status(200).json({ status: 'Accepted', momName: mom_name, helpId: helpRequest.id });
       } else{
-        res.status(200).json({ status: 'Requested'});
+        res.status(200).json({ status: 'Not Accepted' });
       }
-    } else{
-      res.status(200).json({ status: 'Not Requested' });
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
     }
-  } catch (error) {
-    res.status(500).json({ error: (error as Error).message });
+  }
+  if(req.session.role === "Mom"){
+    try {
+      const { userId } = req.session;
+      const activeHelpRequests = await getAllActiveHelpRequests();
+      const userRequests = activeHelpRequests.filter(request => request.mom_id === userId);
+      if(userRequests.length > 0){
+        const helpRequest = userRequests[0];
+        const {volunteer_id} = helpRequest;
+        if(volunteer_id){
+          const volunteer_data = await getUserData(volunteer_id);
+          const volunteer_name = volunteer_data.firstName + ' ' + volunteer_data.lastName;
+          res.status(200).json({ status: 'Accepted', volunteerName: volunteer_name });
+        } else{
+          res.status(200).json({ status: 'Requested'});
+        }
+      } else{
+        res.status(200).json({ status: 'Not Requested' });
+      }
+    } catch (error) {
+      res.status(500).json({ error: (error as Error).message });
+    }
   }
 };
 // Add other controller functions (getById, update, delete)...
