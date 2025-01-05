@@ -16,6 +16,7 @@ type Props = {
 type FormData = {
     description: string;
     emergency: boolean;
+    info?: string;
 }
 export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus}: Props){
     const firstName = useBoundStore((state) => state.firstName);
@@ -30,13 +31,12 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus}
     const emergencyValue = watch('emergency')
 
     const onSubmit: SubmitHandler<FormData> = async (data) => {
-        const description = data.description;
+        const {description, emergency, info } = data;
         const mom_id = id;
-        const mom_name = firstName;
         const response = await fetch(`${BACKEND_URL}/api/help_requests`, {
             method: 'POST', 
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mom_id, description, }),
+            body: JSON.stringify({ mom_id, description, emergency, info}),
             credentials: 'include',
         }); 
         const json = await response.json();

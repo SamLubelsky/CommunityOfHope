@@ -172,6 +172,7 @@ const RequestAVolunteerScreen = () => {
     await fetch(`${BACKEND_URL}/api/logout`, {
       method: "POST",
       credentials: "include",
+      headers: {"Content-Type": "application/json"},
       body: JSON.stringify(body),
     });
     setIsSignedIn(false);

@@ -16,6 +16,8 @@ RUN npm run build
 
 RUN npm prune --production
 
+RUN mkdir -p /public/images
+
 EXPOSE 8080
 
 CMD [ "node", "./dist/index.js" ]

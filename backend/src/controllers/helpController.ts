@@ -25,9 +25,9 @@ export const addHelpRequest = async (req: Request, res: Response): Promise<any> 
   }
   try {
     const id = await createHelpRequest(req.body);
-    let messageBody = "New help request has been created!";
+    let messageBody = "A help request was posted to EPIC!";
     if(req.body.emergency){
-      messageBody = "New EMERGENCY help request has been created!";
+      messageBody = "An EMERGENCY help request was posted to EPIC!";
     }
     const volunteers = await getAllVolunteers();
     const volunteerIds = volunteers.map((volunteer) => volunteer.id);

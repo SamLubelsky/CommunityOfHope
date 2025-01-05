@@ -165,6 +165,7 @@ export default function HelpRequests(){
       await fetch(`${BACKEND_URL}/api/logout`, {
         method: "POST",
         credentials: "include",
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify(body),
       });
       console.log(body);
