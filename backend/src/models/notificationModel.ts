@@ -21,3 +21,7 @@ export const getAllPushTokens = async(userIds: string[]): Promise<string[]> => {
         return Promise.reject(new Error('No tokens found for any of the provided users'));
     }
 }
+export const removePushToken = async(userId: string, pushToken: string): Promise<void> => {
+    await executeQuery('DELETE FROM pushTokens WHERE userId = $1 AND token = $2', [userId, pushToken]);
+    return;
+}

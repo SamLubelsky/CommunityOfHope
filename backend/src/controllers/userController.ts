@@ -7,6 +7,7 @@ import {deleteSessionBySessionId, getSessionData} from '../models/sessionModel'
 import fs from 'fs';
 import session from 'express-session';
 import path from 'path';
+import { removePushToken } from '../models/notificationModel';
 const bcrypt = require('bcrypt')
 
 interface MulterRequest extends Request {
@@ -156,6 +157,11 @@ export const logoutUser = (req: Request, res: Response): void => {
         return res.status(500).json({ message: 'Error logging out' });
       }
       res.clearCookie('connect.sid');
+      const { expoPushToken } = req.body;
+      const { userId } = req.session;
+      if(expoPushToken){
+        removePushToken(userId, expoPushToken);
+      }
       res.status(201).json({ message: 'Logout successful' });
     });
 };
