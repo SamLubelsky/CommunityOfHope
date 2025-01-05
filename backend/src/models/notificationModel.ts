@@ -1,15 +1,23 @@
 import { executeQuery } from "../config/setupDatabase";
 
 export const uploadPushToken = async(userId: string, pushToken: string): Promise<any> => {
-    await executeQuery('UPDATE users SET pushToken = $1 WHERE id = $2', [pushToken, userId]);
+    await executeQuery('INSERT INTO pushTokens (userId, token) VALUES ($1, $2)', [userId, pushToken]);
     return;
 };
 
-export const getPushToken = async(userId: string): Promise<string> => {
-    const rows = await executeQuery('SELECT pushToken AS "pushToken" FROM users WHERE id=$1', [userId]);
-    if(rows){
-        return rows[0].pushToken;
+export const getPushTokens = async(userId: string): Promise<string[]> => {
+    const rows = await executeQuery('SELECT token as "pushToken" FROM pushTokens WHERE userId = $1', [userId]);
+    if(rows.length > 0){
+        return rows.map((row: any) => row.pushToken);
     } else{
-        return Promise.reject(new Error('User not found'));
+        return Promise.reject(new Error('No token found for the provided user'));
+    }
+}
+export const getAllPushTokens = async(userIds: string[]): Promise<string[]> => {
+    const rows = await executeQuery('SELECT token as "pushToken" FROM pushTokens WHERE userId = ANY($1)', [userIds]);
+    if(rows.length > 0){
+        return rows.map((row: any) => row.pushToken);
+    } else{
+        return Promise.reject(new Error('No tokens found for any of the provided users'));
     }
 }

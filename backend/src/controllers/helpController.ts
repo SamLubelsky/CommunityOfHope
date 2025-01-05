@@ -100,7 +100,7 @@ export const deactivateRequest = async (req: Request, res: Response): Promise<an
     }
     const acceptedHelpRequest = acceptedHelpRequests[0];
     await deactivateHelpRequest(acceptedHelpRequest.id);
-    res.status(200).json({ message: 'Help request accepted successfully' });
+    res.status(200).json({ message: 'Help request deactivated successfully' });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }

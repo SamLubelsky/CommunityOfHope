@@ -1,21 +1,19 @@
 import {Expo} from 'expo-server-sdk';
-import { getPushToken } from '../models/notificationModel';
+import { getPushTokens, getAllPushTokens } from '../models/notificationModel';
 type NotificationMessage = {
     sound: string;
     body: string;
     data: any;      
 }
 export const sendNotification = async(userId: string, data: NotificationMessage) => {
-    const expoPushToken = await getPushToken(userId);
+    sendNotifications([userId], data);
+}
+export const sendNotifications = async(userIds: string[], data: NotificationMessage) => {
+    const expoPushTokens = await getAllPushTokens(userIds);
 
     const expo = new Expo({})
-
-    const chunks = expo.chunkPushNotifications([{ to: expoPushToken, ...data }]);
+    const chunks = expo.chunkPushNotifications(expoPushTokens.map(token => ({ to: token, ...data })));
     const tickets = [];
-    console.log("chunks", chunks);
-    console.log("Data to send:", { to: expoPushToken, ...data });
-    console.log("expoPustToken", expoPushToken);
-    console.log("Data:", data);
     for (const chunk of chunks) {
         try {
             const ticketChunk = await expo.sendPushNotificationsAsync(chunk);

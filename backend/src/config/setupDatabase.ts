@@ -24,7 +24,7 @@ const initializePool = async () => {
   }
 } 
 
-const executeQuery = async (query: string, values: string[]) => {
+const executeQuery = async (query: string, values: string[] | string[][]) => {
     try {
       if(!pool) await initializePool();
       const client = await pool.connect();
@@ -81,7 +81,17 @@ const createTables = async () => {
           message TEXT, 
           senderId INTEGER,
           dateSent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (senderId) REFERENCES users(id)
+          FOREIGN KEY (senderId) REFERENCES users(id),
+          FOREIGN KEY (chatId) REFERENCES chatIds(id)
+          )
+        `,[]);
+  await executeQuery(`
+          CREATE TABLE IF NOT EXISTS pushTokens (
+          id SERIAL PRIMARY KEY,
+          userId INTEGER,
+          token TEXT,
+          dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (userId) REFERENCES users(id)
           )
         `,[]);
   //create session database for express-session
