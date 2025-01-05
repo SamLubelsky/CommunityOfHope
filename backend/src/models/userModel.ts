@@ -7,6 +7,10 @@ export const getAllUsers = async() => {
   const rows = await executeQuery('SELECT id, username, firstName AS "firstName", lastName AS "lastName", role, profileLink AS "profileLink" FROM users', []);
   return rows;
 };
+export const getAllVolunteers = async(): Promise<User[]> => {
+  const rows = await executeQuery('SELECT id, username, firstName AS "firstName", lastName AS "lastName", role, profileLink AS "profileLink" FROM users WHERE role=$1', ['Volunteer']);
+  return rows;
+}
 export const getUserData = async (id: string): Promise<User> => {
   const row = await executeQuery('SELECT id, password, username, firstName AS "firstName", lastName AS "lastName", role, profileLink AS "profileLink" FROM users where id=$1', [id]);
   if(row){

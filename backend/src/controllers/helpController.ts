@@ -1,46 +1,37 @@
 import { Request, Response } from 'express';
 import { acceptHelpRequest, getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest} from '../models/helpRequestModel';
-import { getUserData, getAllUsers } from '../models/userModel';
+import { getUserData, getAllUsers, getAllVolunteers } from '../models/userModel';
 import { createChat, getChat } from '../models/chatsModel';
 import { getHeapSnapshot } from 'v8';
-import { sendNotification } from "../notifications/notifications";
-export const getHelpRequests = async (req: Request, res: Response): Promise<void> => {
+import { sendNotification, sendNotifications } from "../notifications/notifications";
+export const getHelpRequests = async (req: Request, res: Response): Promise<any> => {
   try {
     const requests = await getAllHelpRequests();
-    const requestsWithNames = await Promise.all(requests.map(async (request) => {
-      const momData = await getUserData(String(request.mom_id));
-      const mom_name = momData.firstName + ' ' + momData.lastName;
-      let volunteer_name = null;
-      if(request.volunteer_id){
-        const volunteerData = await getUserData(String(request.volunteer_id));
-        volunteer_name = volunteerData.firstName + ' ' + volunteerData.lastName;
-      }
-
-      const requestWithNames = {
-        id: request.id,
-        mom_id: request.mom_id,
-        volunteer_id: request.volunteer_id,
-        description: request.description,
-        active: request.active,
-        mom_name,
-        volunteer_name,
-      };
-      // console.log("requestWithNames(singular): ", requestWithNames);
-      return requestWithNames;
-    }));
     // console.log("requestsWithNames(plural):", requestsWithNames);
-    res.json({ Requests: requestsWithNames });
+    return res.json({ Requests: requests });
   } catch (error) {
-    res.status(500).json({ error: (error as Error).message });
+    return res.status(500).json({ error: (error as Error).message });
   }
 };
 
-export const addHelpRequest = async (req: Request, res: Response): Promise<void> => {
+export const addHelpRequest = async (req: Request, res: Response): Promise<any> => {
   try {
     const id = await createHelpRequest(req.body);
-    res.status(201).json({ id });
+    let messageBody = "New help request has been created!";
+    if(req.body.emergency){
+      let messageBody = "New EMERGENCY help request has been created!";
+    }
+    const volunteers = await getAllVolunteers();
+    const volunteerIds = volunteers.map((volunteer) => volunteer.id);
+    const notificationData = {
+      sound: 'default',
+      body: messageBody,
+      data: {},
+    }
+    sendNotifications(volunteerIds, notificationData);
+    return res.status(201).json({ id });
   } catch (error) {
-    res.status(500).json({ error: (error as Error).message });
+    return res.status(500).json({ error: (error as Error).message });
   }
 };
 
@@ -78,7 +69,7 @@ export const acceptRequest = async (req: Request, res: Response): Promise<any> =
 
     const notificationData = {
       sound: 'default',
-      body: 'Your help request has been accepted',
+      body: 'Your help request has been accepted!',
       data: {},
     }
     sendNotification(mom_id, notificationData);
