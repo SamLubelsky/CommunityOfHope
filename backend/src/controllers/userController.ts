@@ -49,8 +49,8 @@ export const addUser = async (req: MulterRequest, res: Response): Promise<any> =
     fs.unlink(profilePic.path, (err) => {
       if (err) console.error("Error deleting file:", err);
     });
-    console.log("ERROR ERROR:", error);
-    return res.status(500).json({ message: (error as Error) });
+    console.log("ERROR:", error.message);
+    return res.status(500).json({ message: error.message });  
   }
 };
 export const editUser = async(req: MulterRequest, res: Response): Promise<any> =>{

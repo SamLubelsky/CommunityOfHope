@@ -16,7 +16,7 @@ RUN npm run build
 
 RUN npm prune --production
 
-RUN mkdir -p /public/images
+RUN mkdir -p public/images
 
 EXPOSE 8080
 
