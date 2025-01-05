@@ -38,6 +38,7 @@ async function sendPushNotification(expoPushToken: string) {
     body: JSON.stringify(message),
   });
 }
+
 async function uploadPushToken(expoPushToken: string) {
   const response = await fetch(`${BACKEND_URL}/api/upload-token`, {
     method: "POST",
@@ -148,7 +149,7 @@ const RequestAVolunteerScreen = () => {
     registerForPushNotificationsAsync()
     .then(token => setExpoPushToken(token ?? ''))
     .catch((error: any) => setExpoPushToken(`${error}`));
-    fetchHelpStatus();
+
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
     });
@@ -156,6 +157,7 @@ const RequestAVolunteerScreen = () => {
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
       console.log(response);
     });
+    fetchHelpStatus();
     const intervalId = setInterval(fetchHelpStatus, 15000);
     return ()=>{
       clearInterval(intervalId)
@@ -204,17 +206,6 @@ const RequestAVolunteerScreen = () => {
       <HelpCard />
       <View style={{ flex: 1, alignItems: 'center', justifyContent: 'space-around' }}>
       <Text>Your Expo push token: {expoPushToken}</Text>
-      <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <Text>Title: {notification && notification.request.content.title} </Text>
-        <Text>Body: {notification && notification.request.content.body}</Text>
-        <Text>Data: {notification && JSON.stringify(notification.request.content.data)}</Text>
-      </View>
-      <Button
-        title="Press to Send Notification"
-        onPress={async () => {
-          await sendPushNotification(expoPushToken);
-        }}
-      />
     </View>
       <MyButton label="Logout" onPress={handleLogout} />
     </View>
