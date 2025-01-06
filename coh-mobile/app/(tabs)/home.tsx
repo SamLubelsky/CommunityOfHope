@@ -6,9 +6,11 @@ import { router } from 'expo-router';
 import { BACKEND_URL } from '../config';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
+import {useIsFocused} from '@react-navigation/native';
 import Constants from 'expo-constants';
 import HelpRequests from '@/components/helpRequests';
 import RequestAVolunteer from '@/components/requestAVolunteer';
+
 async function uploadPushToken(expoPushToken: string) {
     const response = await fetch(`${BACKEND_URL}/api/upload-token`, {
       method: "POST",
@@ -81,6 +83,8 @@ export default function Home(){
     const [expoPushToken, setExpoPushToken] = useState("");
     const [notification, setNotification] = useState<Notifications.Notification | undefined>(undefined);
 
+    const isFocused = useIsFocused();
+
     const role = useBoundStore((state) => state.role);
     const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
 
@@ -118,7 +122,7 @@ export default function Home(){
             responseListener.current && 
             Notifications.removeNotificationSubscription(responseListener.current);
         };
-    }, [])
+    }, [isFocused]);
 
     return (
         <View style={styles.container}>

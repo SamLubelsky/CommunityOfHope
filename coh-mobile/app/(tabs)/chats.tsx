@@ -4,7 +4,9 @@ import MyButton from '@/components/MyButton';
 import { router } from 'expo-router'
 import { BACKEND_URL } from '../config';
 import {Chat} from '../../types';
+import {useIsFocused} from '@react-navigation/native';
 export default function Chats(){
+    const isFocused = useIsFocused();
     const [chats, setChats] = useState<Chat[]>([]);
     useEffect(() => {
         const loadChats = async () => {
@@ -18,8 +20,11 @@ export default function Chats(){
             return responseData;
         }
         loadChats();
-    }, []);
+    }, [isFocused]);
     async function onSubmit(id: Number){
+        const selectedChat = chats.filter(chat => chat.chatId === id)[0];
+        const chatsResorted = [selectedChat, ...chats.filter(chat => chat.chatId !== id)];
+        // setChats(chatsResorted);
         router.push(`/chats/${id}`);
     }
 
