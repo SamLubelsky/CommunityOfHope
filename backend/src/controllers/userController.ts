@@ -51,7 +51,7 @@ export const addUser = async (req: MulterRequest, res: Response): Promise<any> =
     });
     console.log("ERROR:", error.message);
     return res.status(500).json({ message: error.message });  
-  }
+  } 
 };
 export const editUser = async(req: MulterRequest, res: Response): Promise<any> =>{
   const { id } = req.params;

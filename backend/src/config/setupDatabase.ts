@@ -8,7 +8,7 @@ const dbPassword = process.env.DB_PASSWORD || "password";
 const dbName = process.env.DB_NAME || "coh-data"; 
 const connector = new Connector()
 let pool: Pool;
-
+type Value = string | number | boolean | string[];
 const initializePool = async () => {
   if(!pool){
     const clientOpts = await connector.getOptions({
@@ -24,7 +24,7 @@ const initializePool = async () => {
   }
 } 
 
-const executeQuery = async (query: string, values: string[] | string[][]) => {
+const executeQuery = async (query: string, values: Value[]) => {
     try {
       if(!pool) await initializePool();
       const client = await pool.connect();

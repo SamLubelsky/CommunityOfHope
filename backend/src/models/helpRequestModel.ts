@@ -70,12 +70,12 @@ export const deactivateHelpRequest = async(id: string): Promise<void> => {
   return;
 };
 export const createHelpRequest = async (data: HelpRequest): Promise<any> => {
-  const { mom_id, description } = data;
+  const { mom_id, description, emergency } = data;
   const activeHelpRequests = await executeQuery('SELECT * FROM help_requests WHERE mom_id = $1 AND active = TRUE', [mom_id]);
   if(activeHelpRequests.length > 0){
     return Promise.reject(new Error('Mom already has an active help request'));
   }
-  await executeQuery('INSERT INTO help_requests (mom_id, description, active) VALUES ($1, $2, TRUE)', [mom_id, description]);
+  await executeQuery('INSERT INTO help_requests (mom_id, description, emergency, active) VALUES ($1, $2, $3, TRUE)', [mom_id, description, emergency]);
   return;
 };
 
