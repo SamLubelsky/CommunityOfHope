@@ -71,7 +71,8 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server')
 })
 
-setInterval(processReceipts, 1000 * 60 * 15) //process receipts every 15 minutes
+// setInterval(processReceipts, 1000 * 60 * 15) //process receipts every 15 minutes
+setInterval(processReceipts, 1000 * 20);
 
 const port = process.env.PORT || 3000
 const httpServer = http.createServer(app)  
