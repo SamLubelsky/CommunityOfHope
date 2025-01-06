@@ -115,7 +115,7 @@ export const unclaimRequest = async (req: Request, res: Response): Promise<any> 
       return res.status(400).json({error: 'You have not accepted any help requests'});
     }
     const acceptedHelpRequest = acceptedHelpRequests[0];
-    await unclaimHelpRequest(acceptedHelpRequest.id);
+    await unclaimHelpRequest(acceptedHelpRequest.id, req.session.userId);
     res.status(200).json({ message: 'Help request unclaimed successfully' });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });

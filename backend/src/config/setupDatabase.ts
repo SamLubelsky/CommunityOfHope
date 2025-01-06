@@ -94,6 +94,16 @@ const createTables = async () => {
           FOREIGN KEY (userId) REFERENCES users(id)
           )
         `,[]);
+  await executeQuery(`
+    CREATE TABLE IF NOT EXISTS unclaimedHistory (
+    id SERIAL PRIMARY KEY,
+    helpId INTEGER,
+    userId INTEGER,
+    dateUnclaimed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userId) REFERENCES users(id),
+    FOREIGN KEY (helpId) REFERENCES help_requests(id)
+    )
+  `,[]);
   //create session database for express-session
   await executeQuery(`CREATE TABLE IF NOT EXISTS session (
                       sid VARCHAR NOT NULL PRIMARY KEY,

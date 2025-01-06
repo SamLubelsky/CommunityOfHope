@@ -28,21 +28,26 @@ export const getAllActiveHelpRequests = async(): Promise<HelpRequest[]> => {
   return rows;
 };
 
-export const getAllUnclaimedHelpRequests = async(): Promise<HelpRequest[]> => {
+export const getAllUnclaimedHelpRequests = async(userId: string): Promise<HelpRequest[]> => {
   //get all help requests that are active and have no volunteer assigned yet, put longest waiting first, put all emergency requests first
-  
+  //if a user has already unclaimed a request, don't show it to them
   const rows = await executeQuery(`SELECT help.id, help.mom_id, help.volunteer_id, help.description,
     vol.firstName || ' ' || vol.lastName as volunteer_name,
     mom.firstName || ' ' || mom.lastName as mom_name
      FROM help_requests help
-       LEFT JOIN users vol
-         ON vol.id = help.volunteer_id
-       LEFT JOIN users mom
-         ON mom.id = help.mom_id
-      WHERE help.active = TRUE AND help.volunteer_id IS NULL
+      LEFT JOIN users vol
+        ON vol.id = help.volunteer_id
+      LEFT JOIN users mom
+        ON mom.id = help.mom_id
+      LEFT JOIN unclaimedHistory unc
+        ON unc.helpID = help.id AND unc.userId = $1
+      WHERE 
+        help.active = TRUE 
+        AND help.volunteer_id IS NULL
+        AND unc.helpId is NULL   
       ORDER BY 
         help.emergency DESC,
-        help.dateCreated ASC`, []);
+        help.dateCreated ASC`, [userId]);
   return rows;
 };
 export const getHelpRequest = async(id: string): Promise<HelpRequest> => {
@@ -69,8 +74,9 @@ export const deactivateHelpRequest = async(id: string): Promise<void> => {
   await executeQuery('UPDATE help_requests SET active = FALSE WHERE id = $1', [id]);
   return;
 };
-export const unclaimHelpRequest = async(id: string): Promise<void> => {
-  await executeQuery('UPDATE help_requests SET volunteer_id = NULL WHERE id = $1', [id]);
+export const unclaimHelpRequest = async(volunteerId: string, helpId: string): Promise<void> => {
+  await executeQuery('UPDATE help_requests SET volunteer_id = NULL WHERE id = $1', [volunteerId]);
+  await executeQuery('INSERT INTO unclaimedHistory (helpId, userId) VALUES ($1, $2)', [helpId, volunteerId]);
 }
 export const createHelpRequest = async (data: HelpRequest): Promise<any> => {
   const { mom_id, description, emergency } = data;
