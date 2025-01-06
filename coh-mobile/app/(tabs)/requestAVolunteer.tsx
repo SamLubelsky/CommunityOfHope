@@ -177,6 +177,14 @@ const RequestAVolunteerScreen = () => {
     });
     setIsSignedIn(false);
   };
+  const deactiveRequest= async () => {
+    setHelpStatus("Not Requested")
+    setVolunteerName(null);
+    await fetch(`${BACKEND_URL}/api/help_requests/deactivate/`, {
+      method: 'POST',
+      credentials: 'include',
+    })
+  }
   function HelpCard(){
     // console.log("helpStatus:", helpStatus)
     if(helpStatus === "Not Requested"){
@@ -187,6 +195,7 @@ const RequestAVolunteerScreen = () => {
         <View style={styles.helpCard}>
           <Text style={styles.helpText}>Your help request has been sent</Text>
           <Text style={styles.helpText2}>Please wait for a volunteer to accept</Text>  
+          <MyButton label="Cancel your help request" onPress={deactiveRequest}/>
         </View>
       );
     }
@@ -194,6 +203,7 @@ const RequestAVolunteerScreen = () => {
       return (
         <View style={styles.helpCard}>
           <Text style={styles.helpText}>Your help request has been accepted by {volunteerName}</Text>
+          <MyButton label={`Im done being helped by ${volunteerName}`} onPress={deactiveRequest}/>
         </View>
       );
     } 

@@ -144,19 +144,29 @@ export default function HelpRequests(){
         };
       },[]);
     async function deactivateHelpRequest(){
-      setHelping(false);
-      setMomName(null);
-      setHelpId(null);
       await fetch(`${BACKEND_URL}/api/help_requests/deactivate/`, {
         method: 'POST',
         credentials: 'include',
       })
+      setHelping(false);
+      setMomName(null);
+      setHelpId(null);
+    }
+    async function unclaimRequest(){
+      await fetch(`${BACKEND_URL}/api/help_requests/unclaim/`, {
+        method: 'POST',
+        credentials: 'include',
+      })
+      setHelping(false);
+      setMomName(null);
+      setHelpId(null);
     }
     function HelpCard(){
         return (
             <View style={styles.helpCard}>
                 <Text style={styles.helpText}> You are currently helping {momName}</Text>
                 <MyButton label={`Finish Helping ${momName}`} onPress={deactivateHelpRequest}/>
+                <MyButton label={`Return ${momName} to the Help List`} onPress={unclaimRequest}></MyButton>
             </View>
         );
     }
