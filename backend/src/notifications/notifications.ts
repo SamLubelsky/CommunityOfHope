@@ -5,10 +5,12 @@ type NotificationMessage = {
     body: string;
     data: any;      
 }
+const receiptStore = new Set<string>();
+
 export const sendNotification = async(userId: string, data: NotificationMessage) => {
     sendNotifications([userId], data);
 }
-export const sendNotifications = async(userIds: string[], data: NotificationMessage): Promise<string[]> => {
+export const sendNotifications = async(userIds: string[], data: NotificationMessage): Promise<any> => {
     let expoPushTokens;
     try{
         expoPushTokens = await getAllPushTokens(userIds);
@@ -33,28 +35,32 @@ export const sendNotifications = async(userIds: string[], data: NotificationMess
     for (const ticket of tickets) {
         if (ticket.status === "error") {
             if (ticket.details && ticket.details.error === "DeviceNotRegistered") {
+                console.log("Removing token inside sendNotifications");
                 await removePushToken(ticket.to, ticket.pushToken);
             }
         }
         if(ticket.status === "ok"){
-            receiptIds.push(ticket.id);
+            // receiptIds.push(ticket.id);
+            receiptStore.add(ticket.id);
         }
     }
-
-    return receiptIds;
 }
 
-export const processReceipts = async (receiptIds: string[]) => {
+export const processReceipts = async () => {
     const expo = new Expo({ });
     console.log("Processing receipts");
-    let receiptIdChunks = expo.chunkPushNotificationReceiptIds(receiptIds); 
+    let receiptIdChunks = expo.chunkPushNotificationReceiptIds(Array.from(receiptStore)); 
     for (const chunk of receiptIdChunks) {
         try {
             let receipts = await expo.getPushNotificationReceiptsAsync(chunk);
             console.log(receipts);
             for(let receiptId in receipts){
                 let {status, details} = receipts[receiptId];
+                console.log('ReciptId:', receiptId);
+                console.log("Status:", status);
+                console.log("Details:", details);
                 if(status === 'ok'){
+                    receiptStore.delete(receiptId);
                     continue;
                 } else if(status === 'error'){
                     console.error('There was an error sending a notification: ', details);
@@ -64,6 +70,7 @@ export const processReceipts = async (receiptIds: string[]) => {
                             await removePushTokenAllUsers(details.expoPushToken);
                         }                        
                     }
+                    receiptStore.delete(receiptId);
                 }
             }
         } catch (error) {
@@ -71,3 +78,5 @@ export const processReceipts = async (receiptIds: string[]) => {
         }
     }
 }
+
+setInterval(processReceipts, 1000 * 20);
