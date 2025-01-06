@@ -140,6 +140,13 @@ export const unclaimRequest = async (req: Request, res: Response): Promise<any> 
     }
     const acceptedHelpRequest = acceptedHelpRequests[0];
     await unclaimHelpRequest(acceptedHelpRequest.id, req.session.userId);
+    const mom_id = acceptedHelpRequest.mom_id;
+    const notificationData = {
+      sound: 'default',
+      body: 'Your help request has been returned to the help list.',
+      data: {},
+    }
+    sendNotification(mom_id, notificationData);
     res.status(200).json({ message: 'Help request unclaimed successfully' });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
