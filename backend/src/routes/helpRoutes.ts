@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getRequestStatus, getHelpRequests, addHelpRequest, getActiveHelpRequests, acceptRequest, deactivateRequest, getUnclaimedHelpRequests, unclaimRequest } from '../controllers/helpController';
+import { deactivateRequestById, getRequestStatus, getHelpRequests, addHelpRequest, getActiveHelpRequests, acceptRequest, deactivateRequest, getUnclaimedHelpRequests, unclaimRequest } from '../controllers/helpController';
 import { requireAuth, requireAdmin } from '../authMiddleware';
 
 const router = Router();
@@ -8,6 +8,7 @@ router.get('/help_requests', requireAdmin, getHelpRequests);
 router.get('/help_requests/unclaimed', requireAuth, getUnclaimedHelpRequests);
 router.post('/help_requests/unclaim', requireAuth, unclaimRequest);
 router.post('/help_requests/deactivate', requireAuth, deactivateRequest);
+router.post('/help_requests/deactivate/:id', requireAuth, deactivateRequestById);
 router.post('/help_requests/:id', requireAuth, acceptRequest);
 router.post('/help_requests', requireAuth, addHelpRequest);
 router.get('/help_status', requireAuth, getRequestStatus);

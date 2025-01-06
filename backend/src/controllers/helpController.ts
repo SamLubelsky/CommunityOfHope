@@ -54,7 +54,7 @@ export const getActiveHelpRequests = async (req: Request, res: Response): Promis
 
 export const getUnclaimedHelpRequests = async (req: Request, res: Response): Promise<void> => {
   try {
-    const requests = await getAllUnclaimedHelpRequests();
+    const requests = await getAllUnclaimedHelpRequests(req.session.userId);
     res.json({ Requests: requests });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
@@ -97,17 +97,41 @@ export const acceptRequest = async (req: Request, res: Response): Promise<any> =
 };
 export const deactivateRequest = async (req: Request, res: Response): Promise<any> => {
   try {
-    const acceptedHelpRequests = (await getAllActiveHelpRequests()).filter((request)=> request.volunteer_id === req.session.userId);
-    if(acceptedHelpRequests.length === 0){
-      return res.status(400).json({error: 'You have not accepted any help requests'});
+    if(req.session.role === "Volunteer"){
+      const acceptedHelpRequests = (await getAllActiveHelpRequests()).filter((request)=> request.volunteer_id === req.session.userId);
+      if(acceptedHelpRequests.length === 0){
+        return res.status(400).json({error: 'You have not accepted any help requests'});
+      }
+      const acceptedHelpRequest = acceptedHelpRequests[0];
+      await deactivateHelpRequest(acceptedHelpRequest.id);
+      res.status(200).json({ message: 'Help request deactivated successfully' });
     }
-    const acceptedHelpRequest = acceptedHelpRequests[0];
-    await deactivateHelpRequest(acceptedHelpRequest.id);
-    res.status(200).json({ message: 'Help request deactivated successfully' });
+    if(req.session.role === "Mom"){
+      const activeHelpRequests = await getAllActiveHelpRequests();
+      const userRequests = activeHelpRequests.filter(request => request.mom_id === req.session.userId);
+      if(userRequests.length === 0){
+        return res.status(400).json({error: 'You have not posted any help requests'});
+      }
+      const userRequest = userRequests[0];
+      await deactivateHelpRequest(userRequest.id);
+      res.status(200).json({ message: 'Help request deactivated successfully' });
+    }
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
   }
 };
+export const deactivateRequestById = async (req: Request, res: Response): Promise<any> => {
+  if(req.session.role !== "Admin"){
+    return res.status(401).json({error: 'Only admins can deactivate help requests'});
+  }
+  try {
+    const { id } = req.params;
+    await deactivateHelpRequest(id);
+    res.status(200).json({ message: 'Help request deactivated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+}
 export const unclaimRequest = async (req: Request, res: Response): Promise<any> => {
   try {
     const acceptedHelpRequests = (await getAllActiveHelpRequests()).filter((request)=> request.volunteer_id === req.session.userId);
@@ -163,4 +187,5 @@ export const getRequestStatus = async (req: Request, res: Response): Promise<any
     }
   }
 };
+//primarily intended for moms so they can remove their own help requests, but will also allow admins to remove any active help request
 // Add other controller functions (getById, update, delete)...
