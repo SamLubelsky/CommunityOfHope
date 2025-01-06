@@ -36,7 +36,12 @@ export const addHelpRequest = async (req: Request, res: Response): Promise<any> 
       body: messageBody,
       data: {},
     }
-    sendNotifications(volunteerIds, notificationData);
+    try{
+      sendNotifications(volunteerIds, notificationData);
+    } catch(error){
+      console.log("Error sending notifications:", error);
+    }
+
     return res.status(201).json({ id });
   } catch (error) {
     return res.status(500).json({ error: (error as Error).message });

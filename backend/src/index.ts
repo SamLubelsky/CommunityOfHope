@@ -72,7 +72,7 @@ app.get('/', (req: Request, res: Response) => {
 })
 
 // setInterval(processReceipts, 1000 * 60 * 15) //process receipts every 15 minutes
-setInterval(processReceipts, 1000 * 20);
+// tInterval(processReceipts, 1000 * 10)
 
 const port = process.env.PORT || 3000
 const httpServer = http.createServer(app)  

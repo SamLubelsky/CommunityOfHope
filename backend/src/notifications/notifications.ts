@@ -49,6 +49,7 @@ export const sendNotifications = async(userIds: string[], data: NotificationMess
 export const processReceipts = async () => {
     const expo = new Expo({ });
     console.log("Processing receipts");
+    console.log("ReceiptStore:", receiptStore)
     let receiptIdChunks = expo.chunkPushNotificationReceiptIds(Array.from(receiptStore)); 
     for (const chunk of receiptIdChunks) {
         try {
