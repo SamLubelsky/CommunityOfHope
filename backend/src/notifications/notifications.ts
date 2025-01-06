@@ -48,18 +48,18 @@ export const sendNotifications = async(userIds: string[], data: NotificationMess
 
 export const processReceipts = async () => {
     const expo = new Expo({ });
-    console.log("Processing receipts");
-    console.log("ReceiptStore:", receiptStore)
+    // console.log("Processing receipts");
+    // console.log("ReceiptStore:", receiptStore)
     let receiptIdChunks = expo.chunkPushNotificationReceiptIds(Array.from(receiptStore)); 
     for (const chunk of receiptIdChunks) {
         try {
             let receipts = await expo.getPushNotificationReceiptsAsync(chunk);
-            console.log(receipts);
+            // console.log(receipts);
             for(let receiptId in receipts){
                 let {status, details} = receipts[receiptId];
-                console.log('ReciptId:', receiptId);
-                console.log("Status:", status);
-                console.log("Details:", details);
+                // console.log('ReciptId:', receiptId);
+                // console.log("Status:", status);
+                // console.log("Details:", details);
                 if(status === 'ok'){
                     receiptStore.delete(receiptId);
                     continue;
@@ -80,4 +80,4 @@ export const processReceipts = async () => {
     }
 }
 
-setInterval(processReceipts, 1000 * 20);
+setInterval(processReceipts, 1000 * 60 * 15) //process receipts every 15 minutes;
