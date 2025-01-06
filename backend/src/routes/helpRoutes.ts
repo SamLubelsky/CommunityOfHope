@@ -1,11 +1,13 @@
 import { Router } from 'express';
 import { getRequestStatus, getHelpRequests, addHelpRequest, getActiveHelpRequests, acceptRequest, deactivateRequest, getUnclaimedHelpRequests } from '../controllers/helpController';
 import { requireAuth, requireAdmin } from '../authMiddleware';
+import { unclaimHelpRequest } from '../models/helpRequestModel';
 
 const router = Router();
 // Protected routes
 router.get('/help_requests', requireAdmin, getHelpRequests);
 router.get('/help_requests/unclaimed', requireAuth, getUnclaimedHelpRequests);
+router.post('/help_requests/unclaim', requireAuth, unclaimHelpRequest);
 router.post('/help_requests/deactivate', requireAuth, deactivateRequest);
 router.post('/help_requests/:id', requireAuth, acceptRequest);
 router.post('/help_requests', requireAuth, addHelpRequest);

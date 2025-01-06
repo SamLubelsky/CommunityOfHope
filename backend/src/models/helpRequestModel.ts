@@ -69,6 +69,9 @@ export const deactivateHelpRequest = async(id: string): Promise<void> => {
   await executeQuery('UPDATE help_requests SET active = FALSE WHERE id = $1', [id]);
   return;
 };
+export const unclaimHelpRequest = async(id: string): Promise<void> => {
+  await executeQuery('UPDATE help_requests SET volunteer_id = NULL WHERE id = $1', [id]);
+}
 export const createHelpRequest = async (data: HelpRequest): Promise<any> => {
   const { mom_id, description, emergency } = data;
   const activeHelpRequests = await executeQuery('SELECT * FROM help_requests WHERE mom_id = $1 AND active = TRUE', [mom_id]);

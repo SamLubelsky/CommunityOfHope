@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { acceptHelpRequest, getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest, getAllUnclaimedHelpRequests} from '../models/helpRequestModel';
+import { acceptHelpRequest, getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest, getAllUnclaimedHelpRequests, unclaimHelpRequest} from '../models/helpRequestModel';
 import { getUserData, getAllUsers, getAllVolunteers } from '../models/userModel';
 import { createChat, getChat } from '../models/chatsModel';
 import { getHeapSnapshot } from 'v8';
@@ -108,6 +108,19 @@ export const deactivateRequest = async (req: Request, res: Response): Promise<an
     res.status(500).json({ error: (error as Error).message });
   }
 };
+export const unclaimRequest = async (req: Request, res: Response): Promise<any> => {
+  try {
+    const acceptedHelpRequests = (await getAllActiveHelpRequests()).filter((request)=> request.volunteer_id === req.session.userId);
+    if(acceptedHelpRequests.length === 0){
+      return res.status(400).json({error: 'You have not accepted any help requests'});
+    }
+    const acceptedHelpRequest = acceptedHelpRequests[0];
+    await unclaimHelpRequest(acceptedHelpRequest.id);
+    res.status(200).json({ message: 'Help request unclaimed successfully' });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+}
 export const getRequestStatus = async (req: Request, res: Response): Promise<any> => {
   if(req.session.role === "Volunteer" || req.session.role === "Admin"){
     try {

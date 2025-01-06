@@ -27,17 +27,23 @@ export default function AddUser(){
             credentials:"include",
             body: formData,
         });
-        const responseData = await response.json();
-        if (!response.ok) {
-            const error = responseData.message;
+        try{
+            const responseData = await response.json();
+            if (!response.ok) {
+                const error = responseData.message;
+                console.error(error);
+                setError(error);
+            }   
+            else{                
+                setAddSuccess(true);
+            }
+            setIsLoading(false);
+            console.log(responseData);
+        } catch(error){
             console.error(error);
-            setError(error);
-        }   
-        else{                
-            setAddSuccess(true);
+            setError("An unknown error occurred. Please refresh the page and try again.");
+            setIsLoading(false);
         }
-        setIsLoading(false);
-        console.log(responseData);
     }
     return  (
     <div className="flex items-center justify-center min-h-screen w-full">
