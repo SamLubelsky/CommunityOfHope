@@ -75,7 +75,7 @@ export const deactivateHelpRequest = async(id: string): Promise<void> => {
   return;
 };
 export const unclaimHelpRequest = async(helpId: string, volunteerId: string): Promise<void> => {
-  await executeQuery('UPDATE help_requests SET volunteer_id = NULL WHERE id = $1', [volunteerId]);
+  await executeQuery('UPDATE help_requests SET volunteer_id = NULL WHERE id = $1', [helpId]);
   await executeQuery('INSERT INTO unclaimedHistory (helpId, userId) VALUES ($1, $2)', [helpId, volunteerId]);
   return;
 }
