@@ -5,7 +5,7 @@ import MyButton from '@/components/MyButton';
 import VolunteerRequestForm from "@/components/VolunteerRequestForm";
 import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';
-import { BACKEND_URL } from '../config';
+import { BACKEND_URL } from '../app/config';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import Constants from 'expo-constants'
@@ -142,7 +142,7 @@ const RequestAVolunteerScreen = () => {
 
   useEffect(() => {
     if(role == "Volunteer"){
-      router.replace('/helpRequests')
+      // router.replace('/helpRequests')
       return;
     }
     registerForPushNotificationsAsync()
@@ -210,9 +210,6 @@ const RequestAVolunteerScreen = () => {
   }
   return (
     <View style={styles.container}>
-      <View style={styles.textContainer}>
-        <Text style={styles.text}> Welcome to EPIC!</Text>
-      </View>
       <MyButton label="REQUEST A VOLUNTEER" onPress={requestVolunteer} />
       <VolunteerRequestForm setHelpStatus={setHelpStatus} isVisible={isModalVisible} onClose={onModalClose} />
       <HelpCard />

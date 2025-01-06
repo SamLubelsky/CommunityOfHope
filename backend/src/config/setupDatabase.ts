@@ -65,17 +65,18 @@ const createTables = async () => {
           )
         `,[]);
   await executeQuery(`
-          CREATE TABLE IF NOT EXISTS chatIds (
+          CREATE TABLE IF NOT EXISTS chats (
           id SERIAL PRIMARY KEY,
           momId INTEGER,
           volunteerId INTEGER,
           dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          lastMessageTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (momId) REFERENCES users(id),
           FOREIGN KEY (volunteerId) REFERENCES users(id)
           )
         `,[]);
   await executeQuery(`
-          CREATE TABLE IF NOT EXISTS chats (
+          CREATE TABLE IF NOT EXISTS messages (
           id SERIAL PRIMARY KEY,
           chatId INTEGER,
           message TEXT, 
