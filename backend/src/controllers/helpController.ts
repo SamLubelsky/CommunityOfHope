@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { acceptHelpRequest, getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest, getAllUnclaimedHelpRequests, unclaimHelpRequest} from '../models/helpRequestModel';
 import { getUserData, getAllUsers, getAllVolunteers } from '../models/userModel';
-import { createChat, getChat } from '../models/chatsModel';
+import { createChat } from '../models/chatsModel';
 import { getHeapSnapshot } from 'v8';
 import { sendNotification, sendNotifications } from "../notifications/notifications";
 export const getHelpRequests = async (req: Request, res: Response): Promise<any> => {

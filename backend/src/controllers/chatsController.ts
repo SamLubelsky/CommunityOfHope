@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getMessageData, getChatById, createChat, createMessage, getChats } from '../models/chatsModel'
+import { getMessageData, getChatById, createChat, createMessage, getChats, getChatParticipants } from '../models/chatsModel'
 import {Chat} from '../utils/definitions';
 import { getAllUsers, getUserData } from '../models/userModel';
 //gets all chats for associated chat id
@@ -11,8 +11,9 @@ export const getMessages = async (req: Request, res: Response): Promise<any> =>{
         if(!chat){
             return res.status(400).json({error: 'Chat not found'});
         }
-        const {momId, volunteerId} = chat;
-        if(userId !== momId &&  userId !== volunteerId && role !== 'Admin'){
+        const {id} = chat;
+        const chatParticipants = await getChatParticipants(id); 
+        if(role !== "Admin" && !chatParticipants.includes(userId)){
             return res.status(401).json({error: 'You are unauthorized to view this chat'});
         }   
         const messages = await getMessageData(chatId);
@@ -32,12 +33,9 @@ export const sendChat = async(req: Request, res: Response): Promise<any> =>{
     }
 }
 export const getAllChats = async (req: Request, res: Response): Promise<any> =>{
-    if(!req.session || !req.session.userId || !req.session.role){
-        return res.status(401).json({error: 'You are not logged in'});
-    }
     const {userId, role} = req.session;
     try{
-        const chats = await getChats(userId, role);
+        const chats = await getChats(userId);
         return res.status(200).json(chats);
     } catch (error) {
         console.log(error);
