@@ -3,6 +3,7 @@ import { router, Slot, Stack, Tabs } from 'expo-router';
 import { setStatusBarStyle } from 'expo-status-bar';
 import { useEffect } from 'react';
 import {BACKEND_URL} from './config';
+import "../globals.css"
 export default function RootLayout() {
   useEffect(() => {
     setTimeout(() => {
