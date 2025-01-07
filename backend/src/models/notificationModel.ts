@@ -1,4 +1,4 @@
-import { executeQuery } from "../config/setupDatabase";
+import { executeQuery } from "../config/database";
 
 export const uploadPushToken = async(userId: string, pushToken: string): Promise<any> => {
     await executeQuery('INSERT INTO pushTokens (userId, token) VALUES ($1, $2)', [userId, pushToken]);

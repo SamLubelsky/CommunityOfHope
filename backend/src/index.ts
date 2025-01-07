@@ -7,7 +7,7 @@ import userRoutes from './routes/userRoutes';
 import helpRoutes from './routes/helpRoutes';
 import chatRoutes from './routes/chatRoutes';
 import notificationRoutes from './routes/notificationRoutes';
-import { createTables } from './config/setupDatabase'
+import { createTables } from './config/database'
 import  {Pool} from 'pg'
 import PgSimple from 'connect-pg-simple'
 import { initializeWebSocket } from './websocket'

@@ -1,4 +1,4 @@
-import { executeQuery } from '../config/setupDatabase';
+import { executeQuery } from '../config/database';
 import { HelpRequest } from '../types/helpRequest';
 
 export const getAllHelpRequests = async(): Promise<HelpRequest[]> => {

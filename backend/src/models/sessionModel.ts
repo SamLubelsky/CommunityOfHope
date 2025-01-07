@@ -1,5 +1,5 @@
 import e from 'express';
-import {executeQuery} from '../config/setupDatabase'
+import {executeQuery} from '../config/database'
 export const getSessionData = async () => {
     const rows = await executeQuery('SELECT * FROM session', []);
     return rows;

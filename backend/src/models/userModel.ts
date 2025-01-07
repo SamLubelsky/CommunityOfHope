@@ -1,6 +1,6 @@
 import { validateUserInput } from '../utils/functions'
 import {User} from "../utils/definitions"
-import {executeQuery} from '../config/setupDatabase'
+import {executeQuery} from '../config/database'
 const bcrypt = require('bcrypt')
 
 export const getAllUsers = async() => {
