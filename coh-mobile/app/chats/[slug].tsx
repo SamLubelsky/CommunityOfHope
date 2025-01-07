@@ -32,19 +32,15 @@ export default function Page(){
             }
         }
         loadMessages();
-        const socket = io(BACKEND_URL);
+        const socket = io(BACKEND_URL, {withCredentials: true});
+        // const socket = io(BACKEND_URL);
         setSocket(socket);
         socket.on("message", (data)=>{  
             setMessages((prevMessages) => [...prevMessages, data])
-        })
-        socket.on('askId', () =>{
-            socket.emit('idResponse', String(id));
-            // console.log(`Sent id: ${id} to server`);
-        })
+        });
         socket.on('messageReceived', msg=>{
             // console.log("message successfully received by server");
         })
-        socket.emit('idReady');
         //RELOAD MESSAGES 
         const subscription = AppState.addEventListener('change', nextAppState => {
             if (appState.match(/inactive|background/) && nextAppState === 'active') {

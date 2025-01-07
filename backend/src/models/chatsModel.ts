@@ -4,9 +4,14 @@ import {executeQuery} from '../config/database'
 
 export const createChat = async (volunteer_id: string, mom_id: string) => {
   executeQuery('INSERT INTO chats (volunteerId, momId) VALUES ($1, $2)', [volunteer_id, mom_id]);
-  return;
 }
-
+export const getChatRoomMessages = async () => {
+  const rows = await executeQuery('SELECT id, chatid as "chatId", message, senderid as "senderId", datesent as "dateSent"  FROM messages where chatId=-1', []);
+  return rows;
+}
+export const createChatRoomMessage = async (senderId: string, message: string, dateSent: string) => {
+  executeQuery('INSERT INTO messages (chatId, senderId, message, dateSent) VALUES ($1, $2, $3, $4)', [-1, senderId, message, dateSent]);
+};
 export const getChatById = async (chatId: string): Promise<Chat | null> => {
   const rows = await executeQuery('SELECT id, momid as "momId", volunteerid as "volunteerId" FROM chats where id=$1', [chatId]);
   if(rows){
@@ -64,5 +69,4 @@ export const getMessageData = async (chatId: string) => {
 export const createMessage = async (chatId: string, senderId: string, message: string, dateSent: string) => {
   executeQuery('INSERT INTO messages (chatId, senderId, message, dateSent) VALUES ($1, $2, $3, $4)', [chatId, senderId, message, dateSent]);
   executeQuery('UPDATE chats SET lastMessageTime=$1 WHERE id=$2', [dateSent, chatId]);
-  return;
 }

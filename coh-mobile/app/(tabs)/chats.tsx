@@ -5,10 +5,14 @@ import { router } from 'expo-router'
 import { BACKEND_URL } from '../config';
 import {Chat} from '../../types';
 import {useIsFocused} from '@react-navigation/native';
+import { useBoundStore } from '@/store/useBound';
 export default function Chats(){
     const isFocused = useIsFocused();
     const [chats, setChats] = useState<Chat[]>([]);
+
+    const role = useBoundStore((state) => state.role);
     useEffect(() => {
+        console.log("role:", role);
         const loadChats = async () => {
             const response = await fetch(`${BACKEND_URL}/api/chats`, {
                 method: 'GET',
@@ -29,16 +33,29 @@ export default function Chats(){
     }
 
     function getChatsList(){
-        if(chats.length == 0){
+        if(chats.length === 0 && role === "Mom"){
             return <Text style={styles.helpText}> You don't have any chats open yet</Text>
         }
-        return chats.map((chat: any, index: any) => {   
+        const chatsList = chats.map((chat: any, index: any) => {   
             return (
                 <View key={index} style={styles.itemContainer}>
                     <Text style={styles.text}> {chat.otherName}</Text>
                     <MyButton label="Open Chat" onPress={() => onSubmit(chat.id)}/>
                 </View>
             )});
+        if(role === "Volunteer" || role === "Admin"){
+            const chatRoomChat =         
+            (
+            <View key="chatRoom" style={styles.itemContainer}>
+                <Text style={styles.text}> Volunteer Chat Room</Text>
+                <MyButton label="Open Chat" onPress={() => onSubmit(-1)}/>
+            </View>
+            );
+            console.log("chats:", [chatRoomChat, ...chatsList]);
+            return [chatRoomChat, ...chatsList];
+        } else {
+            return chatsList;
+        }
     }       
     return (
         <View style={styles.container}>

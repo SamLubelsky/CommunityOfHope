@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getMessageData, getChatById, createChat, createMessage, getChats } from '../models/chatsModel'
+import { getMessageData, getChatById, createChat, createMessage, getChats, getChatRoomMessages } from '../models/chatsModel'
 import {Chat} from '../utils/definitions';
 import { getAllUsers, getUserData } from '../models/userModel';
 //gets all chats for associated chat id
@@ -7,6 +7,10 @@ export const getMessages = async (req: Request, res: Response): Promise<any> =>{
     const {chatId} = req.params;
     const {userId, role} = req.session;
     try{
+        if(chatId === "-1"){
+            const messages = await getChatRoomMessages();
+            return res.status(200).json(messages);
+        }
         const chat = await getChatById(chatId);
         if(!chat){
             return res.status(400).json({error: 'Chat not found'});

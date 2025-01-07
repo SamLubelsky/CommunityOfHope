@@ -13,7 +13,6 @@ import PgSimple from 'connect-pg-simple'
 import { initializeWebSocket } from './websocket'
 import http from 'http'
 import path from 'path'
-import {processReceipts} from './notifications/notifications';
 
 createTables();
 dotenv.config()
@@ -38,7 +37,7 @@ const pool = new Pool({
 })
 const pgSession = PgSimple(session);
 
-app.use(session({
+const sessionMiddleware = session({
   store: new pgSession({
     pool,
     tableName: 'session'
@@ -49,13 +48,12 @@ app.use(session({
   saveUninitialized: false,
   cookie: { 
     httpOnly: true,
-    secure: !isDevelopment,
+    secure: !isDevelopment, // Set secure: true in production when using HTTPS
     sameSite: isDevelopment ? 'lax' : 'none',
-    // domain: isDevelopment ? 'localhost' : 'https://api-v4j57qn4oq-uc.a.run.app',
-    // secure: !isDevelopment,
     maxAge: 1000 * 60 * 60 * 24 * 90, //3 months
-  }  // Set secure: true in production when using HTTPS
-}));
+  }  
+})
+app.use(sessionMiddleware);
 
 
 app.use(express.json())
@@ -71,26 +69,11 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server')
 })
 
-// setInterval(processReceipts, 1000 * 60 * 15) //process receipts every 15 minutes
-// tInterval(processReceipts, 1000 * 10)
-
 const port = process.env.PORT || 3000
 const httpServer = http.createServer(app)  
 httpServer.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`)
 });
-// if(isDevelopment){
-//   httpServer.listen(port, () => {
-//     console.log(`[server]: Server is running at http://localhost:${port}`)
-//   }); 
-// } else{
-//   console.log("Not running server");
-// }
+
 initializeWebSocket(httpServer);
-// exports.api = functions.https.onRequest(app);
-// export {app};
-// if (require.main == module) {
-//   app.listen(port, () => {
-//     console.log(`[server]: Server is running at http://localhost:${port}`)
-//   })
-// }
+export {sessionMiddleware}
