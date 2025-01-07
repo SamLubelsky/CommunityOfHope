@@ -79,9 +79,9 @@ export const acceptRequest = async (req: Request, res: Response): Promise<any> =
     }
     try{
       const chat = await getChatByParticipants([mom_id, volunteer_id]); //will throw an error if chat does not exist
-      console.log(chat);
       console.log("Chat already exists");
-    } catch{
+    } catch(error){
+      console.log(error);
       console.log("Chat does not exist, creating chat");
       await createChat(volunteer_id, mom_id);
     }

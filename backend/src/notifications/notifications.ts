@@ -15,7 +15,7 @@ export const sendNotifications = async(userIds: string[], data: NotificationMess
     try{
         expoPushTokens = await getAllPushTokens(userIds);
     } catch(error){
-        console.error(error);
+        console.log(error, "Aborting sendNotifications.");
         return;
     }
 

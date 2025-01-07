@@ -79,7 +79,6 @@ export const editUser = async(req: MulterRequest, res: Response): Promise<any> =
   }
 }
 export const deleteUser = async(req: Request, res: Response) => {
-  console.log("DELETING USER");
   const { id } = req.params;
   try {
     await deleteUserById(id);
@@ -90,7 +89,6 @@ export const deleteUser = async(req: Request, res: Response) => {
       // console.log("id stored in session:", session.sess.userId);
       if(session.sess.userId == id){
         deleteSessionBySessionId(session.sid);
-        console.log("Session deleted:", session.sid);
       }
     })
     res.status(201).json({ message: `User ${id} deleted` });
@@ -128,7 +126,6 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
     const {id, firstName, lastName, role} = existingUser;
     req.session.userId = id;
     req.session.role = existingUser.role;
-    console.log("Session Id:", req.sessionID);
     return res.status(201).json({ message: 'Login successful', id, firstName, lastName, role});
     // req.session.userId = id;
     // req.session.role = existingUser.role;
@@ -160,9 +157,6 @@ export const logoutUser = (req: Request, res: Response): void => {
       }
       res.clearCookie('connect.sid');
       const { expoPushToken } = req.body;
-      console.log("body:", req.body);
-      console.log("Expo Push Token:", expoPushToken);
-      console.log("User Id:", userId);
       if(expoPushToken){
         removePushToken(userId, expoPushToken);
       }
