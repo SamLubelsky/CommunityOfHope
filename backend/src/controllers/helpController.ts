@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { acceptHelpRequest, getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest, getAllUnclaimedHelpRequests, unclaimHelpRequest} from '../models/helpRequestModel';
 import { getUserData, getAllUsers, getAllVolunteers } from '../models/userModel';
-import { createChat } from '../models/chatsModel';
+import { createChat, getChatByParticipants } from '../models/chatsModel';
 import { getHeapSnapshot } from 'v8';
 import { sendNotification, sendNotifications } from "../notifications/notifications";
 export const getHelpRequests = async (req: Request, res: Response): Promise<any> => {
@@ -78,7 +78,7 @@ export const acceptRequest = async (req: Request, res: Response): Promise<any> =
       return res.status(400).json({error: 'You have already accepted a help request'});
     }
     try{
-      const chat = await getChat(mom_id, volunteer_id); //will throw an error if chat does not exist
+      const chat = await getChatByParticipants([mom_id, volunteer_id]); //will throw an error if chat does not exist
       console.log(chat);
       console.log("Chat already exists");
     } catch{
