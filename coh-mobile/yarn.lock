@@ -6125,6 +6125,11 @@ react-is@^16.13.1, react-is@^16.7.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
+react-native-edge-to-edge@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-edge-to-edge/-/react-native-edge-to-edge-1.2.0.tgz#fa1e8e64a7348bbd5d5514008c1dec0e1c7935e4"
+  integrity sha512-jlXwoT9y7Thb/E1uEirKcbk/lgs3oIQ1n7MKLrcHcVwownr7RqlSTnwYQ6iCTiwvpy6AgpLOhWZg8im+TsIXdA==
+
 react-native-gesture-handler@2.20.2:
   version "2.20.2"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.20.2.tgz#73844c8e9c417459c2f2981bc4d8f66ba8a5ee66"
@@ -6148,6 +6153,11 @@ react-native-is-edge-to-edge@^1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/react-native-is-edge-to-edge/-/react-native-is-edge-to-edge-1.1.6.tgz#69ec13f70d76e9245e275eed4140d0873a78f902"
   integrity sha512-1pHnFTlBahins6UAajXUqeCOHew9l9C2C8tErnpGC3IyLJzvxD+TpYAixnCbrVS52f7+NvMttbiSI290XfwN0w==
+
+react-native-nitro-modules@^0.20.1:
+  version "0.20.1"
+  resolved "https://registry.yarnpkg.com/react-native-nitro-modules/-/react-native-nitro-modules-0.20.1.tgz#99568818b90e364f1e08b5341a7868eca3762333"
+  integrity sha512-ffa8GbnLBs7irEx1ZCl7WdHzzA5uj4ngh7hIWbeUfBs8m2iAn+byowOJWHKmO+RA2hp9dVwTxHYSBOqIvTVvHA==
 
 react-native-paper@^5.12.5:
   version "5.12.5"
@@ -6187,6 +6197,11 @@ react-native-screens@4.4.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
+
+react-native-unistyles@^3.0.0-beta.4:
+  version "3.0.0-beta.4"
+  resolved "https://registry.yarnpkg.com/react-native-unistyles/-/react-native-unistyles-3.0.0-beta.4.tgz#ae542a43e243eba2cf87dbecaa35a7134dfde31e"
+  integrity sha512-epCDTHQwoeC2aEfHIWoJFCqCItNe29hv9Cru6nHBRGeQHpbxEZDlbaCS2ntVjxNDhgmoet0uS75qMFPmraxvzw==
 
 react-native-web@~0.19.10:
   version "0.19.13"
