@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useContext, useEffect, useState} from 'react';
-import { View, Text, StyleSheet, Platform } from 'react-native';
+import { View, Text, StyleSheet, Platform, Pressable } from 'react-native';
 import MyButton from '@/components/MyButton';
 import VolunteerRequestForm from "@/components/VolunteerRequestForm";
 import { BACKEND_URL } from '../app/config';
+import "../global.css";
 type HelpStatus =  "Not Requested" | "Requested" | "Accepted" 
 
 const RequestAVolunteer = () => {
@@ -53,10 +54,12 @@ const RequestAVolunteer = () => {
     }
     if(helpStatus === "Requested"){
       return (
-        <View style={styles.helpCard}>
-          <Text style={styles.helpText}>Your help request has been sent</Text>
-          <Text style={styles.helpText2}>Please wait for a volunteer to accept</Text>  
-          <MyButton label="Cancel your help request" onPress={deactiveRequest}/>
+        <View className="flex-1 py-16 rounded-md border-blue-300 border-2 bg-blue-300">
+          <Text className="my-4 font-primary text-blue-500 text-8 text-center">Your help request has been sent</Text>
+          <Text className="my-4 font-primary text-blue-500 text-8 text-center">Please wait for a volunteer to accept</Text>  
+          <Pressable className="my-5 w-12 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2" onPress={deactiveRequest}>
+            <Text className="text-blue-600 text-6 text-center font-primary m-auto">Cancel Help Request</Text>
+          </Pressable>
         </View>
       );
     }
@@ -70,10 +73,15 @@ const RequestAVolunteer = () => {
     } 
   }
   return (
-    <View style={styles.container}>
-      <MyButton label="REQUEST A VOLUNTEER" onPress={requestVolunteer} />
+    <View>
+      {helpStatus === "Not Requested" ?
+          <Pressable className="w-12 h-7 bg-blue-200 border self-center rounded-md border-none" onPress={requestVolunteer}>
+            <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Request a volunteer</Text>
+          </Pressable>
+          : <HelpCard />
+      }      
       <VolunteerRequestForm setHelpStatus={setHelpStatus} isVisible={isModalVisible} onClose={onModalClose} />
-      <HelpCard />
+
     </View>
   );
 };
@@ -81,6 +89,12 @@ const RequestAVolunteer = () => {
 export default RequestAVolunteer;
 
 const styles = StyleSheet.create({
+  elevation:{
+    elevation: 0,
+  },
+  blackBackground: {
+    backgroundColor: 'black',
+  },
   container:
   {
     flex: 1,

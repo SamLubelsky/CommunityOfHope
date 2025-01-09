@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
-import { Platform, View, Text, StyleSheet } from 'react-native';
+import { Platform, View, Text, StyleSheet, Pressable } from 'react-native';
 import MyButton from '@/components/MyButton';
 import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';
@@ -8,9 +8,9 @@ import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
 import {useIsFocused} from '@react-navigation/native';
 import Constants from 'expo-constants';
-import HelpRequests from '@/components/helpRequests';
-import RequestAVolunteer from '@/components/requestAVolunteer';
-
+import HelpRequests from '@/components/HelpRequests';
+import RequestAVolunteer from '@/components/RequestAVolunteer';
+import "../../global.css";
 async function uploadPushToken(expoPushToken: string) {
     const response = await fetch(`${BACKEND_URL}/api/upload-token`, {
       method: "POST",
@@ -125,10 +125,13 @@ export default function Home(){
     }, [isFocused]);
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.text}> Welcome to EPIC!</Text>
+        <View className="flex-1 bg-gray-100 items-center justify-center">
+            <Text className="text-primary py-5 text-pink-300 text-center text-9"> Welcome to EPIC!</Text>
             {role === "Mom" ? <RequestAVolunteer /> : <HelpRequests />}
-            <MyButton label="Logout" onPress={handleLogout}/>
+          {/* <Pressable className="my-5 w-10 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2" onPress={handleLogout}> */}
+          <Pressable className="my-5 "onPress={handleLogout}>
+            <Text className="text-blue-600 text-6 text-center font-primary text-5 m-auto underline" >Logout</Text>
+          </Pressable>
         </View>
     )
 }
