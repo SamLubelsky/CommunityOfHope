@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Pressable} from 'react-native';
+import {View, Text, StyleSheet, Pressable, Image} from 'react-native';
 import MyButton from '@/components/MyButton';
 import { router } from 'expo-router'
 import { BACKEND_URL } from '../config';
@@ -40,6 +40,7 @@ export default function Chats(){
             return (
                 <View key={index} className="w-full items-center justify-center border-2 border-blue-300 rounded-md bg-gray-200 px-6 py-3 mt-4">
                     <Text className="text-blue-600 text-6 mb-3 font-5"> {chat.otherName}</Text>
+                    <Image className=""source={{uri: `${BACKEND_URL}${chat.otherProfileLink}`}} />
                     <Pressable className="py-2 px-4 mt-3 bg-blue-200 border self-center rounded-md border-none" onPress={()=>onSubmit(chat.id)}>
                         <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Open Chat</Text>
                     </Pressable>
