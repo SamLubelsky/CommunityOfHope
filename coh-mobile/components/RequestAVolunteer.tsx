@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useContext, useEffect, useState} from 'react';
-import { View, Text, StyleSheet, Platform, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Platform, Pressable, Button } from 'react-native';
 import MyButton from '@/components/MyButton';
 import VolunteerRequestForm from "@/components/VolunteerRequestForm";
 import { BACKEND_URL } from '../app/config';
@@ -11,7 +11,7 @@ const RequestAVolunteer = () => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [helpStatus, setHelpStatus] = useState<HelpStatus>("Not Requested");
   const [volunteerName, setVolunteerName] = useState<string | null>("");
-
+  const [description, setDescription] = useState<string | null>(null);
   const requestVolunteer = () => {
     setIsModalVisible(true);
   };  
@@ -26,6 +26,7 @@ const RequestAVolunteer = () => {
     });
     const data = await response.json();
     setHelpStatus(data.status);
+    setDescription(data.description);
     if (data.status === "Accepted") {
       setVolunteerName(data.volunteerName);
     }
@@ -42,6 +43,7 @@ const RequestAVolunteer = () => {
   const deactiveRequest= async () => {
     setHelpStatus("Not Requested")
     setVolunteerName(null);
+    setDescription(null);
     await fetch(`${BACKEND_URL}/api/help_requests/deactivate/`, {
       method: 'POST',
       credentials: 'include',
@@ -54,9 +56,9 @@ const RequestAVolunteer = () => {
     }
     if(helpStatus === "Requested"){
       return (
-        <View className="flex-1 py-16 rounded-md border-blue-300 border-2 bg-blue-300">
-          <Text className="my-4 font-primary text-blue-500 text-8 text-center">Your help request has been sent</Text>
-          <Text className="my-4 font-primary text-blue-500 text-8 text-center">Please wait for a volunteer to accept</Text>  
+        <View className="flex-1 py-3 my-3 px-5 rounded-md border-blue-300 border-2 bg-gray-200">
+          <Text className="my-4 font-primary text-blue-600 text-8 text-center">You have requested help for {description}</Text>
+          <Text className="my-4 font-primary text-yellow-500 text-7 text-center">Please wait for a volunteer to accept</Text>  
           <Pressable className="my-5 w-12 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2" onPress={deactiveRequest}>
             <Text className="text-blue-600 text-6 text-center font-primary m-auto">Cancel Help Request</Text>
           </Pressable>
@@ -65,9 +67,11 @@ const RequestAVolunteer = () => {
     }
     if(helpStatus === "Accepted"){
       return (
-        <View style={styles.helpCard}>
-          <Text style={styles.helpText}>Your help request has been accepted by {volunteerName}</Text>
-          <MyButton label={`Im done being helped by ${volunteerName}`} onPress={deactiveRequest}/>
+        <View className="w-14 flex-1 py-5 my-3 px-5 rounded-md border-blue-300 border-2 bg-gray-200">
+          <Text className="font-primary text-center text-blue-600 text-7 my-4 mx-6">Your help request has been accepted by {volunteerName}</Text>
+          <Pressable className="my-5 w-13 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2 hover:bg-blue-200" onPress={deactiveRequest}>
+            <Text className="text-blue-600 text-6 text-center font-primary m-auto">I'm done being helped by {volunteerName}</Text>
+          </Pressable>
         </View>
       );
     } 
@@ -80,7 +84,7 @@ const RequestAVolunteer = () => {
           </Pressable>
           : <HelpCard />
       }      
-      <VolunteerRequestForm setHelpStatus={setHelpStatus} isVisible={isModalVisible} onClose={onModalClose} />
+      <VolunteerRequestForm setHelpStatus={setHelpStatus} setDescription={setDescription} isVisible={isModalVisible} onClose={onModalClose} />
 
     </View>
   );
@@ -89,45 +93,4 @@ const RequestAVolunteer = () => {
 export default RequestAVolunteer;
 
 const styles = StyleSheet.create({
-  elevation:{
-    elevation: 0,
-  },
-  blackBackground: {
-    backgroundColor: 'black',
-  },
-  container:
-  {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#F7ACCF',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }, 
-  helpCard:{
-    backgroundColor: '#ff4d4d',
-    padding: 20,
-    margin: 20,
-    borderRadius: 20,
-  },
-  helpText: {
-    color: 'white',
-    fontSize: 24,
-    margin: 5,
-  },
-  helpText2: {
-    color: 'black',
-    fontSize: 20,
-    textAlign: 'center',
-  },
-  textContainer: {
-    marginBottom: 20,
-  },
-  text: {
-    color: '#fff',
-    fontSize: 24,
-  },
-  logoutButton: {
-    marginTop: 20,
-    backgroundColor: '#ff4d4d',
-  },
 });

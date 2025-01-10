@@ -31,7 +31,8 @@ export const getChat = async (momId: string, volunteerId: string): Promise<Chat 
 
 export const getChats = async (userId: string, role: string): Promise<Chat[] | null> => {
   if(role == 'Mom' || role == 'Admin'){
-    const rows = await executeQuery(`SELECT chats.id, chats.momid as "momId", chats.volunteerid as "volunteerId", users.firstName || ' ' || users.lastName as "otherName"
+    const rows = await executeQuery(`SELECT chats.id, chats.momid as "momId", chats.volunteerid as "volunteerId", 
+                                     users.firstName || ' ' || users.lastName as "otherName", users.profileLink as "otherProfileLink"
                                      FROM 
                                         chats chats
                                         INNER JOIN users users
@@ -44,7 +45,8 @@ export const getChats = async (userId: string, role: string): Promise<Chat[] | n
     return rows;
   }
   else if(role == 'Volunteer'){
-    const rows = await executeQuery(`SELECT chats.id, chats.momid as "momId", chats.volunteerid as "volunteerId", users.firstName || ' ' || users.lastName as "otherName"
+    const rows = await executeQuery(`SELECT chats.id, chats.momid as "momId", chats.volunteerid as "volunteerId", 
+                                     users.firstName || ' ' || users.lastName as "otherName", users.profileLink as "otherProfileLink"
                                       FROM 
                                         chats chats
                                         INNER JOIN users users

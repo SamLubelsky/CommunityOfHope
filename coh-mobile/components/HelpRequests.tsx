@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
-import { Platform, View, Text, StyleSheet } from 'react-native';
+import { Platform, View, Text, StyleSheet, Pressable } from 'react-native';
 import MyButton from '@/components/MyButton';
 import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';
@@ -48,10 +48,15 @@ export default function HelpRequests(){
     }
     function HelpCard(){
         return (
-            <View style={styles.helpCard}>
-                <Text style={styles.helpText}> You are currently helping {momName}</Text>
-                <MyButton label={`Finish Helping ${momName}`} onPress={deactivateHelpRequest}/>
-                <MyButton label={`Return ${momName} to the Help List`} onPress={unclaimRequest}></MyButton>
+            <View className="my-5 items-center justify-center border-2 border-blue-300 rounded-md bg-gray-200 p-2">
+                <Text className="font-primary text-yellow-500 my-3 text-6"> You are currently helping {momName}</Text>
+                <Pressable className="py-2 px-4 mt-3 bg-blue-200 border self-center rounded-md border-none" onPress={deactivateHelpRequest}>
+                  <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">I'm done helping {momName}</Text>
+                  <Text className="text-gray-500 text-6 text-center font-primary text-3 m-auto mt-1">{momName} will not be returned to the help list</Text>
+                </Pressable>
+                <Pressable className="my-5 px-2 py-2 bg-gray-100 border self-center rounded-md border-blue-300 border-2 hover:bg-blue-200" onPress={unclaimRequest}>
+                  <Text className="text-blue-600 text-6 text-center font-primary m-auto">Return {momName} to the Help List</Text>
+                </Pressable>
             </View>
         );
     }
@@ -100,13 +105,15 @@ export default function HelpRequests(){
         }
         const requestsList = requests.map((request: any, index: any) => {
             return (
-                <View key={index} style={styles.itemContainer}>
-                    <Text style={styles.helpText}> {request.mom_name} needs help with {request.description}</Text>
-                    <MyButton label="Accept Help Request" onPress={() => acceptHelpRequest(request.id)}/>
+                <View key={index} className="my-5 items-center justify-center border-2 border-blue-300 rounded-md bg-gray-200 p-2">
+                    <Text className="font-primary text-yellow-500 text-6 mb-2 mt-2 w-4/5 text-center"> {request.mom_name} needs help with {request.description}</Text>
+                    <Pressable className="py-2 px-4 mt-3 bg-blue-200 border self-center rounded-md border-none" onPress={()=>acceptHelpRequest(request.id)}>
+                        <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Accept Help Request</Text>
+                    </Pressable>
                 </View>
             )});
         return <>
-                <Text style={styles.text}> All Current Help Requests</Text>
+                <Text className="font-primary text-blue-200 text-7 mb-5"> All Current Help Requests</Text>
                 {requestsList}
                </>
     }
@@ -118,7 +125,7 @@ export default function HelpRequests(){
         }
     }
     return (
-      <View style={styles.container}>
+      <View className="flex-1 bg-gray-100 items-center">
         <MainContent />
       </View>
         )

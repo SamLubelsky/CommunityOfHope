@@ -1,5 +1,4 @@
-import {Modal, StyleSheet, Text, TextInput, View, Pressable} from 'react-native';
-import Button from './MyButton';
+import {Modal, StyleSheet, Text, Button, View, Pressable} from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form'; 
 import {SafeAreaView,SafeAreaProvider } from 'react-native-safe-area-context'
@@ -12,13 +11,14 @@ type Props = {
     isVisible: boolean;
     onClose: () => void;
     setHelpStatus: any;
+    setDescription: any;
 }
 type FormData = {
     description: string;
     emergency: boolean;
     info?: string;
 }
-export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus}: Props){
+export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus, setDescription}: Props){
     const firstName = useBoundStore((state) => state.firstName);
     const id = useBoundStore((state) => state.id);
     const {control, watch, handleSubmit, formState: {errors}} = useForm({
@@ -41,114 +41,50 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus}
         }); 
         const json = await response.json();
         setHelpStatus("Requested");
+        setDescription(description);
         onClose();
     }
     return (
         // <SafeAreaProvider>
         //     <SafeAreaView style = {styles.container}>
-        <Modal animationType="slide" visible={isVisible}>
-            <View style={[styles.modalContainer]}> 
-                <Text style={styles.text}>Request a Volunteer</Text>
-
-                <View style={styles.closeButton}>
+        <Modal animationType="slide" visible={isVisible} transparent={true}>
+            <View className="m-auto justify-center px-5 py-5 self-center bg-gray-200"> 
+                <Text className="font-primary text-pink-400 text-7 text-center mt-2">Request a Volunteer</Text>
+                <View className="absolute top-2 right-2 text-gray-500">
                     <Pressable onPress={onClose}>
-                        <MaterialIcons name="close" color="#fff" size={22} />
+                        <MaterialIcons name="close" color="#fff" size={28} />
                     </Pressable>
                 </View>
 
-                <View style={styles.fixedContainer}>
-                    <View style={[styles.fixedContainer, {flexDirection: 'row'}]}>
-                        <Text style={styles.inputLabel}>Is this an emergency? </Text>
-                        <CheckboxInput name="emergency" control={control} color='white'/>
+                <View className="items-center py-2 gap-2 my-4">
+                    <View className="flex-row items-center gap-2">
+                        <Text className="font-primary top-1 text-gray-400 text-4 mb-2">Is this an emergency? </Text>
+                        <CheckboxInput name="emergency" control={control} color='gray'/>
                     </View>
-                    {!emergencyValue && <Text style={styles.warning}>Emergencies are time sensitive, crisis situations </Text>}
-                    {emergencyValue && <Text style={styles.warning}> If this is a medical emergency, do NOT submit a help request.  Instead, call 911.</Text>}
+                    <Text className="font-primary w-14 text-center text-red-500 text-4 font-7 mt-2">
+                        {emergencyValue ? "If this is a medical emergency, do NOT submit a help request. Instead, call 911"
+                        : "Emergencies are time sensitive, crisis situations"}
+                    </Text> 
+                </View>
+                <View className="items-center mt-3">
+                    <Text className="font-primary text-blue-500 text-7 mb-3">Description</Text>
+                    <Text className="font-primary text-gray-500 text-2 mb-1">What do you need help with?</Text>
+                    <TextareaInput name="description" control={control} required={true} lines={1}/>
+                    {errors.description  && <Text className="mt-2 mb-1 text-red-500">This field is required</Text>}
                 </View>
 
-                <View style={styles.fixedContainer}>
-                    <Text style={styles.inputLabel}>Description</Text>
-                    <Text style={styles.innerLabel}>What do you need help with?</Text>
-                    <TextareaInput name="description" control={control} required={true} lines={3}/>
-                    {errors.description  && <Text style={styles.error}>This field is required</Text>}
-                </View>
-
-                <View style={styles.fixedContainer}>
-                    <Text style={styles.inputLabel}>Additional Information</Text>
-                    <Text style={styles.innerLabel}>Are there any other details you want to share?</Text>
+                <View className="items-center mt-5">
+                    <Text className="font-primary text-blue-500 text-7 mb-3">Additional Information</Text>
+                    <Text className="font-primary text-gray-500 text-2 mb-1">Are there any other details you want to share?</Text>
                     <TextareaInput name="info" control={control} required={false} lines={2}/>
                 </View>
 
-                <Button label="Submit" onPress={handleSubmit(onSubmit)}/>
+                <Pressable className="w-11 h-7 mt-5 bg-blue-200 border self-center rounded-md border-none" onPress={handleSubmit(onSubmit)}>
+                    <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Submit</Text>
+                </Pressable>
             </View>
         </Modal>
     )
 }
 const styles = StyleSheet.create({
-    closeButton: {
-        position: 'absolute',
-        right: 20,
-        top: 20, 
-    },
-    headingContainer: {
-        flex: 1, 
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    modalContainer: {
-        paddingTop: 20,
-        flex: 1,
-        backgroundColor: '#F7ACCF',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-    },
-    fixedContainer: {
-        backgroundColor: '#F7ACCF',
-        alignItems: 'center',
-        padding: 10,
-    },
-    container: {
-        paddingTop: 20,
-        flex: 1,
-        backgroundColor: '#F7ACCF',
-        alignItems: 'center',
-    },
-    inputLabel: {
-        color: '#fff',
-        fontSize: 20,
-        marginBottom: 10,
-        textAlign: 'left',
-        fontWeight: '700',
-    },
-    warning: {
-        color: 'red',
-        fontSize: 20,
-        marginBottom: 10,
-        textAlign: 'left',
-        fontWeight: '700',
-    },
-    innerLabel: {
-        color: '#fff',
-        fontSize: 16,
-        marginBottom: 10,
-        textAlign: 'left',
-        fontWeight: '500',
-    },
-    text: {
-        color: '#fff',
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-    input: {
-        backgroundColor: '#fff',
-        width: 300,
-        padding: 10,
-        marginBottom: 10,
-    },
-    error:{
-        marginTop: -5,
-        marginBottom: 10,
-        color: 'red',
-    },
 })

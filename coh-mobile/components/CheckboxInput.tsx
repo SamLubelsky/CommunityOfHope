@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Controller} from 'react-hook-form'; 
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Pressable } from 'react-native';
 import {MaterialIcons} from '@expo/vector-icons';
 
 type Props={
@@ -21,11 +21,11 @@ export default function CheckboxInput({name, control, color}: Props){
             // style={styles.input}
             // placeholderTextColor="#64748b"
             // />
-            <TouchableOpacity style={styles.container} onPress={() => onChange(!value)} >
+            <Pressable style={styles.container} onPress={() => onChange(!value)} >
                 <View style={[styles.box, value && styles.checkedBox, {borderColor: color}]}>
                     {value && <MaterialIcons name="check" size={20} color={color}/>}
                 </View>
-            </TouchableOpacity>
+            </Pressable>
         )}
         name={name}
         />);

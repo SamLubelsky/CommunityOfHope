@@ -126,11 +126,11 @@ export default function Home(){
 
     return (
         <View className="flex-1 bg-gray-100 items-center justify-center">
-            <Text className="text-primary py-5 text-pink-300 text-center text-9"> Welcome to EPIC!</Text>
+            <Text className="font-primary py-5 text-pink-300 text-center text-9"> Welcome to EPIC!</Text>
             {role === "Mom" ? <RequestAVolunteer /> : <HelpRequests />}
           {/* <Pressable className="my-5 w-10 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2" onPress={handleLogout}> */}
-          <Pressable className="my-5 "onPress={handleLogout}>
-            <Text className="text-blue-600 text-6 text-center font-primary text-5 m-auto underline" >Logout</Text>
+          <Pressable className="my-5"onPress={handleLogout}>
+            <Text className="text-blue-600 text-6 text-center font-primary text-5 m-auto underline hover:text-blue-400 hover:font-6" >Logout</Text>
           </Pressable>
         </View>
     )
