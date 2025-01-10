@@ -183,13 +183,13 @@ export const getRequestStatus = async (req: Request, res: Response): Promise<any
       const userRequests = activeHelpRequests.filter(request => request.mom_id === userId);
       if(userRequests.length > 0){
         const helpRequest = userRequests[0];
-        const {volunteer_id} = helpRequest;
+        const {volunteer_id, description} = helpRequest;
         if(volunteer_id){
           const volunteer_data = await getUserData(volunteer_id);
           const volunteer_name = volunteer_data.firstName + ' ' + volunteer_data.lastName;
           res.status(200).json({ status: 'Accepted', volunteerName: volunteer_name });
         } else{
-          res.status(200).json({ status: 'Requested'});
+          res.status(200).json({ status: 'Requested', description});
         }
       } else{
         res.status(200).json({ status: 'Not Requested' });
