@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, StyleSheet, Pressable, Image} from 'react-native';
-import MyButton from '@/components/MyButton';
 import { router } from 'expo-router'
 import { BACKEND_URL } from '../config';
 import {Chat} from '../../types';
@@ -37,14 +36,22 @@ export default function Chats(){
             return <Text style={styles.helpText}> You don't have any chats open yet</Text>
         }
         const chatsList = chats.map((chat: any, index: any) => {   
+            const date = new Date(chat.lastMessageTime);
+            console.log(date);
+            const day = date.getDate();
+            const month = date.toLocaleString('default', { month: 'long' });
             return (
-                <View key={index} className="w-full items-center justify-center border-2 border-blue-300 rounded-md bg-gray-200 px-6 py-3 mt-4">
-                    <Text className="text-blue-600 text-6 mb-3 font-5"> {chat.otherName}</Text>
-                    <Image className=""source={{uri: `${BACKEND_URL}${chat.otherProfileLink}`}} />
-                    <Pressable className="py-2 px-4 mt-3 bg-blue-200 border self-center rounded-md border-none" onPress={()=>onSubmit(chat.id)}>
+                <Pressable onPress={()=>onSubmit(chat.id)} key={index} className="w-full items-center justify-start border-2 border-blue-300 rounded-md bg-gray-200 px-3 py-3 mt-4 flex-row">
+                    <Image className="w-8 h-8 rounded-full" source={{uri: `${BACKEND_URL}${chat.otherProfileLink}`}} />
+                    <View className="ml-5">
+                        <Text className="font-primary text-blue-600 text-7 mb-3">{chat.otherName}</Text>
+                        <Text className="font-primary text-gray-500 text-3">Last Message Sent</Text>
+                    </View>
+                    <Text className="ml-auto self-start">{month} {day}</Text>
+                    {/* <Pressable className="py-2 px-4 mt-3 bg-blue-200 border self-center rounded-md border-none" onPress={()=>onSubmit(chat.id)}>
                         <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Open Chat</Text>
-                    </Pressable>
-                </View>
+                    </Pressable> */}
+                </Pressable>
             )});
         if(role === "Volunteer" || role === "Admin"){
             const chatRoomChat =         

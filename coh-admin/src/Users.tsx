@@ -54,13 +54,13 @@ export default function Users(){
             const data = [user.username, user.firstName, user.lastName, user.role];
             const row = data.map((data: string, index2)=>{
                 return (
-                    <p key={`user-${index}-${index2}`} className="p-2 text-gray-700 text-xl font-semibold">{data}</p>
+                    <p key={`user-${index}-${index2}`} className="p-2 text-gray-700 text-xl font-medium">{data}</p>
                 );
             })
             return <>
                 {row}
                 <div className="pr-5">
-                <img className="w-1/2 mx-auto" title="profile picture" src={BACKEND_URL + user.profileLink} />
+                <img className="w-1/2 mx-auto" title="profile picture" src={user.profileLink} />
                 </div>
                 <div>
                 <Link key={`link-1-${index}`}className="inline-block" to={{

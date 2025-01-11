@@ -34,7 +34,7 @@ export const getChat = async (momId: string, volunteerId: string): Promise<Chat 
 
 export const getChats = async (userId: string, role: string): Promise<Chat[] | null> => {
   const rows = await executeQuery(`SELECT chats.id, chats.momid as "momId", chats.volunteerid as "volunteerId", chats.lastMessageTime as "lastMessageTime",
-                                     users.firstName || ' ' || users.lastName as "otherName", users.profileLink as "otherProfileLink", 
+                                     users.firstName || ' ' || users.lastName as "otherName", users.profileLink as "otherProfileLink", recent_messages.message AS "lastMessage" 
                                       FROM 
                                         chats chats
                                         INNER JOIN users users
