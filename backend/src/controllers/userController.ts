@@ -8,11 +8,14 @@ import fs from 'fs';
 import session from 'express-session';
 import path from 'path';
 import { removePushToken } from '../models/notificationModel';
+import { Storage} from '@google-cloud/storage';
 const bcrypt = require('bcrypt')
 
 interface MulterRequest extends Request {
   file?: Multer.File;
 }
+const storage = new Storage();
+const bucketName = "coh-profile-pictures";
 export const getUsers = async (req: Request, res: Response): Promise<any> => {
   try {
     const users = await getAllUsers();
@@ -35,7 +38,7 @@ export const getUser = async (req: Request, res: Response): Promise<any> => {
 export const addUser = async (req: MulterRequest, res: Response): Promise<any> => {
   const {username, password, firstName, lastName, role} = req.body;
   const profilePic = req.file;
-  const profilePath = '/images/' + path.basename(profilePic.path);
+  // const profilePath = '/images/' + path.basename(profilePic.path);
   if (!username || !password) {
     fs.unlink(profilePic.path, (err) => {
       if (err) console.error("Error deleting file:", err);
@@ -43,7 +46,16 @@ export const addUser = async (req: MulterRequest, res: Response): Promise<any> =
     return res.status(400).json({ message: 'Username and password are required.' });
   }
   try {
-    const newUserID = await createUser(username, password, firstName, lastName, role, profilePath);
+    const destFileName = `${Date.now()}-${path.basename(profilePic.originalname)}`;
+    const options = {
+      destination: destFileName,
+    }
+    await storage.bucket(bucketName).upload(profilePic.path, options);
+    const profilePicUrl = `https://storage.cloud.google.com/${bucketName}/${destFileName}`;
+    const newUserID = await createUser(username, password, firstName, lastName, role, profilePicUrl);
+    fs.unlink(profilePic.path, (err) => {
+      if (err) console.error("Error deleting file:", err);
+    });
     return res.status(200).json({ message: `User ${username} added` });
   } catch (error) {
     fs.unlink(profilePic.path, (err) => {
@@ -66,10 +78,16 @@ export const editUser = async(req: MulterRequest, res: Response): Promise<any> =
       });
       return res.status(400).json({ message: 'User not found' });
     }
-    fs.unlink(path.join(__dirname, `../../public/${existingUser.profileLink}`), (err) => {
+    const destFileName = `${Date.now()}-${path.basename(profilePic.originalname)}`;
+    const options = {
+      destination: destFileName,
+    }
+    await storage.bucket(bucketName).upload(profilePic.path, options);
+    const profilePicUrl = `https://storage.cloud.google.com/${bucketName}/${destFileName}`;
+    fs.unlink(profilePic.path, (err) => {
       if (err) console.error("Error deleting file:", err);
-    }); 
-    await editUserInfo(username, password, firstName, lastName, role, id, profilePath);
+    })
+    await editUserInfo(username, password, firstName, lastName, role, id, profilePicUrl);
     res.status(201).json({ message: `User ${username} updated` });
   } catch (error) {
     fs.unlink(profilePic.path, (err) => {

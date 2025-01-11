@@ -40,7 +40,6 @@ async function socketRequireAuth(socket, next){
   }
 }
 export const initializeWebSocket = (httpServer: any) => { 
-    console.log("Heyo");
     const io = new Server(httpServer,{
         cors:{
           // origin: process.env.NODE_ENV === 'production' ? false : ["http://localhost:3000"],

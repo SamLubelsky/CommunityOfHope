@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@google-cloud/cloud-sql-connector": "^1.5.0",
+    "@google-cloud/storage": "^7.15.0",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "connect-pg-simple": "^10.0.0",
