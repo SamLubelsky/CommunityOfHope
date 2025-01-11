@@ -1,7 +1,10 @@
 import {Chat} from '../utils/definitions'
 import {executeQuery} from '../config/database'
 
-
+export const getMostRecentMessage = async (chatId: string) => {
+  const rows = await executeQuery('SELECT id, chatid as "chatId", message, senderid as "senderId", datesent as "dateSent" FROM messages where chatId=$1 ORDER BY dateSent DESC LIMIT 1', [chatId]);
+  return rows;
+}
 export const createChat = async (volunteer_id: string, mom_id: string) => {
   executeQuery('INSERT INTO chats (volunteerId, momId) VALUES ($1, $2)', [volunteer_id, mom_id]);
 }
@@ -30,37 +33,27 @@ export const getChat = async (momId: string, volunteerId: string): Promise<Chat 
 }
 
 export const getChats = async (userId: string, role: string): Promise<Chat[] | null> => {
-  if(role == 'Mom' || role == 'Admin'){
-    const rows = await executeQuery(`SELECT chats.id, chats.momid as "momId", chats.volunteerid as "volunteerId", chats.lastMessageTime as "lastMessageTime",
-                                     users.firstName || ' ' || users.lastName as "otherName", users.profileLink as "otherProfileLink"
-                                     FROM 
-                                        chats chats
-                                        INNER JOIN users users
-                                          ON chats.volunteerid = users.id
-                                     WHERE
-                                        momId=$1 OR 
-                                        volunteerId=$1
-                                     ORDER BY lastMessageTime DESC`, 
-                                       [userId]);
-    return rows;
-  }
-  else if(role == 'Volunteer'){
-    const rows = await executeQuery(`SELECT chats.id, chats.momid as "momId", chats.volunteerid as "volunteerId", chats.lastMessageTime as "lastMessageTime",
-                                     users.firstName || ' ' || users.lastName as "otherName", users.profileLink as "otherProfileLink"
+  const rows = await executeQuery(`SELECT chats.id, chats.momid as "momId", chats.volunteerid as "volunteerId", chats.lastMessageTime as "lastMessageTime",
+                                     users.firstName || ' ' || users.lastName as "otherName", users.profileLink as "otherProfileLink", 
                                       FROM 
                                         chats chats
                                         INNER JOIN users users
-                                          ON chats.momid = users.id
+                                          ON (chats.momid = users.id AND chats.volunteerid = $1)
+                                          OR (chats.volunteerid = users.id AND chats.momid = $1)
+                                        INNER JOIN (
+                                          SELECT chatId, MAX(dateSent) AS maxDate
+                                          FROM messages
+                                          GROUP BY chatId
+                                        ) recent_messages_info
+                                        ON chats.id = recent_messages_info.chatId
+                                        INNER JOIN messages recent_messages
+                                        ON recent_messages.chatId = chats.id AND recent_messages.dateSent = recent_messages_info.maxDate
                                       WHERE
                                         momId=$1 OR 
                                         volunteerId=$1
                                       ORDER BY lastMessageTime DESC`, 
                                         [userId]);
     return rows;
-  }
-  else{
-    return Promise.reject(new Error('Invalid role provided'));
-  }
 }
 
 export const getMessageData = async (chatId: string) => {
