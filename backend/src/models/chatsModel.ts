@@ -22,7 +22,7 @@ export const getChatById = async (chatId: string): Promise<Chat | null> => {
                                    JOIN users
                                    ON (users.id = chats.volunteerId)
                                    OR (users.id = chats.momId)
-                                   where id=$1`, [chatId]);
+                                   where chats.id=$1`, [chatId]);
   if(rows){
     return rows[0];
   } else{

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
-import {ScrollView, View, Text, TextInput, StyleSheet} from 'react-native';
+import {ScrollView, View, Text, TextInput, StyleSheet, Image} from 'react-native';
 import MyButton from '@/components/MyButton';
 import { AppState } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -78,7 +78,7 @@ export default function Page(){
         setCurMessage('');
     }
     function displayMessages(){
-        // console.log(messages);
+        console.log("otherProfileLink: ", otherProfileLink);
         if(messages.length == 0){
             return;
         }
@@ -100,8 +100,9 @@ export default function Page(){
     }
     return (
         <View className="flex-1 bg-gray-100">
-            <View className="w-full flex-row items-center justify-start py-4 px-4 bg-gray-400">
+            <View className="w-full flex-row items-center justify-start py-4 px-4 bg-gray-300 mb-5">
                 <Ionicons className="" name="arrow-back" size={24} color="black" onPress={()=>{router.back()}}/>
+                <Image className="w-8 h-8 rounded-full" source={{uri: otherProfileLink}} />
             </View>
             <ScrollView 
             ref={scrollViewRef}
