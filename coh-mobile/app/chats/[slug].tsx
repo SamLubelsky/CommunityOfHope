@@ -21,7 +21,9 @@ export default function Page(){
     const [socket, setSocket] = useState<ReturnType<typeof io>>();
     const [height, setHeight] = useState<number>(25);
     const [appState, setAppState] = useState(AppState.currentState);
-    const [chatData, setChatData] = useState<Chat | null>(null);
+    const [otherName, setOtherName] = useState<string>('');
+    const [otherProfileLink, setOtherProfileLink] = useState<string>('');
+
     const scrollViewRef = React.useRef<ScrollView | null>(null);
 
     useEffect(() => {
@@ -32,22 +34,11 @@ export default function Page(){
             })
             const responseData = await response.json();
             if(!responseData.error){
-                setMessages(responseData);
+                setMessages(responseData.messages);
+                setOtherName(responseData.otherName);
+                setOtherProfileLink(responseData.otherProfileLink);
             }
         }
-        const loadChatData = async () => {
-            const response = await fetch(`${BACKEND_URL}/api/chats/${chatId}`, {
-                method: 'GET',
-                credentials: 'include',
-            })
-            const responseData = await response.json();
-            if(!responseData.error){
-                setChatData(responseData);
-            } else{
-                console.log(responseData.error);
-            }
-        }
-        loadChatData();
         loadMessages();
         const socket = io(BACKEND_URL, {withCredentials: true});
         // const socket = io(BACKEND_URL);

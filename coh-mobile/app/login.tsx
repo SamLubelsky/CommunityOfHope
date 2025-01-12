@@ -1,5 +1,5 @@
 // Start of Selection
-import * as React from 'react';
+import React, {useState} from 'react';
 import { SafeAreaView, StyleSheet, View, Alert, Text, Button, Pressable, TextInput, Platform } from 'react-native';
 import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';
@@ -18,9 +18,9 @@ export const LoginScreen = () => {
   const lastName = useBoundStore((state) => state.lastName);
   const id = useBoundStore((state) => state.id);
 
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [username, setUsername] = React.useState<string>("");
-
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>("");
+  const [error, setError] = useState<string | null>(null);
   const handleLogin = async () => {
     verifyInstallation();
     // Add your authentication logic here + the api call for the login
@@ -49,6 +49,7 @@ export const LoginScreen = () => {
       router.push("/(tabs)");
     }else{
       const error = json.message; 
+      setError(error);
       Alert.alert("Login failed", error);
     }
   };
@@ -75,6 +76,7 @@ export const LoginScreen = () => {
             <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Login </Text>
           </Pressable>
         </View>
+        {error && <Text className="text-red-500 text-5 text-center font-primary text-5">{error}</Text>}
     </View>
     // <SafeAreaView style={loginStyle.content}>
     //   <PaperProvider>
