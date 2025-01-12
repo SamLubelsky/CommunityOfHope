@@ -9,7 +9,7 @@ export const getMessages = async (req: Request, res: Response): Promise<any> =>{
     try{
         if(chatId === "-1"){
             const messages = await getChatRoomMessages();
-            return res.status(200).json(messages);
+            return res.status(200).json({messages: messages, otherName: 'Volunteer Chat Room', otherProfileLink: ''});
         }
         const chat = await getChatById(chatId);
         if(!chat){
