@@ -27,7 +27,6 @@ export default function Chats(){
     async function onSubmit(id: Number){
         const selectedChat = chats.filter(chat => chat.chatId === id)[0];
         const chatsResorted = [selectedChat, ...chats.filter(chat => chat.chatId !== id)];
-        // setChats(chatsResorted);
         router.push(`/chats/${id}`);
     }
 
@@ -42,26 +41,24 @@ export default function Chats(){
             const month = date.toLocaleString('default', { month: 'long' });
             return (
                 <Pressable onPress={()=>onSubmit(chat.id)} key={index} className="w-full items-center justify-start border-2 border-blue-300 rounded-md bg-gray-200 px-3 py-3 mt-4 flex-row">
-                    <Image className="w-8 h-8 rounded-full" source={{uri: `${BACKEND_URL}${chat.otherProfileLink}`}} />
+                    <Image className="w-8 h-8 rounded-full" source={{uri: chat.otherProfileLink}} />
                     <View className="ml-5">
                         <Text className="font-primary text-blue-600 text-7 mb-3">{chat.otherName}</Text>
-                        <Text className="font-primary text-gray-500 text-3">Last Message Sent</Text>
+                        <Text className="font-primary text-gray-500 text-3">{chat.lastMessage}</Text>
                     </View>
                     <Text className="ml-auto self-start">{month} {day}</Text>
-                    {/* <Pressable className="py-2 px-4 mt-3 bg-blue-200 border self-center rounded-md border-none" onPress={()=>onSubmit(chat.id)}>
-                        <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Open Chat</Text>
-                    </Pressable> */}
                 </Pressable>
             )});
         if(role === "Volunteer" || role === "Admin"){
             const chatRoomChat =         
             (
-            <View key="chatRoom" className="items-center justify-center border-2 border-blue-300 rounded-md bg-gray-200 px-6 py-3">
-                <Text className="text-blue-600 text-6 mb-3 font-5"> Volunteer Chat Room</Text>
-                <Pressable className="py-2 px-4 mt-3 bg-blue-200 border self-center rounded-md border-none" onPress={()=>onSubmit(-1)}>
-                    <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Open Chat</Text>
+                <Pressable onPress={()=>onSubmit(-1)} key="chatRoom" className="w-full items-center justify-start border-2 border-blue-300 rounded-md bg-gray-200 px-3 py-3 mt-4 flex-row">
+                    <View className="ml-5">
+                        <Text className="font-primary text-blue-600 text-7 mb-3">Volunteer Chat Room</Text>
+                        {/* <Text className="font-primary text-gray-500 text-3">{chat.lastMessage}</Text> */}
+                    </View>
+                    {/* <Text className="ml-auto self-start">{month} {day}</Text> */}
                 </Pressable>
-            </View>
             );
             console.log("chats:", [chatRoomChat, ...chatsList]);
             return [chatRoomChat, ...chatsList];
@@ -71,10 +68,8 @@ export default function Chats(){
     }       
     return (
         <View className="px-8 text-gray-200 items-center justify-center py-5">
-        <Text className="text-pink-400 text-7 mb-7"> All Opened Chats</Text>
+        <Text className="font-primary text-pink-400 text-7 mb-7"> All Chats</Text>
         {getChatsList()}
-        {/* <Text style={styles.text}> Messages</Text>
-        {getMessagesList(placeholder2)} */}
         </View>)
 }
 const styles = StyleSheet.create({

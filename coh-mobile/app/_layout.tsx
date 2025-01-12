@@ -70,8 +70,6 @@ function AuthNavigator() {
 	}, [isSignedIn]);
 
 	return (
-		<Stack>
-		<Stack.Screen name="(tabs)" options={{headerShown: false}} />
-		</Stack>
+		<Slot />
 	);
 }

@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import {ScrollView, View, Text, TextInput, StyleSheet} from 'react-native';
 import MyButton from '@/components/MyButton';
 import { AppState } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 // import { socket } from "../socket";
 import { useBoundStore } from '@/store/useBound';
 import { io } from 'socket.io-client';
@@ -18,8 +19,10 @@ export default function Page(){
     const [messages, setMessages] = useState<Message[]>([]);
     const[curMessage, setCurMessage] = useState<string>('');
     const [socket, setSocket] = useState<ReturnType<typeof io>>();
-    const [height, setHeight] = useState<number>(50);
+    const [height, setHeight] = useState<number>(25);
     const [appState, setAppState] = useState(AppState.currentState);
+    const scrollViewRef = React.useRef<ScrollView | null>(null);
+
     useEffect(() => {
         const loadMessages = async () => {
             const response = await fetch(`${BACKEND_URL}/api/chats/${chatId}`, {
@@ -77,38 +80,48 @@ export default function Page(){
         return messages.map((message: any, index: any) => {
             if(message.senderId === id){
                 return (
-                    <View key={index} style={[styles.messageContainer, styles.you]}>
-                        <Text style={styles.messageText}> {message.message}</Text>
+                    <View key={index} className="mx-6 self-end items-start justify-center border-2 border-blue-300 w-4/5 p-2 m-1 bg-blue-100 rounded-2xl">
+                        <Text className="font-primary text-blue-800 text-4"> {message.message}</Text>
                     </View>
                 ); 
             }
             else{
                 return (
-                    <View key={index} style={[styles.messageContainer, styles.them]}>
-                        <Text style={styles.messageText}> {message.message}</Text>
+                    <View key={index} className="mx-6 self-start items-start justify-center border-2 border-pink-300 w-4/5 p-2 m-1 bg-pink-100 rounded-2xl">
+                        <Text className="font-primary text-pink-800 text-4"> {message.message}</Text>
                     </View>
                 );
             }});
     }
     return (
-        <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollView}>
-        <Text>ChatId: {chatId}</Text>
-        {displayMessages()}
-        <View key={-1} style={styles.messageContainer}>
-            <TextInput style={[styles.inputText, {height: Math.min(height, 200)}]} 
-            editable 
-            multiline 
-            onChangeText={msg=>setCurMessage(msg)}  
-            onContentSizeChange={(event) => {
-                setHeight(event.nativeEvent.contentSize.height);
-            }}
-            value={curMessage}
-            placeholder="Type a message...">
-            </TextInput>
-        </View>
-        <MyButton label="Send" onPress={sendMessage}/>
-        </ScrollView>
+        <View className="flex-1 bg-gray-100">
+            <View className="w-full flex-row items-center justify-start py-4 px-4 bg-gray-400">
+                <Ionicons className="" name="arrow-back" size={24} color="black" onPress={()=>{router.back()}}/>
+            </View>
+            <ScrollView 
+            ref={scrollViewRef}
+            onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}>
+            {/* ref={ref=> {this.scrollView=ref}}
+            onContentSizeChange={()=> this.scrollView.scrollToEnd({animated: true})}> */}
+            {displayMessages()}
+            <View className="mx-6 flex-row justify-start items-center">
+                <View key={-1} className="flex-1 self-end items-start justify-center border-2 border-blue-300 p-2 m-1 bg-blue-100 rounded-2xl">
+                    <TextInput style={{height: Math.min(height, 200)}}  
+                        editable 
+                        multiline 
+                        onChangeText={msg=>setCurMessage(msg)}  
+                        onContentSizeChange={(event) => {
+                            setHeight(event.nativeEvent.contentSize.height);
+                        }}
+                        value={curMessage}
+                        placeholder="Text message"
+                        className="font-primary text-blue-800 text-4 w-full p-1"
+                    />
+                </View>
+                <Ionicons name="send-outline" size={26} color="black" onPress={sendMessage}/>
+            </View>
+            {/* <MyButton label="Send" onPress={sendMessage}/> */}
+            </ScrollView>
         </View>
     );
 }
