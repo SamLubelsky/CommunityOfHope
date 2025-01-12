@@ -3,3 +3,7 @@ export type Chat = {
     volunteerId: number;
     momId: number;
 }
+export type Message = {
+    senderId: number;
+    message: string;
+}

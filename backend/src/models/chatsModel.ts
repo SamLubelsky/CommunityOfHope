@@ -16,7 +16,13 @@ export const createChatRoomMessage = async (senderId: string, message: string, d
   executeQuery('INSERT INTO messages (chatId, senderId, message, dateSent) VALUES ($1, $2, $3, $4)', [-1, senderId, message, dateSent]);
 };
 export const getChatById = async (chatId: string): Promise<Chat | null> => {
-  const rows = await executeQuery('SELECT id, momid as "momId", volunteerid as "volunteerId" FROM chats where id=$1', [chatId]);
+  const rows = await executeQuery(`SELECT chats.id, chats.momId as "momId", chats.volunteerId as "volunteerId",
+                                   users.firstName || ' ' || users.lastName AS "otherName", users.profileLink AS "otherProfileLink"
+                                   FROM chats 
+                                   JOIN users
+                                   ON (users.id == chats.volunteerId)
+                                   OR (users.id == chats.momId)
+                                   where id=$1`, [chatId]);
   if(rows){
     return rows[0];
   } else{

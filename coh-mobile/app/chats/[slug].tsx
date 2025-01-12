@@ -8,19 +8,20 @@ import { Ionicons } from '@expo/vector-icons';
 import { useBoundStore } from '@/store/useBound';
 import { io } from 'socket.io-client';
 import { BACKEND_URL } from '../config';
-type Message = {
-    senderId: number;
-    message: string;
-}
+import { Chat, Message } from '@/types';
+
 
 export default function Page(){
     const chatId = Number(useLocalSearchParams().slug);
+
     const id = useBoundStore((state) => state.id);
+
     const [messages, setMessages] = useState<Message[]>([]);
     const[curMessage, setCurMessage] = useState<string>('');
     const [socket, setSocket] = useState<ReturnType<typeof io>>();
     const [height, setHeight] = useState<number>(25);
     const [appState, setAppState] = useState(AppState.currentState);
+    const [chatData, setChatData] = useState<Chat | null>(null);
     const scrollViewRef = React.useRef<ScrollView | null>(null);
 
     useEffect(() => {
@@ -34,6 +35,19 @@ export default function Page(){
                 setMessages(responseData);
             }
         }
+        const loadChatData = async () => {
+            const response = await fetch(`${BACKEND_URL}/api/chats/${chatId}`, {
+                method: 'GET',
+                credentials: 'include',
+            })
+            const responseData = await response.json();
+            if(!responseData.error){
+                setChatData(responseData);
+            } else{
+                console.log(responseData.error);
+            }
+        }
+        loadChatData();
         loadMessages();
         const socket = io(BACKEND_URL, {withCredentials: true});
         // const socket = io(BACKEND_URL);

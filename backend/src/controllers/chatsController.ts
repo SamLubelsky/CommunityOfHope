@@ -20,7 +20,8 @@ export const getMessages = async (req: Request, res: Response): Promise<any> =>{
             return res.status(401).json({error: 'You are unauthorized to view this chat'});
         }   
         const messages = await getMessageData(chatId);
-        return res.status(200).json(messages);
+        const chatData = await getChatById(chatId);
+        return res.status(200).json({messages: messages, ...chatData});
     } catch (error) {
         return res.status(500).json({ error: (error as Error).message });
     }
@@ -45,6 +46,15 @@ export const getAllChats = async (req: Request, res: Response): Promise<any> =>{
         return res.status(200).json(chats);
     } catch (error) {
         console.log(error);
+        return res.status(500).json({ error: (error as Error).message });
+    }
+}
+export const getChat = async (req: Request, res: Response): Promise<any> =>{
+    const {id} = req.params;
+    try{
+        const chat = await getChatById(id);
+        return res.status(200).json(chat);
+    } catch(error){
         return res.status(500).json({ error: (error as Error).message });
     }
 }
