@@ -168,7 +168,9 @@ export const getRequestStatus = async (req: Request, res: Response): Promise<any
         const {mom_id} = helpRequest;
         const mom_data = await getUserData(mom_id);
         const mom_name = mom_data.firstName + ' ' + mom_data.lastName;
-        res.status(200).json({ status: 'Accepted', momName: mom_name, helpId: helpRequest.id });
+        const chat = await getChat(mom_id, userId);
+        const chatId = chat.id;
+        res.status(200).json({ status: 'Accepted', momName: mom_name, helpId: helpRequest.id , chatId });
       } else{
         res.status(200).json({ status: 'Not Accepted' });
       }
@@ -187,7 +189,9 @@ export const getRequestStatus = async (req: Request, res: Response): Promise<any
         if(volunteer_id){
           const volunteer_data = await getUserData(volunteer_id);
           const volunteer_name = volunteer_data.firstName + ' ' + volunteer_data.lastName;
-          res.status(200).json({ status: 'Accepted', volunteerName: volunteer_name });
+          const chat = await getChat(userId, volunteer_id);
+          const chatId = chat.id;
+          res.status(200).json({ status: 'Accepted', volunteerName: volunteer_name, chatId });
         } else{
           res.status(200).json({ status: 'Requested', description});
         }

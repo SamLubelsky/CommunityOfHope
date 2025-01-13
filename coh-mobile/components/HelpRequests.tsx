@@ -51,8 +51,12 @@ export default function HelpRequests(){
             <View className="my-5 items-center justify-center border-2 border-blue-300 rounded-md bg-gray-200 p-2">
                 <Text className="font-primary text-yellow-500 my-3 text-6"> You are currently helping {momName}</Text>
                 <Pressable className="py-2 px-4 mt-3 bg-blue-200 border self-center rounded-md border-none" onPress={deactivateHelpRequest}>
+                  <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Open Chat</Text>
+                  {/* <Text className="text-gray-500 text-6 text-center font-primary text-3 m-auto mt-1">{momName} will not be returned to the help list</Text> */}
+                </Pressable>
+                <Pressable className="py-2 px-4 mt-3 bg-blue-200 border self-center rounded-md border-none" onPress={deactivateHelpRequest}>
                   <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">I'm done helping {momName}</Text>
-                  <Text className="text-gray-500 text-6 text-center font-primary text-3 m-auto mt-1">{momName} will not be returned to the help list</Text>
+                  {/* <Text className="text-gray-500 text-6 text-center font-primary text-3 m-auto mt-1">{momName} will not be returned to the help list</Text> */}
                 </Pressable>
                 <Pressable className="my-5 px-2 py-2 bg-gray-100 border self-center rounded-md border-blue-300 border-2 hover:bg-blue-200" onPress={unclaimRequest}>
                   <Text className="text-blue-600 text-6 text-center font-primary m-auto">Return {momName} to the Help List</Text>
@@ -101,7 +105,7 @@ export default function HelpRequests(){
     }
     function getRequestsList(){
         if (!requests){
-            return <Text style={styles.helpText}>No requests found</Text>;
+            return <Text className="text-yellow-7 font-primary">No requests found</Text>;
         }
         const requestsList = requests.map((request: any, index: any) => {
             return (
