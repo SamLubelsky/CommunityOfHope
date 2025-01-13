@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getMessageData, getChatById, createChat, createMessage, getChats, getChatRoomMessages } from '../models/chatsModel'
+import { getMessageData, getChatById, createChat, createMessage, getChats, getChatRoomMessages, getChatByIdWithName } from '../models/chatsModel'
 import {Chat} from '../utils/definitions';
 import { getAllUsers, getUserData } from '../models/userModel';
 //gets all chats for associated chat id
@@ -11,7 +11,7 @@ export const getMessages = async (req: Request, res: Response): Promise<any> =>{
             const messages = await getChatRoomMessages();
             return res.status(200).json({messages: messages, otherName: 'Volunteer Chat Room', otherProfileLink: ''});
         }
-        const chat = await getChatById(chatId, userId);
+        const chat = await getChatByIdWithName(chatId, userId);
         if(!chat){
             return res.status(400).json({error: 'Chat not found'});
         }
@@ -52,7 +52,7 @@ export const getChat = async (req: Request, res: Response): Promise<any> =>{
     const {chatId} = req.params;
     const {userId} = req.session;
     try{
-        const chat = await getChatById(chatId, userId);
+        const chat = await getChatByIdWithName(chatId, userId);
         return res.status(200).json(chat);
     } catch(error){
         return res.status(500).json({ error: (error as Error).message });
