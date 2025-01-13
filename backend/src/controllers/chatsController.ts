@@ -49,9 +49,10 @@ export const getAllChats = async (req: Request, res: Response): Promise<any> =>{
     }
 }
 export const getChat = async (req: Request, res: Response): Promise<any> =>{
-    const {id} = req.params;
+    const {chatId} = req.params;
+    const {userId} = req.session;
     try{
-        const chat = await getChatById(id);
+        const chat = await getChatById(chatId, userId);
         return res.status(200).json(chat);
     } catch(error){
         return res.status(500).json({ error: (error as Error).message });
