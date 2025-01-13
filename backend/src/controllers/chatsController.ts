@@ -11,7 +11,7 @@ export const getMessages = async (req: Request, res: Response): Promise<any> =>{
             const messages = await getChatRoomMessages();
             return res.status(200).json({messages: messages, otherName: 'Volunteer Chat Room', otherProfileLink: ''});
         }
-        const chat = await getChatById(chatId);
+        const chat = await getChatById(chatId, userId);
         if(!chat){
             return res.status(400).json({error: 'Chat not found'});
         }
@@ -20,8 +20,7 @@ export const getMessages = async (req: Request, res: Response): Promise<any> =>{
             return res.status(401).json({error: 'You are unauthorized to view this chat'});
         }   
         const messages = await getMessageData(chatId);
-        const chatData = await getChatById(chatId);
-        return res.status(200).json({messages: messages, ...chatData});
+        return res.status(200).json({messages: messages, ...chat});
     } catch (error) {
         return res.status(500).json({ error: (error as Error).message });
     }
