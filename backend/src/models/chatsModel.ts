@@ -20,8 +20,8 @@ export const getChatById = async (chatId: string): Promise<Chat | null> => {
                                    users.firstName || ' ' || users.lastName AS "otherName", users.profileLink AS "otherProfileLink"
                                    FROM chats 
                                    JOIN users
-                                   ON (users.id = chats.volunteerId)
-                                   OR (users.id = chats.momId)
+                                   ON (users.id = chats.volunteerId AND chats.momId = $1)
+                                   OR (users.id = chats.momId AND chats.volunteerId = $1)
                                    where chats.id=$1`, [chatId]);
   if(rows){
     return rows[0];
@@ -65,7 +65,7 @@ export const getChats = async (userId: string, role: string): Promise<Chat[] | n
 export const getMessageData = async (chatId: string) => {
   const rows = await executeQuery('SELECT id, chatid as "chatId", message, senderid as "senderId", datesent as "dateSent" FROM messages where chatId=$1', [chatId]);
   return rows;
-  };
+};
 
 export const createMessage = async (chatId: string, senderId: string, message: string, dateSent: string) => {
   executeQuery('INSERT INTO messages (chatId, senderId, message, dateSent) VALUES ($1, $2, $3, $4)', [chatId, senderId, message, dateSent]);
