@@ -15,14 +15,14 @@ export const getChatRoomMessages = async () => {
 export const createChatRoomMessage = async (senderId: string, message: string, dateSent: string) => {
   executeQuery('INSERT INTO messages (chatId, senderId, message, dateSent) VALUES ($1, $2, $3, $4)', [-1, senderId, message, dateSent]);
 };
-export const getChatById = async (chatId: string): Promise<Chat | null> => {
+export const getChatById = async (chatId: string, userId: string): Promise<Chat | null> => {
   const rows = await executeQuery(`SELECT chats.id, chats.momId as "momId", chats.volunteerId as "volunteerId",
                                    users.firstName || ' ' || users.lastName AS "otherName", users.profileLink AS "otherProfileLink"
                                    FROM chats 
                                    JOIN users
-                                   ON (users.id = chats.volunteerId AND chats.momId = $1)
-                                   OR (users.id = chats.momId AND chats.volunteerId = $1)
-                                   where chats.id=$1`, [chatId]);
+                                   ON (users.id = chats.volunteerId AND chats.momId = $2)
+                                   OR (users.id = chats.momId AND chats.volunteerId = $2)
+                                   where chats.id=$1`, [chatId, userId]);
   if(rows){
     return rows[0];
   } else{
