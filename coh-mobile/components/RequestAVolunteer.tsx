@@ -5,6 +5,7 @@ import MyButton from '@/components/MyButton';
 import VolunteerRequestForm from "@/components/VolunteerRequestForm";
 import { BACKEND_URL } from '../app/config';
 import "../global.css";
+import { router } from 'expo-router';
 type HelpStatus =  "Not Requested" | "Requested" | "Accepted" 
 
 const RequestAVolunteer = () => {
@@ -12,6 +13,7 @@ const RequestAVolunteer = () => {
   const [helpStatus, setHelpStatus] = useState<HelpStatus>("Not Requested");
   const [volunteerName, setVolunteerName] = useState<string | null>("");
   const [description, setDescription] = useState<string | null>(null);
+  const [chatId, setChatId] = useState<number | null>(null);
   const requestVolunteer = () => {
     setIsModalVisible(true);
   };  
@@ -27,6 +29,7 @@ const RequestAVolunteer = () => {
     const data = await response.json();
     setHelpStatus(data.status);
     setDescription(data.description);
+    setChatId(data.chatId);
     if (data.status === "Accepted") {
       setVolunteerName(data.volunteerName);
     }
@@ -44,6 +47,7 @@ const RequestAVolunteer = () => {
     setHelpStatus("Not Requested")
     setVolunteerName(null);
     setDescription(null);
+    setChatId(null);
     await fetch(`${BACKEND_URL}/api/help_requests/deactivate/`, {
       method: 'POST',
       credentials: 'include',
@@ -56,10 +60,10 @@ const RequestAVolunteer = () => {
     }
     if(helpStatus === "Requested"){
       return (
-        <View className="flex-1 py-3 my-3 px-5 rounded-md border-blue-300 border-2 bg-gray-200">
-          <Text className="my-4 font-primary text-blue-600 text-8 text-center">You have requested help for {description}</Text>
-          <Text className="my-4 font-primary text-yellow-500 text-7 text-center">Please wait for a volunteer to accept</Text>  
-          <Pressable className="my-5 w-12 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2" onPress={deactiveRequest}>
+        <View className="py-3 my-3 px-3 mx-3 rounded-md border-blue-300 border-2 bg-gray-200">
+          <Text className="mb-4 font-primary text-blue-600 text-8 text-center">You have requested help for {description}</Text>
+          <Text className="mb-4 font-primary text-yellow-500 text-7 text-center">Please wait for a volunteer to accept</Text>  
+          <Pressable className="bg-gray-200 w-12 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2" onPress={deactiveRequest}>
             <Text className="text-blue-600 text-6 text-center font-primary m-auto">Cancel Help Request</Text>
           </Pressable>
         </View>
@@ -67,17 +71,20 @@ const RequestAVolunteer = () => {
     }
     if(helpStatus === "Accepted"){
       return (
-        <View className="w-14 flex-1 py-5 my-3 px-5 rounded-md border-blue-300 border-2 bg-gray-200">
-          <Text className="font-primary text-center text-blue-600 text-7 my-4 mx-6">Your help request has been accepted by {volunteerName}</Text>
-          <Pressable className="my-5 w-13 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2 hover:bg-blue-200" onPress={deactiveRequest}>
-            <Text className="text-blue-600 text-6 text-center font-primary m-auto">I'm done being helped by {volunteerName}</Text>
+        <View className="py-3 px-5 rounded-md border-blue-300 border-2 bg-gray-200">
+          <Text className="w-12 font-primary text-center text-blue-600 text-7 mb-4 mx-2">Your help request has been accepted by {volunteerName}</Text>
+          <Pressable className="py-2 px-4 mb-3 bg-blue-200 border self-center rounded-md border-none" onPress={()=>router.push(`/chats/${chatId}`)}>
+            <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Open Chat</Text>
+          </Pressable>
+          <Pressable className="bg-gray-200 px-4 py-2 bg-gray-100 border self-center rounded-md border-blue-300 border-2 hover:bg-blue-200" onPress={deactiveRequest}>
+            <Text className="text-blue-600 text-6 text-center font-primary m-auto">I'm done being helped</Text>
           </Pressable>
         </View>
       );
     } 
   }
   return (
-    <View>
+    <View className="flex-1">
       {helpStatus === "Not Requested" ?
           <Pressable className="w-12 h-7 bg-blue-200 border self-center rounded-md border-none" onPress={requestVolunteer}>
             <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Request a volunteer</Text>
@@ -91,6 +98,3 @@ const RequestAVolunteer = () => {
 };
 
 export default RequestAVolunteer;
-
-const styles = StyleSheet.create({
-});

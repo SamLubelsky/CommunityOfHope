@@ -4,7 +4,6 @@ import { SafeAreaView, StyleSheet, View, Alert, Text, Button, Pressable, TextInp
 import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';
 import { BACKEND_URL } from './config';
-import {verifyInstallation} from 'nativewind';
 
 export const LoginScreen = () => {
   const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
@@ -22,7 +21,6 @@ export const LoginScreen = () => {
   const [username, setUsername] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const handleLogin = async () => {
-    verifyInstallation();
     // Add your authentication logic here + the api call for the login
     // validate the user credentials
     // call the api for the login

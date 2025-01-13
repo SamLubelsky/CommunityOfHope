@@ -16,7 +16,7 @@ export default function HelpRequests(){
     const[helping, setHelping] = useState<boolean>(false);
     const [momName, setMomName] = useState<string | null>(null);
     const [helpId, setHelpId] = useState<number | null>(null);
-    
+    const [chatId, setChatId] = useState<number | null>(null);
     const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
 
 
@@ -48,18 +48,17 @@ export default function HelpRequests(){
     }
     function HelpCard(){
         return (
-            <View className="my-5 items-center justify-center border-2 border-blue-300 rounded-md bg-gray-200 p-2">
-                <Text className="font-primary text-yellow-500 my-3 text-6"> You are currently helping {momName}</Text>
-                <Pressable className="py-2 px-4 mt-3 bg-blue-200 border self-center rounded-md border-none" onPress={deactivateHelpRequest}>
+            <View className="my-5 items-center justify-center border-2 border-blue-300 rounded-md bg-gray-200 px-2 py-4">
+                <Text className="font-primary text-yellow-500 mb-4 text-6"> You are currently helping {momName}</Text>
+                <Pressable className="py-2 px-4 mb-5 bg-blue-200 border self-center rounded-md border-none" onPress={()=>router.push(`/chats/${chatId}`)}>
                   <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Open Chat</Text>
                   {/* <Text className="text-gray-500 text-6 text-center font-primary text-3 m-auto mt-1">{momName} will not be returned to the help list</Text> */}
                 </Pressable>
-                <Pressable className="py-2 px-4 mt-3 bg-blue-200 border self-center rounded-md border-none" onPress={deactivateHelpRequest}>
-                  <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">I'm done helping {momName}</Text>
-                  {/* <Text className="text-gray-500 text-6 text-center font-primary text-3 m-auto mt-1">{momName} will not be returned to the help list</Text> */}
+                <Pressable className="mb-3 px-2 py-2 bg-gray-100 border self-center rounded-md border-blue-300 border-2 hover:bg-blue-200 bg-gray-200"  onPress={deactivateHelpRequest}>
+                  <Text className="text-blue-500 text-6 text-center font-primary text-5 m-auto">I'm done helping {momName}</Text>
                 </Pressable>
-                <Pressable className="my-5 px-2 py-2 bg-gray-100 border self-center rounded-md border-blue-300 border-2 hover:bg-blue-200" onPress={unclaimRequest}>
-                  <Text className="text-blue-600 text-6 text-center font-primary m-auto">Return {momName} to the Help List</Text>
+                <Pressable className=""onPress={unclaimRequest}>
+                  <Text className="text-blue-600 text-6 text-center font-primary text-5 m-auto underline hover:text-blue-400 hover:font-6" >Return {momName} to the Help List</Text>
                 </Pressable>
             </View>
         );
@@ -81,7 +80,6 @@ export default function HelpRequests(){
     async function fetchData(){
         await getRequests();
         await getHelpStatus();
-
     }
     async function getHelpStatus(){
         const response = await fetch(`${BACKEND_URL}/api/help_status`,{
@@ -93,6 +91,7 @@ export default function HelpRequests(){
           setHelping(true);
           setMomName(data.momName);
           setHelpId(data.helpId);
+          setChatId(data.chatId);
         }
     }
     async function getRequests(){
@@ -134,58 +133,3 @@ export default function HelpRequests(){
       </View>
         )
 }
-const styles = StyleSheet.create({
-    descriptionText:{
-      color: 'white',
-      fontSize: 16,
-      margin: 5, 
-    },
-    container:
-    {
-      flex: 1,
-      backgroundColor: '#F7ACCF',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    itemContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 5,
-        borderColor: '#FFF',
-        width: '90%',
-        margin: 5,
-    },
-    text:{
-      color: '#fff',
-      fontSize: 50,
-      margin: 20,
-    },  
-    helpCard:{
-      backgroundColor: '#ff4d4d',
-      padding: 20,
-      margin: 20,
-      borderRadius: 20,
-    },
-    helpText: {
-      color: 'white',
-      fontSize: 24,
-      margin: 5,
-    },
-    titleContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 8,
-    },
-    stepContainer: {
-      gap: 8,
-      marginBottom: 8,
-    },
-    reactLogo: {
-      height: 178,
-      width: 290,
-      bottom: 0,
-      left: 0,
-      position: 'absolute',
-    },
-  });
-  

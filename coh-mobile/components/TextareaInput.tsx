@@ -19,7 +19,7 @@ export default function TextareaInput({name, control, required, lines}: Props){
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
-            className="bg-gray-100 w-13 p-2 mb-2 rounded-md focus:border-2 border-blue-300"
+            className="bg-gray-100 w-12 p-2 mb-2 rounded-md focus:border-2 border-blue-300"
             multiline={true}
             numberOfLines={lines}
             placeholderTextColor="#64748b"
@@ -28,11 +28,3 @@ export default function TextareaInput({name, control, required, lines}: Props){
         name={name}
         />);
 }
-const styles = StyleSheet.create({
-    input: {
-        backgroundColor: '#fff',
-        width: 300,
-        padding: 10,
-        marginBottom: 10,
-    },
-})

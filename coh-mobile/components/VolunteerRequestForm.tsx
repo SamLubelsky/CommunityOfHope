@@ -48,7 +48,7 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
         // <SafeAreaProvider>
         //     <SafeAreaView style = {styles.container}>
         <Modal animationType="slide" visible={isVisible} transparent={true}>
-            <View className="m-auto justify-center px-5 py-5 self-center bg-gray-200"> 
+            <View className="rounded-xl mt-3 justify-center px-2 py-5 self-center bg-gray-200"> 
                 <Text className="font-primary text-pink-400 text-7 text-center mt-2">Request a Volunteer</Text>
                 <View className="absolute top-2 right-2 text-gray-500">
                     <Pressable onPress={onClose}>
@@ -61,7 +61,7 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
                         <Text className="font-primary top-1 text-gray-400 text-4 mb-2">Is this an emergency? </Text>
                         <CheckboxInput name="emergency" control={control} color='gray'/>
                     </View>
-                    <Text className="font-primary w-14 text-center text-red-500 text-4 font-7 mt-2">
+                    <Text className="font-primary text-center text-red-500 text-4 font-7 mt-2">
                         {emergencyValue ? "If this is a medical emergency, do NOT submit a help request. Instead, call 911"
                         : "Emergencies are time sensitive, crisis situations"}
                     </Text> 
@@ -86,5 +86,3 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
         </Modal>
     )
 }
-const styles = StyleSheet.create({
-})

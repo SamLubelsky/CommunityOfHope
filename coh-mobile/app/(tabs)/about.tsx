@@ -1,4 +1,4 @@
-import {Image, Platform, Text, View, StyleSheet} from 'react-native';
+import {Image, Platform, Text, View, StyleSheet, ScrollView} from 'react-native';
 import { HelloWave } from '@/components/HelloWave'
 import ParallaxScrollView from '@/components/ParallaxScrollView'
 import { ThemedText } from '@/components/ThemedText'
@@ -11,23 +11,25 @@ export default function AboutScreen() {
     // );
     return (
       <View className="flex-1 items-center justify-start bg-gray-100 py-6 px-4">
-        <Image className="max-w-12 max-h-12 rounded-full" source={require('@/assets/images/icon.png')} />
-        <Text className="font-primary text-pink-400 text-8 mb-5" >About EPIC</Text>
-        <Text className="font-primary text-blue-600 text-5 mb-4">
-          Epic connects Community of Hope volunteers with moms in the community of hope network.  Here's how it works:
-        </Text>
-        <Text className="font-primary text-pink-400 text-5 mb-1">Step 1:</Text>
-        <Text className="font-primary text-gray-400 text-4 mb-5">A mom submits a request for help, including what she needs help with, if she is an emergency, and any other relevant information.  She may cancel this
-          request at any time and for any reason.
-        </Text>
-        <Text className="font-primary text-pink-400 text-5 mb-1">Step 2:</Text>
-        <Text className="font-primary text-gray-400 text-4 mb-5">This request will be sent to Community of Hope volunteers, who can choose to accept the request for help</Text>
-        <Text className="font-primary text-pink-400 text-5 mb-1">Step 3:</Text>
-        <Text className="font-primary text-gray-400 text-4 mb-5">Once a volunteer accepts the request, the mom will be notified and a chat will be opened between the volunteer and the mom
-          so they can coordinate the details of how the volunteer can help.
-        </Text>
-        <Text className="font-primary text-pink-400 text-5 mb-1">Step 4:</Text>
-        <Text className="font-primary text-gray-400 text-4 mb-5">Once a volunteer has finished helping, they can mark this on the Community of Hope app, allowing them to help another volunteer.</Text>
+        <ScrollView>
+          <Image className="max-w-12 max-h-12 rounded-full self-center" source={require('@/assets/images/icon.png')} />
+          <Text className="font-primary text-pink-400 text-8 mb-5" >About EPIC</Text>
+          <Text className="font-primary text-blue-600 text-5 mb-4">
+            Epic connects Community of Hope volunteers with moms in the community of hope network.  Here's how it works:
+          </Text>
+          <Text className="font-primary text-pink-400 text-5 mb-1">Step 1:</Text>
+          <Text className="font-primary text-gray-400 text-4 mb-5">A mom submits a request for help, including what she needs help with, if she is in an emergency, and any other relevant information.  She may cancel this
+            request at any time and for any reason.
+          </Text>
+          <Text className="font-primary text-pink-400 text-5 mb-1">Step 2:</Text>
+          <Text className="font-primary text-gray-400 text-4 mb-5">This request will be sent to the Help List, which is monitored by Community of Hope volunteers</Text>
+          <Text className="font-primary text-pink-400 text-5 mb-1">Step 3:</Text>
+          <Text className="font-primary text-gray-400 text-4 mb-5">Once a volunteer accepts the request, the mom will be notified and a chat will be opened between the volunteer and the mom
+            so they can coordinate the details of how the volunteer can provide help.
+          </Text>
+          <Text className="font-primary text-pink-400 text-5 mb-1">Step 4:</Text>
+          <Text className="font-primary text-gray-400 text-4 mb-5">Once a volunteer has finished helping, they can mark this on the Community of Hope app, allowing them to help another volunteer.</Text>
+        </ScrollView>
       </View>
       );
     // </View></View><ParallaxScrollView
@@ -71,35 +73,4 @@ export default function AboutScreen() {
     // </ParallaxScrollView>
     // </View>
 }
-const styles = StyleSheet.create({
-    container:
-    {
-      flex: 1,
-      backgroundColor: '#F7ACCF',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    text:{
-      color: '#fff',
-    },  
-    titleContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 8,
-      backgroundColor: '#F7ACCF',
-    },
-    stepContainer: {
-      gap: 8,
-      marginBottom: 8,
-      backgroundColor: '#F7ACCF',
-    },
-    reactLogo: {
-      height: 178,
-      width: 290,
-      bottom: 0,
-      left: 0,
-      position: 'absolute',
-      backgroundColor: '#F7ACCF',
-    },
-  });
   

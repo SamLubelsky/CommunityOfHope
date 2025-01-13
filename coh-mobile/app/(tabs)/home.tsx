@@ -28,9 +28,7 @@ async function uploadPushToken(expoPushToken: string) {
         console.error(data.error);
       }
     }catch(error){
-      console.log("response", response);
       console.error(error);
-      console.log("respones ok", response.status);
     }
   }
 function handleRegistrationError(errorMessage: string) {
@@ -69,7 +67,6 @@ async function registerForPushNotificationsAsync() {
             projectId,
             })
         ).data;
-        console.log("pushTokenString:", pushTokenString);
         await uploadPushToken(pushTokenString);
         return pushTokenString;
         } catch (e: unknown) {
@@ -99,7 +96,6 @@ export default function Home(){
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(body),
         });
-        console.log(body);
         setIsSignedIn(false);
     };
 
@@ -129,24 +125,9 @@ export default function Home(){
             <Text className="font-primary py-5 text-pink-300 text-center text-9"> Welcome to EPIC!</Text>
             {role === "Mom" ? <RequestAVolunteer /> : <HelpRequests />}
           {/* <Pressable className="my-5 w-10 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2" onPress={handleLogout}> */}
-          <Pressable className="my-5"onPress={handleLogout}>
-            <Text className="text-blue-600 text-6 text-center font-primary text-5 m-auto underline hover:text-blue-400 hover:font-6" >Logout</Text>
-          </Pressable>
+          {/* <Pressable className="" onPress={handleLogout}> */}
+          <Text className="mb-3 text-blue-600 text-6 text-center font-primary text-5 underline hover:text-blue-400 hover:font-6" onPress={handleLogout}>Logout</Text>
+          {/* </Pressable> */}
         </View>
     )
 }
-const styles = StyleSheet.create({
-    container:
-    {
-      flex: 1,
-      backgroundColor: '#F7ACCF',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    text:{
-      color: '#fff',
-      fontSize: 50,
-      margin: 20,
-    },  
-  });
-  

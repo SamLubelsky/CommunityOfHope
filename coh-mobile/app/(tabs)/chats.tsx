@@ -5,13 +5,13 @@ import { BACKEND_URL } from '../config';
 import {Chat} from '../../types';
 import {useIsFocused} from '@react-navigation/native';
 import { useBoundStore } from '@/store/useBound';
+import { ImageWithRedirect } from '@/components/ImageWithRedirect';
 export default function Chats(){
     const isFocused = useIsFocused();
     const [chats, setChats] = useState<Chat[]>([]);
 
     const role = useBoundStore((state) => state.role);
     useEffect(() => {
-        console.log("role:", role);
         const loadChats = async () => {
             const response = await fetch(`${BACKEND_URL}/api/chats`, {
                 method: 'GET',
@@ -19,7 +19,6 @@ export default function Chats(){
             });
             const responseData = await response.json();
             setChats(responseData);
-            console.log(responseData);
             return responseData;
         }
         loadChats();
@@ -36,17 +35,17 @@ export default function Chats(){
         }
         const chatsList = chats.map((chat: any, index: any) => {   
             const date = new Date(chat.lastMessageTime);
-            console.log(date);
             const day = date.getDate();
             const month = date.toLocaleString('default', { month: 'long' });
+            console.log("otherLink: ", chat.otherProfileLink);
             return (
-                <Pressable onPress={()=>onSubmit(chat.id)} key={index} className="w-full items-center justify-start border-2 border-blue-300 rounded-md bg-gray-200 px-3 py-3 mt-4 flex-row">
-                    <Image className="w-8 h-8 rounded-full" source={{uri: chat.otherProfileLink}} />
+                <Pressable onPress={()=>onSubmit(chat.id)} key={index} className="items-center justify-start border-2 border-blue-300 rounded-md bg-gray-200 px-3 py-2 mt-4 flex-row">
+                    <ImageWithRedirect resizeMode="cover" className="w-6 h-6 rounded-full" source={chat.otherProfileLink}/>
                     <View className="ml-5">
-                        <Text className="font-primary text-blue-600 text-7 mb-3">{chat.otherName}</Text>
+                        <Text className="font-primary text-blue-600 text-7">{chat.otherName}</Text>
                         <Text className="font-primary text-gray-500 text-3">{chat.lastMessage}</Text>
                     </View>
-                    <Text className="ml-auto self-start">{month} {day}</Text>
+                    <Text className="self-start">{month} {day}</Text>
                 </Pressable>
             )});
         if(role === "Volunteer" || role === "Admin"){
@@ -60,14 +59,13 @@ export default function Chats(){
                     {/* <Text className="ml-auto self-start">{month} {day}</Text> */}
                 </Pressable>
             );
-            console.log("chats:", [chatRoomChat, ...chatsList]);
             return [chatRoomChat, ...chatsList];
         } else {
             return chatsList;
         }
     }       
     return (
-        <View className="px-8 text-gray-200 items-center justify-center py-5">
+        <View className="px-2 text-gray-200 items-center justify-center py-5">
         <Text className="font-primary text-pink-400 text-7 mb-7"> All Chats</Text>
         {getChatsList()}
         </View>)
