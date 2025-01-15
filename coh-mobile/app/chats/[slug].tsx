@@ -85,14 +85,14 @@ export default function Page(){
         return messages.map((message: any, index: any) => {
             if(message.senderId === id){
                 return (
-                    <View key={index} className="mx-6 self-end items-start justify-center border-2 border-blue-300 w-4/5 p-2 m-1 bg-blue-100 rounded-2xl">
+                    <View key={index} className="mx-4 self-end items-start justify-center border-2 border-blue-300 w-4/5 p-2 m-1 bg-blue-100 rounded-2xl">
                         <Text className="font-primary text-blue-800 text-4"> {message.message}</Text>
                     </View>
                 ); 
             }
             else{
                 return (
-                    <View key={index} className="mx-6 self-start items-start justify-center border-2 border-pink-300 w-4/5 p-2 m-1 bg-pink-100 rounded-2xl">
+                    <View key={index} className="mx-4 self-start items-start justify-center border-2 border-pink-300 w-3/4 p-2 m-1 bg-pink-100 rounded-2xl">
                         <Text className="font-primary text-pink-800 text-4"> {message.message}</Text>
                     </View>
                 );

@@ -92,7 +92,12 @@ export const acceptRequest = async (req: Request, res: Response): Promise<any> =
       body: 'Your help request has been accepted!',
       data: {},
     }
-    sendNotification(mom_id, notificationData);
+    try{
+      sendNotification(mom_id, notificationData);
+    } catch(error){
+      console.log("Error sending notification");
+    }
+
 
 
     res.status(200).json({ message: 'Help request accepted successfully' });

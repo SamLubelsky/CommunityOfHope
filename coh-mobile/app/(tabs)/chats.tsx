@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, StyleSheet, Pressable, Image} from 'react-native';
+import {View, Text, StyleSheet, Pressable, Image, ScrollView} from 'react-native';
 import { router } from 'expo-router'
 import { BACKEND_URL } from '../config';
 import {Chat} from '../../types';
@@ -42,13 +42,15 @@ export default function Chats(){
             // const redirectURL = fetchRedirectUrl(chat.otherPEWrofileLink);
             // console.log("redirectURL: ", chat.redirectURL);
             console.log("otherLink: ", chat.otherProfileLink);
+            const {lastMessage} = chat;
+            const shortenedMessage = lastMessage.length > 20 ? lastMessage.substring(0, 20) + "..." : lastMessage;
             return (
                 <Pressable onPress={()=>onSubmit(chat.id)} key={index} className="items-center justify-start border-2 border-blue-300 rounded-md bg-gray-200 px-3 py-2 mt-4 flex-row">
                     {/* <ImageWithRedirect resizeMode="cover" className="w-6 h-6 rounded-full" source={chat.otherProfileLink}/> */}
                     <Image source={{uri: chat.otherProfileLink}} className="w-8 h-8 rounded-full" resizeMode="cover"/>
                     <View className="ml-5">
                         <Text className="font-primary text-blue-600 text-7">{chat.otherName}</Text>
-                        <Text className="font-primary text-gray-500 text-3">{chat.lastMessage}</Text>
+                        <Text className="font-primary text-gray-500 text-3">{shortenedMessage}</Text>
                     </View>
                     <Text className="self-start">{month} {day}</Text>
                 </Pressable>
@@ -72,7 +74,9 @@ export default function Chats(){
     return (
         <View className="px-2 text-gray-200 items-center justify-center py-5">
         <Text className="font-primary text-pink-400 text-7 mb-7"> All Chats</Text>
+        <ScrollView>
         {getChatsList()}
+        </ScrollView>
         </View>)
 }
 const styles = StyleSheet.create({
