@@ -40,7 +40,8 @@ export default function Chats(){
             const day = date.getDate();
             const month = date.toLocaleString('default', { month: 'long' });
             // const redirectURL = fetchRedirectUrl(chat.otherPEWrofileLink);
-            console.log("redirectURL: ", chat.redirectURL);
+            // console.log("redirectURL: ", chat.redirectURL);
+            console.log("otherLink: ", chat.otherProfileLink);
             return (
                 <Pressable onPress={()=>onSubmit(chat.id)} key={index} className="items-center justify-start border-2 border-blue-300 rounded-md bg-gray-200 px-3 py-2 mt-4 flex-row">
                     {/* <ImageWithRedirect resizeMode="cover" className="w-6 h-6 rounded-full" source={chat.otherProfileLink}/> */}
