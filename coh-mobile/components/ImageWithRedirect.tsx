@@ -12,9 +12,13 @@ export const ImageWithRedirect = ({ resizeMode, source, className }: Props) => {
   useEffect(() => {
     if (source.startsWith('https')) {
       // Check for redirects
-      fetch(source, { method: 'HEAD' })
+      fetch(source, { method: 'GET', credentials: "include", headers: {
+        'origin': 'http://localhost:8081'
+      }}, )
         .then((response) => {
-          if (response.redirected) {
+          console.log("response status: ", response.status);
+          console.log("response: ", response);
+          if (response.redirected || response.status === 200) {
             setFinalSource(response.url);
             console.log("redirecting to: ", response.url);
           }

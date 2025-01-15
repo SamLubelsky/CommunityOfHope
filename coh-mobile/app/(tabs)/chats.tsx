@@ -6,10 +6,10 @@ import {Chat} from '../../types';
 import {useIsFocused} from '@react-navigation/native';
 import { useBoundStore } from '@/store/useBound';
 import { ImageWithRedirect } from '@/components/ImageWithRedirect';
+import axios from 'axios';
 export default function Chats(){
     const isFocused = useIsFocused();
     const [chats, setChats] = useState<Chat[]>([]);
-
     const role = useBoundStore((state) => state.role);
     useEffect(() => {
         const loadChats = async () => {
@@ -18,6 +18,8 @@ export default function Chats(){
                 credentials: 'include',
             });
             const responseData = await response.json();
+            // setChats(responseData);
+            console.log(responseData);
             setChats(responseData);
             return responseData;
         }
@@ -37,10 +39,12 @@ export default function Chats(){
             const date = new Date(chat.lastMessageTime);
             const day = date.getDate();
             const month = date.toLocaleString('default', { month: 'long' });
-            console.log("otherLink: ", chat.otherProfileLink);
+            // const redirectURL = fetchRedirectUrl(chat.otherPEWrofileLink);
+            console.log("redirectURL: ", chat.redirectURL);
             return (
                 <Pressable onPress={()=>onSubmit(chat.id)} key={index} className="items-center justify-start border-2 border-blue-300 rounded-md bg-gray-200 px-3 py-2 mt-4 flex-row">
-                    <ImageWithRedirect resizeMode="cover" className="w-6 h-6 rounded-full" source={chat.otherProfileLink}/>
+                    {/* <ImageWithRedirect resizeMode="cover" className="w-6 h-6 rounded-full" source={chat.otherProfileLink}/> */}
+                    <Image source={{uri: chat.otherProfileLink}} className="w-8 h-8 rounded-full" resizeMode="cover"/>
                     <View className="ml-5">
                         <Text className="font-primary text-blue-600 text-7">{chat.otherName}</Text>
                         <Text className="font-primary text-gray-500 text-3">{chat.lastMessage}</Text>

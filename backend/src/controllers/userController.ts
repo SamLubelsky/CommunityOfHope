@@ -51,7 +51,8 @@ export const addUser = async (req: MulterRequest, res: Response): Promise<any> =
       destination: destFileName,
     }
     await storage.bucket(bucketName).upload(profilePic.path, options);
-    const profilePicUrl = `https://storage.cloud.google.com/${bucketName}/${destFileName}`;
+    // const profilePicUrl = `https://storage.cloud.google.com/${bucketName}/${destFileName}`;
+    const profilePicUrl = `https://storage.googleapis.com/${bucketName}/${destFileName}`;
     const newUserID = await createUser(username, password, firstName, lastName, role, profilePicUrl);
     fs.unlink(profilePic.path, (err) => {
       if (err) console.error("Error deleting file:", err);
@@ -83,7 +84,8 @@ export const editUser = async(req: MulterRequest, res: Response): Promise<any> =
       destination: destFileName,
     }
     await storage.bucket(bucketName).upload(profilePic.path, options);
-    const profilePicUrl = `https://storage.cloud.google.com/${bucketName}/${destFileName}`;
+    // const profilePicUrl = `https://storage.cloud.google.com/${bucketName}/${destFileName}`;
+    const profilePicUrl = `https://storage.googleapis.com/${bucketName}/${destFileName}`;
     fs.unlink(profilePic.path, (err) => {
       if (err) console.error("Error deleting file:", err);
     })
@@ -145,23 +147,6 @@ export const loginUser = async (req: Request, res: Response): Promise<any> => {
     req.session.userId = id;
     req.session.role = existingUser.role;
     return res.status(201).json({ message: 'Login successful', id, firstName, lastName, role});
-    // req.session.userId = id;
-    // req.session.role = existingUser.role;
-    // console.log('Session created:', req.session);
-    // console.log('Headers being sent:', res.getHeaders());
-    // // const token = 'test-token';
-    // // res.setHeader('Set-Cookie', `session=${token}; Path=/; Secure; HttpOnly; SameSite=None`);
-    // req.session.save((err: any) => {
-    //   if (err) {
-    //     return res.status(500).json({ message: 'Error saving session', error: err.message });
-    //   }
-    //   // res.send(req.session.sessionID);
-    //   console.log(req.session.sessionId);
-    //   console.log('Session created:', req.session);
-    //   console.log('Headers being sent:', res.getHeaders());
-    //   return res.status(201).json({ message: 'Login successful', id, firstName, lastName, role});
-    // });
-
   } catch (error) {
     return res.status(500).json({ message: 'Error logging in', error: (error as Error).message });
   }
