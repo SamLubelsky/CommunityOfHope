@@ -12,7 +12,8 @@ type Props = {
 export const ButtonWithConfirmation = ({ onConfirm, children, className, confirmText }: Props) => {
     const [isConfirming, setIsConfirming] = useState(false);
     const handleClick = () => {
-        setIsConfirming(true);
+        setIsConfirming(false);
+        onConfirm();
     }
     return (
         <>
@@ -22,7 +23,7 @@ export const ButtonWithConfirmation = ({ onConfirm, children, className, confirm
         <Modal animationType="slide" visible={isConfirming} transparent={true}>
             <View className="w-12 rounded-xl p-5 z-10 absolute left bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 bg-gray-300">
                 <Text className="font-primary font-7 text-red-500 text-5 mb-5 text-center">{confirmText}</Text>
-                <PrimaryButton text="Yes" onPress={onConfirm}/>
+                <PrimaryButton text="Yes" onPress={handleClick}/>
                 <SecondaryButton text="No" onPress={()=>setIsConfirming(false)}/>
             </View>
         </Modal>

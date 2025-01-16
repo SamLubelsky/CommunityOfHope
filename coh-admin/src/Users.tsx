@@ -5,6 +5,7 @@ import {
     TrashIcon
 } from '@heroicons/react/24/outline';
 import { BACKEND_URL } from '../config';
+import { ButtonWithConfirmation } from './components/LinkWithConfirmation';
 type User = {
     username: string;
     firstName: string;
@@ -54,7 +55,7 @@ export default function Users(){
             const data = [user.username, user.firstName, user.lastName, user.role];
             const row = data.map((data: string, index2)=>{
                 return (
-                    <p key={`user-${index}-${index2}`} className="p-2 text-gray-700 text-xl font-medium">{data}</p>
+                    <p key={`user-${index}-${index2}`} className="bg-gray-200 p-2 text-gray-700 text-xl font-medium">{data}</p>
                 );
             })
             return <>
@@ -67,7 +68,7 @@ export default function Users(){
                     pathname: "/edit-user",
                     search: `?id=${user.id}`
                 }}>
-                <PencilSquareIcon key={`pencil-${index}`} className="h-6 w-6 text-blue-300 hover:text-blue-500"/>
+                <PencilSquareIcon key={`pencil-${index}`} className="h-10 w-10 text-blue-300 hover:text-blue-500"/>
                 </Link>
                 </div>
                 <div>
@@ -75,21 +76,24 @@ export default function Users(){
                     pathname:"/delete-user",
                     search: `?id=${user.id}`
                     }}> */}
-                <a className="inline-block hover:cursor-pointer" onClick={()=>deleteUser(user.id)}>
-                <TrashIcon key={`trash-${index}`} className="h-6 w-6 text-red-300 hover:text-red-500"/>
-                </a>
+                {/* <a className="inline-block hover:cursor-pointer" onClick={()=>deleteUser(user.id)}>
+                    <TrashIcon key={`trash-${index}`} className="h-10 w-10 text-red-300 hover:text-red-500"/>
+                </a> */}
+                <ButtonWithConfirmation key={`button-${index}`} onConfirm={()=>deleteUser(user.id)} className="inline-block hover:cursor-pointer" confirmText="Are you sure you want to delete this user?">
+                    <TrashIcon key={`trash-${index}`} className="h-10 w-10 text-red-300 hover:text-red-500"/>
+                </ButtonWithConfirmation>
                 {/* </Link> */}
                 </div>
             </>
         });
-        return  <div className="grid grid-cols-7">
-                <p key='th-1' className="p-2 text-gray-700 text-xl font-semibold">Username</p>
-                <p key='th-2' className="p-2 text-gray-700 text-xl font-semibold">First Name</p>
-                <p key='th-3' className="p-2 text-gray-700 text-xl font-semibold">Last Name</p>
-                <p key='th-4' className="p-2 text-gray-700 text-xl font-semibold">Role</p>
-                <p key='th-5' className="p-2 text-gray-700 text-xl font-semibold">Profile Picture</p>
-                <p key='th-6' className="p-2 text-gray-700 text-xl font-semibold">Edit User</p>
-                <p key='th-7' className="p-2 text-gray-700 text-xl font-semibold">Delete User</p>
+        return  <div className="grid grid-cols-7 bg-gray-100 gap-1">
+                <p key='th-1' className="bg-gray-300 p-2 text-gray-700 text-xl font-semibold">Username</p>
+                <p key='th-2' className="bg-gray-300 p-2 text-gray-700 text-xl font-semibold">First Name</p>
+                <p key='th-3' className="bg-gray-300 p-2 text-gray-700 text-xl font-semibold">Last Name</p>
+                <p key='th-4' className="bg-gray-300 p-2 text-gray-700 text-xl font-semibold">Role</p>
+                <p key='th-5' className="bg-gray-300 p-2 text-gray-700 text-xl font-semibold">Profile Picture</p>
+                <p key='th-6' className="bg-gray-300 p-2 text-gray-700 text-xl font-semibold">Edit User</p>
+                <p key='th-7' className="bg-gray-300 p-2 text-gray-700 text-xl font-semibold">Delete User</p>
                 {formattedList}
                 </div>
     }

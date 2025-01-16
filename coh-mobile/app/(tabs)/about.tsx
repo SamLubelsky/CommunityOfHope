@@ -11,7 +11,7 @@ export default function AboutScreen() {
     // );
     return (
       <View className="flex-1 items-center justify-start bg-gray-100 py-6 px-4">
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Image className="max-w-12 max-h-12 rounded-full self-center" source={require('@/assets/images/icon.png')} />
           <Text className="font-primary text-pink-400 text-8 mb-5" >About EPIC</Text>
           <Text className="font-primary text-blue-600 text-5 mb-4">

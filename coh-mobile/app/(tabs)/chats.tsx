@@ -74,7 +74,7 @@ export default function Chats(){
     return (
         <View className="px-2 text-gray-200 items-center justify-center py-5">
         <Text className="font-primary text-pink-400 text-7 mb-7"> All Chats</Text>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
         {getChatsList()}
         </ScrollView>
         </View>)
