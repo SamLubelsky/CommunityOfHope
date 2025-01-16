@@ -41,7 +41,7 @@ export default function Chats(){
             const month = date.toLocaleString('default', { month: 'long' });
             // const redirectURL = fetchRedirectUrl(chat.otherPEWrofileLink);
             // console.log("redirectURL: ", chat.redirectURL);
-            console.log("otherLink: ", chat.otherProfileLink);
+            // console.log("otherLink: ", chat.otherProfileLink);
             const {lastMessage} = chat;
             const shortenedMessage = lastMessage.length > 20 ? lastMessage.substring(0, 20) + "..." : lastMessage;
             return (

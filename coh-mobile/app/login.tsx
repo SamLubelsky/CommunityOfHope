@@ -4,6 +4,7 @@ import { SafeAreaView, StyleSheet, View, Alert, Text, Button, Pressable, TextInp
 import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';
 import { BACKEND_URL } from './config';
+import { PrimaryButton } from '@/components/PrimaryButton';
 
 export const LoginScreen = () => {
   const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
@@ -70,9 +71,7 @@ export const LoginScreen = () => {
              onChangeText={setPassword}
                className="font-primary text-6 h-8 w-12 mb-5 bg-gray-200 pl-4 rounded-md focus:border-2 border-blue-400"
              />
-          <Pressable className="w-11 h-7 bg-blue-200 border self-center rounded-md border-none" onPress={handleLogin}>
-            <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Login </Text>
-          </Pressable>
+          <PrimaryButton text="Login" onPress={handleLogin}/>
         </View>
         {error && <Text className="text-red-500 text-5 text-center font-primary text-5">{error}</Text>}
     </View>

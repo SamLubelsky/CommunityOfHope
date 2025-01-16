@@ -6,6 +6,9 @@ import VolunteerRequestForm from "@/components/VolunteerRequestForm";
 import { BACKEND_URL } from '../app/config';
 import "../global.css";
 import { router } from 'expo-router';
+import { PrimaryButton } from './PrimaryButton';
+import { SecondaryButton } from './SecondaryButton';
+import { ButtonWithConfirmation } from './ButtonWithConfirmation';
 type HelpStatus =  "Not Requested" | "Requested" | "Accepted" 
 
 const RequestAVolunteer = () => {
@@ -62,10 +65,12 @@ const RequestAVolunteer = () => {
       return (
         <View className="py-3 my-3 px-3 mx-3 rounded-md border-blue-300 border-2 bg-gray-200">
           <Text className="mb-4 font-primary text-blue-600 text-8 text-center">You have requested help for {description}</Text>
-          <Text className="mb-4 font-primary text-yellow-500 text-7 text-center">Please wait for a volunteer to accept</Text>  
-          <Pressable className="bg-gray-200 w-12 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2" onPress={deactiveRequest}>
+          <Text className="mb-4 font-primary text-yellow-500 text-7 text-center">Please wait for a volunteer to accept</Text>
+          <ButtonWithConfirmation className="bg-gray-200 w-12 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2" 
+          onConfirm={deactiveRequest} 
+          confirmText={`Are you sure you would like to cancel your help request?`}>
             <Text className="text-blue-600 text-6 text-center font-primary m-auto">Cancel Help Request</Text>
-          </Pressable>
+          </ButtonWithConfirmation>
         </View>
       );
     }
@@ -73,12 +78,13 @@ const RequestAVolunteer = () => {
       return (
         <View className="py-3 px-5 rounded-md border-blue-300 border-2 bg-gray-200">
           <Text className="w-12 font-primary text-center text-blue-600 text-7 mb-4 mx-2">Your help request has been accepted by {volunteerName}</Text>
-          <Pressable className="py-2 px-4 mb-3 bg-blue-200 border self-center rounded-md border-none" onPress={()=>router.push(`/chats/${chatId}`)}>
-            <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Open Chat</Text>
-          </Pressable>
-          <Pressable className="bg-gray-200 px-4 py-2 bg-gray-100 border self-center rounded-md border-blue-300 border-2 hover:bg-blue-200" onPress={deactiveRequest}>
+          <PrimaryButton text="Open Chat" onPress={()=>router.push(`/chats/${chatId}`)} />
+          <ButtonWithConfirmation 
+          className="bg-gray-200 px-4 py-2 bg-gray-100 border self-center rounded-md border-blue-300 border-2 hover:bg-blue-200"
+          onConfirm={deactiveRequest}
+          confirmText={`Are you sure you are done being helped?(this action cannot be undone)`}>
             <Text className="text-blue-600 text-6 text-center font-primary m-auto">I'm done being helped</Text>
-          </Pressable>
+          </ButtonWithConfirmation>
         </View>
       );
     } 
@@ -86,9 +92,7 @@ const RequestAVolunteer = () => {
   return (
     <View className="flex-1">
       {helpStatus === "Not Requested" ?
-          <Pressable className="w-12 h-7 bg-blue-200 border self-center rounded-md border-none" onPress={requestVolunteer}>
-            <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Request a volunteer</Text>
-          </Pressable>
+          <PrimaryButton text="Request a volunteer" onPress={requestVolunteer} />
           : <HelpCard />
       }      
       <VolunteerRequestForm setHelpStatus={setHelpStatus} setDescription={setDescription} isVisible={isModalVisible} onClose={onModalClose} />
