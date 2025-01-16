@@ -5,7 +5,6 @@ import { BACKEND_URL } from '../config';
 import {Chat} from '../../types';
 import {useIsFocused} from '@react-navigation/native';
 import { useBoundStore } from '@/store/useBound';
-import { ImageWithRedirect } from '@/components/ImageWithRedirect';
 import axios from 'axios';
 export default function Chats(){
     const isFocused = useIsFocused();

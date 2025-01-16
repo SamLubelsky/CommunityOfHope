@@ -1,6 +1,5 @@
 import React, {useEffect, useState, useRef} from 'react';
 import { Platform, View, Text, StyleSheet, Pressable } from 'react-native';
-import MyButton from '@/components/MyButton';
 import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';
 import { BACKEND_URL } from '../config';

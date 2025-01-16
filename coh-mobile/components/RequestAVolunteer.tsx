@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useContext, useEffect, useState} from 'react';
 import { View, Text, StyleSheet, Platform, Pressable, Button } from 'react-native';
-import MyButton from '@/components/MyButton';
 import VolunteerRequestForm from "@/components/VolunteerRequestForm";
 import { BACKEND_URL } from '../app/config';
 import "../global.css";

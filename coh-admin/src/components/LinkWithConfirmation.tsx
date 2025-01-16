@@ -22,7 +22,7 @@ export const ButtonWithConfirmation = ({ onConfirm, children, className, confirm
             <div className="flex flex-col justify-center gap-5">
             <button className="bg-cyan-400"onClick={handleClick}>Yes</button>
             <button className="bg-red-400" onClick={()=>setIsConfirming(false)}>No</button>
-            </div>
+        </div>
         </div>
         }
         </>
