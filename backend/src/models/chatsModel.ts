@@ -57,20 +57,20 @@ export const getChats = async (userId: string, role: string): Promise<Chat[] | n
                                      users.firstName || ' ' || users.lastName as "otherName", users.profileLink as "otherProfileLink", recent_messages.message AS "lastMessage" 
                                       FROM 
                                         chats chats
-                                        INNER JOIN users users
-                                          ON (chats.momid = users.id AND chats.volunteerid = $1)
-                                          OR (chats.volunteerid = users.id AND chats.momid = $1)
-                                        INNER JOIN (
+                                        LEFT JOIN users
+                                          ON (chats.momid = users.id AND chats.volunteerId = $1)
+                                          OR (chats.volunteerId = users.Id AND chats.momId = $1)
+                                        LEFT JOIN (
                                           SELECT chatId, MAX(dateSent) AS maxDate
                                           FROM messages
                                           GROUP BY chatId
                                         ) recent_messages_info
                                         ON chats.id = recent_messages_info.chatId
-                                        INNER JOIN messages recent_messages
+                                        LEFT JOIN messages recent_messages
                                         ON recent_messages.chatId = chats.id AND recent_messages.dateSent = recent_messages_info.maxDate
                                       WHERE
-                                        momId=$1 OR 
-                                        volunteerId=$1
+                                        chats.momId=$1 OR 
+                                        chats.volunteerId=$1
                                       ORDER BY lastMessageTime DESC`, 
                                         [userId]);
     return rows;
