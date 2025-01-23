@@ -5,7 +5,6 @@ import { useForm, SubmitHandler} from 'react-hook-form';
 import { PrimaryButton } from './PrimaryButton';
 type Props = {
     children: React.ReactNode;
-    className: string;
     onSuccess: () => void;
 }
 type FormData = {
@@ -29,6 +28,7 @@ export const ConsentScreen = ({children, onSuccess}: Props) => {
                 setError("Please accept the conditions to proceed");
             }
         }
+    return (
     <Modal animationType="slide" transparent={true}>
         <View className="w-full h-full bg-gray-300 bg-opacity-90">
             {children}
@@ -37,4 +37,5 @@ export const ConsentScreen = ({children, onSuccess}: Props) => {
             {error && <Text className="text-red-500">{error}</Text>}
         </View>
     </Modal>
+    );
 }

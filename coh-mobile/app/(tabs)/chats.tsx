@@ -42,16 +42,20 @@ export default function Chats(){
             // console.log("redirectURL: ", chat.redirectURL);
             // console.log("otherLink: ", chat.otherProfileLink);
             const {lastMessage} = chat;
-            const shortenedMessage = lastMessage.length > 20 ? lastMessage.substring(0, 20) + "..." : lastMessage;
+            let displayMessage = "";
+            if(lastMessage){
+                displayMessage = lastMessage.length > 20 ? lastMessage.substring(0, 20) + "..." : lastMessage;
+            }
+
             return (
-                <Pressable onPress={()=>onSubmit(chat.id)} key={index} className="items-center justify-start border-2 border-blue-300 rounded-md bg-gray-200 px-3 py-2 mt-4 flex-row">
+                <Pressable onPress={()=>onSubmit(chat.id)} key={index} className="items-center justify-start border-2 border-blue-300 rounded-md bg-gray-200 px-2 py-1 mt-3 flex-row">
                     {/* <ImageWithRedirect resizeMode="cover" className="w-6 h-6 rounded-full" source={chat.otherProfileLink}/> */}
-                    <Image source={{uri: chat.otherProfileLink}} className="w-8 h-8 rounded-full" resizeMode="cover"/>
-                    <View className="ml-5">
-                        <Text className="font-primary text-blue-600 text-7">{chat.otherName}</Text>
-                        <Text className="font-primary text-gray-500 text-3">{shortenedMessage}</Text>
+                    <Image source={{uri: chat.otherProfileLink}} className="w-7 h-7 rounded-full" resizeMode="cover"/>
+                    <View className="ml-2 mr-3 justify-between">
+                        <Text className="font-primary text-blue-600 text-4 max-w-11">{chat.otherName}</Text>
+                        <Text className="font-primary text-gray-500 text-2">{displayMessage}</Text>
                     </View>
-                    <Text className="self-start">{month} {day}</Text>
+                    <Text className="self-start ml-auto">{month} {day}</Text>
                 </Pressable>
             )});
         if(role === "Volunteer" || role === "Admin"){

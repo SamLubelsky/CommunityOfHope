@@ -52,15 +52,15 @@ export default function HelpRequests(){
             <View className="my-5 items-center justify-center border-2 border-blue-300 rounded-md bg-gray-200 px-2 py-4">
                 <Text className="font-primary text-yellow-500 mb-4 text-6"> You are currently helping {momName}</Text>
                 <PrimaryButton text="Open Chat" onPress={()=>router.push(`/chats/${chatId}`)} />
-                <ButtonWithConfirmation className="mb-3 px-2 py-2 bg-gray-100 border self-center rounded-md border-blue-300 border-2 hover:bg-blue-200 bg-gray-200"
+                <ButtonWithConfirmation className="mb-3 px-2 py-2 bg-gray-100 border self-center rounded-md border-green-500 border-2 hover:bg-blue-200 bg-gray-200"
                   onConfirm={deactivateHelpRequest}
                   confirmText={`Are you sure you're done helping ${momName}?`}>
-                  <Text className="text-blue-500 text-6 text-center font-primary text-5 m-auto">I'm done helping {momName}</Text>
+                  <Text className="text-green-500 text-5 text-center font-primary text-5 m-auto font-7">I'm done helping</Text>
                 </ButtonWithConfirmation>
-                <ButtonWithConfirmation className="mb-3 px-2 py-2 bg-gray-100 border self-center rounded-md border-blue-300 border-2 hover:bg-blue-200 bg-gray-200"
+                <ButtonWithConfirmation className="mb-3 px-2 py-2 bg-gray-100 border self-center rounded-md border-red-500 border-2 hover:bg-blue-200 bg-gray-200"
                   onConfirm={unclaimRequest}
                   confirmText={`Are you sure you would like to return ${momName} to the Help List?`}>
-                  <Text className="text-blue-500 text-6 text-center font-primary text-5 m-auto">Return {momName} to the help list</Text>
+                  <Text className="text-red-600 text-5 text-center font-primary text-5 m-auto font-7">Return to the help list</Text>
                 </ButtonWithConfirmation>
             </View>
         );
