@@ -6,8 +6,9 @@
 ### Everytime you want to run the backend do the following:
 
 - cd into the `/CommunityOfHope/backend` directory.
-- run `npm run build`
-- run `npm run start`
+- run `npm run go` to launch the app
+- make sure it says "In Development Mode", if not something is run with the .env file
+
 
 # Git Instructions
 
