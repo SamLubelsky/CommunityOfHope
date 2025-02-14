@@ -4,6 +4,7 @@ import { setStatusBarStyle } from 'expo-status-bar';
 import { useEffect } from 'react';
 import {BACKEND_URL} from './config';
 import "../global.css"
+
 export default function RootLayout() {
   useEffect(() => {
     setTimeout(() => {

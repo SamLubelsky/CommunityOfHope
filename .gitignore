@@ -1,5 +1,4 @@
 #js files
-*.js
 package-lock.json
 # Logs
 logs
