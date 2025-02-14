@@ -1,9 +1,10 @@
-# Setup Instructions
+## Mobile App
 
 - cd into the `/CommunitOfHope/coh-mobile` directory
 - run `yarn` for first time setup
 - run `npx expo start` to launch the app
-
+- open on the web or scan the QR code with Expo Go App to launch on your phone.  Note: For me this doesn't work unless my phone and computer are connceted to the same wifi network.
+  
 ## Git Instructions
 
 - First, ALWAYS `git pull` before you make changes.
