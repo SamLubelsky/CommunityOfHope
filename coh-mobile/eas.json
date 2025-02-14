@@ -16,6 +16,12 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios": {
+        "ascApiKeyPath": "/home/sammy/appkey.p8",
+        "ascApiKeyIssuerId": "8a0ed5f5-0ec4-4f3e-8634-68009be3fea6",
+        "ascApiKeyId": "QUMV4MUNXN"
+      }
+    }
   }
 }
