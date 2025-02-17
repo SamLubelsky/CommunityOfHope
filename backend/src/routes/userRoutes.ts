@@ -22,7 +22,7 @@ router.post('/users', requireAdmin, upload.single("profilePic"), addUser); //is 
 // npm run
 router.post('/login', loginUser);
 router.post('/logout', logoutUser);
-router.delete('/users/:id',requireAdmin, deleteUser);
+router.post('/users/:id',requireAdmin, deleteUser);
 router.post('/logout', logoutUser);
 router.put('/users/:id', requireAdmin, upload.single("profilePic"), editUser);
 router.get('/users/:id', requireAdmin, getUser);
