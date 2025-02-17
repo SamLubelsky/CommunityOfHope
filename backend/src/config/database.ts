@@ -61,7 +61,7 @@ const createTables = async () => {
           emergency BOOLEAN DEFAULT FALSE,
           active BOOLEAN DEFAULT TRUE,
           dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-          FOREIGN KEY (mom_id) REFERENCES users(id) ON DELETE SET NULL,
+          FOREIGN KEY (mom_id) REFERENCES users(id) ON DELETE SET NULL
           )
         `,[]);
   await executeQuery(`
@@ -83,7 +83,7 @@ const createTables = async () => {
           senderId INTEGER,
           dateSent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (senderId) REFERENCES users(id) ON DELETE SET NULL,
-          FOREIGN KEY (chatId) REFERENCES chatIds(id)
+          FOREIGN KEY (chatId) REFERENCES chats(id)
           )
         `,[]);
   await executeQuery(`
