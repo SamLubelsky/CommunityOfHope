@@ -14,7 +14,7 @@ import { initializeWebSocket } from './websocket'
 import http from 'http'
 import path from 'path'
 
-createTables();
+createTables(); //create database tables if they don't exist
 dotenv.config()
 const app = express()
 
