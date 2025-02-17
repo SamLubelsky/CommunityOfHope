@@ -41,7 +41,7 @@ export default function Users(){
     }
     async function deleteUser(id: string){
         await fetch(`${BACKEND_URL}/api/users/${id}`,{
-            method:'delete',
+            method:'post',
             credentials:'include'
         })
         reloadUsers();
