@@ -61,7 +61,7 @@ const createTables = async () => {
           emergency BOOLEAN DEFAULT FALSE,
           active BOOLEAN DEFAULT TRUE,
           dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-          FOREIGN KEY (mom_id) REFERENCES users(id)
+          FOREIGN KEY (mom_id) REFERENCES users(id) ON DELETE SET NULL,
           )
         `,[]);
   await executeQuery(`
@@ -71,8 +71,8 @@ const createTables = async () => {
           volunteerId INTEGER,
           dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           lastMessageTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (momId) REFERENCES users(id),
-          FOREIGN KEY (volunteerId) REFERENCES users(id)
+          FOREIGN KEY (momId) REFERENCES users(id) ON DELETE SET NULL,
+          FOREIGN KEY (volunteerId) REFERENCES users(id) ON DELETE SET NULL
           )
         `,[]);
   await executeQuery(`
@@ -82,7 +82,7 @@ const createTables = async () => {
           message TEXT, 
           senderId INTEGER,
           dateSent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (senderId) REFERENCES users(id),
+          FOREIGN KEY (senderId) REFERENCES users(id) ON DELETE SET NULL,
           FOREIGN KEY (chatId) REFERENCES chatIds(id)
           )
         `,[]);
@@ -92,7 +92,7 @@ const createTables = async () => {
           userId INTEGER,
           token TEXT,
           dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (userId) REFERENCES users(id)
+          FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
           )
         `,[]);
   await executeQuery(`
@@ -101,7 +101,7 @@ const createTables = async () => {
           helpId INTEGER,
           userId INTEGER,
           dateUnclaimed TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          FOREIGN KEY (userId) REFERENCES users(id),
+          FOREIGN KEY (userId) REFERENCES users(id) ON DELETE SET NULL,
           FOREIGN KEY (helpId) REFERENCES help_requests(id)
     )
   `,[]);
