@@ -5,12 +5,16 @@ import {Link} from 'react-router-dom';
 import SelectField from './components/selectField';
 import { BACKEND_URL } from '../config';
 import ImageField from './components/imageField';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+
 const roleOptions = ['Mom','Volunteer','Admin']
 export default function AddUser(){
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const [addSuccess, setAddSuccess] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
+    const navigate = useNavigate();
     function resetForm(){
         setAddSuccess(false);
         if(formRef.current){
@@ -30,8 +34,12 @@ export default function AddUser(){
         try{
             const responseData = await response.json();
             if (!response.ok) {
+                if(response.status === 401){
+                    Cookies.remove("SignedIn");
+                    navigate("/login");
+                    return;
+                }
                 const error = responseData.message;
-                console.error(error);
                 setError(error);
             }   
             else{                

@@ -1,13 +1,17 @@
 import {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import { BACKEND_URL } from '../config';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
 type HelpRequest = {
     mom_name: string;
     volunteer_name: string;
     active: boolean;
 }
 export default function HelpRequests(){
+    const navigate = useNavigate();
     const [HelpRequests, setHelpRequests] = useState<HelpRequest[] | null>(null);
+    const [error, setError] = useState<string | null>(null);
     useEffect(()=>{
         async function loadRequests(){
             const response = await fetch(`${BACKEND_URL}/api/help_requests`,{
@@ -16,6 +20,16 @@ export default function HelpRequests(){
                 credentials: 'include'
             });
             const responseData = await response.json();
+            if(!response.ok){
+                console.log("Error fetching user data:", responseData.message);
+                if(response.status === 401){
+                    Cookies.remove("SignedIn");
+                    navigate("/login");
+                    return;
+                }
+                setError(responseData.message);
+                return;
+            }
             setHelpRequests(responseData.Requests);
             console.log(responseData);
         }

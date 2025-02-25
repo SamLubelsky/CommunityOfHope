@@ -1,5 +1,6 @@
 import {useState, useEffect} from 'react';
 import {Link, useNavigate} from 'react-router-dom'
+import Cookies from 'js-cookie';
 import {
     PencilSquareIcon,
     TrashIcon
@@ -16,6 +17,8 @@ type User = {
 }
 export default function Users(){
     const [usersList, setUsersList] = useState<null  | User[]>(null);
+    const [error, setError] = useState<null | string>(null);
+
     const navigate = useNavigate();
     useEffect(()=>{
         async function loadUsers(){
@@ -25,6 +28,16 @@ export default function Users(){
                 credentials: 'include'
             });
             const responseData = await response.json();
+            if(!response.ok){
+                console.log("Error fetching user data:", responseData.message);
+                if(response.status === 401){
+                    Cookies.remove("SignedIn");
+                    navigate("/login");
+                    return;
+                }
+                setError(responseData.message);
+                return;
+            }
             setUsersList(responseData.users);
             console.log("responseData:", responseData.users);
         }
@@ -100,6 +113,7 @@ export default function Users(){
     return (
     <div className="flex items-center justify-center min-h-screen w-full">
         <div className="w-full max-w-8xl p-8 space-y-6 bg-white rounded shadow-md">
+            {error && <p className="text-red-500 text-xl font-semibold">{error}</p>}
             <h2 className="text-3xl font-bold text-center text-gray-700">List of All Users</h2>
             {getFormattedList()}
                 <div className="flex flex-col gap-y-5">

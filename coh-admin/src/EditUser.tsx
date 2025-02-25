@@ -1,10 +1,11 @@
 import React, {useEffect, useState, useRef,} from 'react';
 import InputField from './components/inputField';
 import SubmitButton from './components/submitButton';
-import { Link, useSearchParams} from 'react-router-dom';
+import { Link, useNavigate, useSearchParams} from 'react-router-dom';
 import {BACKEND_URL} from '../config';
 import SelectField from './components/selectField';
 import ImageField from './components/imageField';
+import Cookies from 'js-cookie';
 const roleOptions = ['Mom','Volunteer','Admin']
 type User = {
     username: string;
@@ -22,6 +23,7 @@ export default function EditUser(){
     const id = searchParams.get("id");
     const [success, setSuccess] = useState(null);
     useEffect(()=>{
+        const navigate = useNavigate();
         const loadUserData = async () =>{
             const response = await fetch(`${BACKEND_URL}/api/users/${id}`,{
                 method: 'GET',
@@ -29,6 +31,16 @@ export default function EditUser(){
                 credentials:"include",
             })
             const responseData = await response.json();
+            if(!response.ok){
+                console.log("Error fetching user data:", responseData.message);
+                if(response.status === 401){
+                    Cookies.remove("SignedIn");
+                    navigate("/login");
+                    return;
+                }
+                setError(responseData.message);
+                return;
+            }
             setUserData(responseData);
         }
         if(!userData){
