@@ -2,12 +2,14 @@ import { Tabs } from 'expo-router';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useBoundStore } from '@/store/useBound';
 import "../../global.css"
+import ErrorBoundary from '@/components/ErrorBoundary';
 type Props = {
   role: string;
 }
 export default function TabLayout() {
   const role = useBoundStore((state) => state.role);
   return (
+    <ErrorBoundary>
     <Tabs screenOptions={{
         tabBarActiveTintColor: "#ffd33d",
         tabBarInactiveTintColor: '#e4e4e7',
@@ -46,5 +48,7 @@ export default function TabLayout() {
         href: null
       }} 
       />
-    </Tabs>);
+    </Tabs>
+    </ErrorBoundary>
+    );
 }

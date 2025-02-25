@@ -1,15 +1,18 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {View, Text, StyleSheet, Pressable, Image, ScrollView} from 'react-native';
 import { router } from 'expo-router'
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { BACKEND_URL } from '../config';
 import {Chat} from '../../types';
 import {useIsFocused} from '@react-navigation/native';
 import { useBoundStore } from '@/store/useBound';
 import axios from 'axios';
+import { ErrorContext } from '@/components/ErrorBoundary';
 export default function Chats(){
     const isFocused = useIsFocused();
     const [chats, setChats] = useState<Chat[]>([]);
     const role = useBoundStore((state) => state.role);
+    const throwError = useContext(ErrorContext);
     useEffect(() => {
         const loadChats = async () => {
             const response = await fetch(`${BACKEND_URL}/api/chats`, {
@@ -17,7 +20,12 @@ export default function Chats(){
                 credentials: 'include',
             });
             const responseData = await response.json();
-            // setChats(responseData);
+            if(throwError){
+                throwError(new Error("error"));
+            }
+            if(!response.ok){
+
+            }
             console.log(responseData);
             setChats(responseData);
             return responseData;
@@ -75,12 +83,15 @@ export default function Chats(){
         }
     }       
     return (
+        <ErrorBoundary>
         <View className="px-2 text-gray-200 items-center justify-center py-5">
         <Text className="font-primary text-pink-400 text-7 mb-7"> All Chats</Text>
         <ScrollView showsVerticalScrollIndicator={false}>
         {getChatsList()}
         </ScrollView>
-        </View>)
+        </View>
+        </ErrorBoundary>
+        );
 }
 const styles = StyleSheet.create({
     container:
