@@ -8,6 +8,8 @@ import { router } from 'expo-router';
 import { PrimaryButton } from './PrimaryButton';
 import { SecondaryButton } from './SecondaryButton';
 import { ButtonWithConfirmation } from './ButtonWithConfirmation';
+import { ErrorContext } from '@/components/ErrorBoundary';
+import {handleError} from '@/utils/error';
 type HelpStatus =  "Not Requested" | "Requested" | "Accepted" 
 
 const RequestAVolunteer = () => {
@@ -16,6 +18,7 @@ const RequestAVolunteer = () => {
   const [volunteerName, setVolunteerName] = useState<string | null>("");
   const [description, setDescription] = useState<string | null>(null);
   const [chatId, setChatId] = useState<number | null>(null);
+  const throwError = useContext(ErrorContext);
   const requestVolunteer = () => {
     setIsModalVisible(true);
   };  
@@ -29,6 +32,9 @@ const RequestAVolunteer = () => {
       credentials: "include",
     });
     const data = await response.json();
+    if(!response.ok){
+      handleError(throwError, data);
+    }
     setHelpStatus(data.status);
     setDescription(data.description);
     setChatId(data.chatId);
@@ -50,10 +56,14 @@ const RequestAVolunteer = () => {
     setVolunteerName(null);
     setDescription(null);
     setChatId(null);
-    await fetch(`${BACKEND_URL}/api/help_requests/deactivate/`, {
+    const response = await fetch(`${BACKEND_URL}/api/help_requests/deactivate/`, {
       method: 'POST',
       credentials: 'include',
-    })
+    });
+    if(!response.ok){
+      const data = await response.json();
+      handleError(throwError, data);
+    }
   }
   function HelpCard(){
     // console.log("helpStatus:", helpStatus)

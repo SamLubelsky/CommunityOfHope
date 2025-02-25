@@ -6,6 +6,8 @@ import { BACKEND_URL } from '../app/config';
 import {ButtonWithConfirmation} from '@/components/ButtonWithConfirmation';
 import {PrimaryButton} from '@/components/PrimaryButton';
 import { SecondaryButton } from '@/components/SecondaryButton';
+import { ErrorContext } from '@/components/ErrorBoundary';
+import {handleError} from '@/utils/error';
 type HelpRequest ={
   mom_name: string;
   category: string;
@@ -19,7 +21,7 @@ export default function HelpRequests(){
     const [helpId, setHelpId] = useState<number | null>(null);
     const [chatId, setChatId] = useState<number | null>(null);
     const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
-
+    const throwError = React.useContext(ErrorContext);
 
       const role = useBoundStore((state) => state.role);
       useEffect(() => {
@@ -30,19 +32,27 @@ export default function HelpRequests(){
         };
       },[]);
     async function deactivateHelpRequest(){
-      await fetch(`${BACKEND_URL}/api/help_requests/deactivate/`, {
+      const response = await fetch(`${BACKEND_URL}/api/help_requests/deactivate/`, {
         method: 'POST',
         credentials: 'include',
       })
+      if(!response.ok){
+        const data = await response.json();
+        handleError(throwError, data);
+      }
       setHelping(false);
       setMomName(null);
       setHelpId(null);
     }
     async function unclaimRequest(){
-      await fetch(`${BACKEND_URL}/api/help_requests/unclaim/`, {
+      const response = await fetch(`${BACKEND_URL}/api/help_requests/unclaim/`, {
         method: 'POST',
         credentials: 'include',
       })
+      if(!response.ok){
+        const data = await response.json();
+        handleError(throwError, data);
+      }
       setHelping(false);
       setMomName(null);
       setHelpId(null);
@@ -77,6 +87,9 @@ export default function HelpRequests(){
         setMomName(submittedHelpRequest.mom_name);
         setHelpId(submittedHelpRequest.id);
         setRequests(requests.filter(request => request.id !== id));
+      } else{
+        const data = await response.json();
+        handleError(throwError, data);
       }
     }
     async function fetchData(){
@@ -89,6 +102,9 @@ export default function HelpRequests(){
           credentials: 'include',
         });
         const data = await response.json();
+        if(!response.ok){
+          handleError(throwError, data);
+        }
         if(data.status === 'Accepted'){
           setHelping(true);
           setMomName(data.momName);
@@ -102,6 +118,9 @@ export default function HelpRequests(){
           credentials: 'include',
         });
         const json = await response.json();
+        if(!response.ok){
+          handleError(throwError, json);
+        }
         setRequests(json.Requests);
     }
     function getRequestsList(){

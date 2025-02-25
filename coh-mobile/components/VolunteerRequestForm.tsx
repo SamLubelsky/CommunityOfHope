@@ -7,6 +7,8 @@ import CheckboxInput from './CheckboxInput';
 import { useBoundStore } from '@/store/useBound';
 import { BACKEND_URL } from '../app/config';
 import React, {useState} from 'react';
+import { ErrorContext } from '@/components/ErrorBoundary';
+import {handleError} from '@/utils/error';
 type Props = {
     isVisible: boolean;
     onClose: () => void;
@@ -29,7 +31,7 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
         }
     });
     const emergencyValue = watch('emergency')
-
+    const throwError = React.useContext(ErrorContext);
     const onSubmit: SubmitHandler<FormData> = async (data) => {
         const {description, emergency, info } = data;
         const mom_id = id;
@@ -40,6 +42,9 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
             credentials: 'include',
         }); 
         const json = await response.json();
+        if(!response.ok){
+            handleError(throwError, json);
+        }  
         setHelpStatus("Requested");
         setDescription(description);
         onClose();

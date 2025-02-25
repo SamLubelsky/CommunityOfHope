@@ -8,6 +8,7 @@ import {useIsFocused} from '@react-navigation/native';
 import { useBoundStore } from '@/store/useBound';
 import axios from 'axios';
 import { ErrorContext } from '@/components/ErrorBoundary';
+import {handleError} from '@/utils/error';
 export default function Chats(){
     const isFocused = useIsFocused();
     const [chats, setChats] = useState<Chat[]>([]);
@@ -15,16 +16,13 @@ export default function Chats(){
     const throwError = useContext(ErrorContext);
     useEffect(() => {
         const loadChats = async () => {
-            const response = await fetch(`${BACKEND_URL}/api/chats`, {
+            const response = await fetch(`${BACKEND_URL}/api/chats/`, {
                 method: 'GET',
                 credentials: 'include',
             });
             const responseData = await response.json();
-            if(throwError){
-                throwError(new Error("error"));
-            }
             if(!response.ok){
-
+                handleError(throwError, responseData);
             }
             console.log(responseData);
             setChats(responseData);
