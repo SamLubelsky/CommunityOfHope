@@ -27,7 +27,7 @@ export default function Home(){
     const throwError = useContext(ErrorContext);
 
     function handleRegistrationError(errorMessage: string) {
-      throw new Error(errorMessage);
+      handleError(throwError, {message: errorMessage});
     }
   
     async function registerForPushNotificationsAsync() {
@@ -128,7 +128,7 @@ export default function Home(){
     }, [isFocused]);
 
     return (
-        <View className="flex-1 bg-gray-100 items-center justify-center">
+        <View className="flex-1 bg-gray-100 items-center justify-center mx-2 my-1">
             <Text className="font-primary py-5 text-pink-300 text-center text-9"> Welcome to EPIC!</Text>
             {role === "Mom" ? <RequestAVolunteer /> : <HelpRequests />}
           {/* <Pressable className="my-5 w-10 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2" onPress={handleLogout}> */}

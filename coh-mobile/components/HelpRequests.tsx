@@ -139,7 +139,7 @@ export default function HelpRequests(){
                 </View>
             )});
         return <>
-                <Text className="font-primary text-blue-200 text-7 mb-5"> All Current Help Requests</Text>
+                <Text className="font-primary text-center text-blue-200 text-7 mb-5"> All Current Help Requests</Text>
                   <ScrollView showsVerticalScrollIndicator={false}>
                 {requestsList}
                 </ScrollView>
