@@ -22,7 +22,7 @@ export default function Users(){
     const navigate = useNavigate();
     useEffect(()=>{
         async function loadUsers(){
-            const response = await fetch(`${BACKEND_URL}/api/users`,{
+            const response = await fetch(`${BACKEND_URL}/api/users`,{ //hi
                 headers: { 'Content-Type': 'application/json' },
                 method: 'GET',
                 credentials: 'include'
