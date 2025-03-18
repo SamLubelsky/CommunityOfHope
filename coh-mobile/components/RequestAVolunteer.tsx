@@ -77,7 +77,8 @@ const RequestAVolunteer = () => {
           <Text className="mb-4 font-primary text-yellow-500 text-7 text-center">Please wait for a volunteer to accept</Text>
           <ButtonWithConfirmation className="bg-gray-200 w-12 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2" 
           onConfirm={deactiveRequest} 
-          confirmText={`Are you sure you would like to cancel your help request?`}>
+          confirmText={`Are you sure you would like to cancel your help request?`}
+          danger={true}>
             <Text className="text-blue-600 text-6 text-center font-primary m-auto">Cancel Help Request</Text>
           </ButtonWithConfirmation>
         </View>
@@ -91,6 +92,7 @@ const RequestAVolunteer = () => {
           <ButtonWithConfirmation 
           className="bg-gray-200 px-4 py-2 bg-gray-100 border self-center rounded-md border-blue-300 border-2 hover:bg-blue-200"
           onConfirm={deactiveRequest}
+          danger={true}
           confirmText={`Are you sure you are done being helped?(this action cannot be undone)`}>
             <Text className="text-blue-600 text-6 text-center font-primary m-auto">I'm done being helped</Text>
           </ButtonWithConfirmation>

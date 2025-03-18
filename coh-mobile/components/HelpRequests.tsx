@@ -63,12 +63,14 @@ export default function HelpRequests(){
                 <Text className="font-primary text-yellow-500 mb-4 text-6"> You are currently helping {momName}</Text>
                 <PrimaryButton text="Open Chat" onPress={()=>router.push(`/chats/${chatId}`)} />
                 <ButtonWithConfirmation className="mb-3 px-2 py-2 bg-gray-100 border self-center rounded-md border-green-500 border-2 hover:bg-blue-200 bg-gray-200"
+                  danger={false}
                   onConfirm={deactivateHelpRequest}
                   confirmText={`Are you sure you're done helping ${momName}?`}>
                   <Text className="text-green-500 text-5 text-center font-primary text-5 m-auto font-7">I'm done helping</Text>
                 </ButtonWithConfirmation>
                 <ButtonWithConfirmation className="mb-3 px-2 py-2 bg-gray-100 border self-center rounded-md border-red-500 border-2 hover:bg-blue-200 bg-gray-200"
                   onConfirm={unclaimRequest}
+                  danger={true}
                   confirmText={`Are you sure you would like to return ${momName} to the Help List?`}>
                   <Text className="text-red-600 text-5 text-center font-primary text-5 m-auto font-7">Return to the help list</Text>
                 </ButtonWithConfirmation>
@@ -128,10 +130,13 @@ export default function HelpRequests(){
             return <Text className="text-yellow-7 font-primary">No requests found</Text>;
         }
         const requestsList = requests.map((request: any, index: any) => {
+          const {emergency} = request;
+          console.log(emergency);
             return (
-                <View key={index} className="my-5 items-center justify-center border-2 border-blue-300 rounded-lg bg-gray-200 p-4">
+                <View key={index} className={`${emergency ? "border-red-500 bg-red-100" : "border-blue-300 bg-gray-200"} my-5 items-center justify-center border-2 rounded-lg p-4`}>
                     <Text className="font-primary text-yellow-500 text-6 mb-2 w-12 text-center"> {request.mom_name} needs help with {request.description}</Text>
                     <ButtonWithConfirmation className="py-2 px-4 mt-3 bg-blue-200 border self-center rounded-md border-none"
+                      danger={false}
                       onConfirm={()=>acceptHelpRequest(request.id)}
                       confirmText={`Are you sure you would like to accept this help request?`}>
                       <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Accept Help Request</Text>

@@ -38,7 +38,7 @@ export default function Chats(){
 
     function getChatsList(){
         if(chats.length === 0 && role === "Mom"){
-            return <Text style={styles.helpText}> You don't have any chats open yet</Text>
+            return <Text className="text-7 m-2"> You don't have any chats open yet</Text>
         }
         const chatsList = chats.map((chat: any, index: any) => {   
             const date = new Date(chat.lastMessageTime);
@@ -91,36 +91,3 @@ export default function Chats(){
         </ErrorBoundary>
         );
 }
-const styles = StyleSheet.create({
-    container:
-    {
-      flex: 1,
-      backgroundColor: '#F7ACCF',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    itemContainer: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderWidth: 5,
-        borderColor: '#FFF',
-        width: '75%',
-        backgroundColor: 'white',
-        margin: 5,
-    },
-    helpText: {
-        color: '#0994dc',
-        fontSize: 50,
-        margin: 20,
-    },
-    text:{
-      color: '#0994dc',
-      fontSize: 25,
-      margin: 10,
-    },  
-    titleContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 8,
-    },
-  });
