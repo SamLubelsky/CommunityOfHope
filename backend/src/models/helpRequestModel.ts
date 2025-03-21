@@ -2,7 +2,7 @@ import { executeQuery } from '../config/database';
 import { HelpRequest } from '../types/helpRequest';
 
 export const getAllHelpRequests = async(): Promise<HelpRequest[]> => {
-  const rows = await executeQuery(`SELECT help.active, help.id, help.mom_id, help.volunteer_id, help.description,
+  const rows = await executeQuery(`SELECT help.active, help.id, help.mom_id, help.volunteer_id, help.description, help.emergency,
                                    vol.firstName || ' ' || vol.lastName as volunteer_name,
                                    mom.firstName || ' ' || mom.lastName as mom_name
                                     FROM help_requests help
