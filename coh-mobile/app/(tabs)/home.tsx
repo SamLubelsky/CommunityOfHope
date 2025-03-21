@@ -27,7 +27,7 @@ export default function Home(){
     const throwError = useContext(ErrorContext);
 
     function handleRegistrationError(errorMessage: string) {
-      // handleError(throwError, {message: errorMessage});
+      handleError(throwError, {message: errorMessage});
     }
   
     async function registerForPushNotificationsAsync() {
