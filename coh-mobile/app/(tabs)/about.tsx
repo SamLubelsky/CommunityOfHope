@@ -22,37 +22,37 @@ export default function AboutScreen() {
           </Text>
           <Text className="font-primary text-black-400 text-5 mb-4">RESOURCES:</Text>
 
-          <Text className="font-primary text-gray-400 text-4 mb-1"> <em> Wellness/Infant: </em></Text>
+          <Text className="font-primary text-gray-400 text-4 mb-1">  Wellness/Infant:x</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Caring 4 Kids (314)-726-5437</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Womens & Infants Center for Fetal Care (314)-747-6539</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Youth In Need (314)-553-9169</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">St. Louis Crisis Nursery (314)-292-5770</Text>
 
-          <Text className="font-primary text-gray-400 text-4 mb-1"> <em> Food:</em></Text>
+          <Text className="font-primary text-gray-400 text-4 mb-1"> Food:</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Urban League of Metropolitan St. Louis (314)-615-3600</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">United Way (2-1-1)</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">St. Louis Area Foodbank (314)-292-6262</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Better Family Life (314)-367-3440</Text>
 
-          <Text className="font-primary text-gray-400 text-4 mb-1"> <em>Furniture:</em></Text>
+          <Text className="font-primary text-gray-400 text-4 mb-1"> Furniture:</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Home Sweet Home (314)-448-9838</Text>
 
-          <Text className="font-primary text-gray-400 text-4 mb-1"> <em>Education:</em></Text>
+          <Text className="font-primary text-gray-400 text-4 mb-1"> Education:</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">St. Louis Job Corps (314)-679-2021</Text>
 
-          <Text className="font-primary text-gray-400 text-4 mb-1"> <em>Counseling:</em></Text>
+          <Text className="font-primary text-gray-400 text-4 mb-1"> Counseling:</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Infant Loss Resource (314)-241-7437</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Annie's Hope Center for Grieving (314)-965-5015</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Haven of Grace Support Counseling (314)-325-1995</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Helping Survivors - helpingsurvivors.org/child-sexual-abuse</Text>
 
-          <Text className="font-primary text-gray-400 text-4 mb-1"> <em>Housing:</em></Text>
+          <Text className="font-primary text-gray-400 text-4 mb-1"> Housing:</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Good Shepard Children & Family (314)-824-5700</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Almost Home (314)-771-4663</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Our Lady's Inn (314)-351-4590</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Haven of Grace (314)-621-6507</Text>
 
-          <Text className="font-primary text-gray-400 text-4 mb-1"> <em>Smart Saving Strategies For Moms On A Budget:</em></Text>
+          <Text className="font-primary text-gray-400 text-4 mb-1"> Smart Saving Strategies For Moms On A Budget:</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">A guide to help navigate the financial challenges of motherhood with practical, 
             achievable strategies for securing your family's financial well-being: mightymoms.net</Text>
 
