@@ -54,8 +54,9 @@ export const LoginScreen = () => {
   };
 
   return (
-    <View className="flex-1 bg-gray-100 items-center justify-center">
-      <Text className="font-primary text-pink-400 text-10 text-center">Welcome to Epic</Text>
+    <View className="flex-1 bg-gray-100 items-center justify-center px-3">
+      <Text className="font-primary text-pink-400 text-7 text-center">EPIC: Emergency Portal For Infant Care</Text>
+      <Text className="font-primary text-black text-8 text-center">Login</Text>
         <View className="mx-4 mt-3">
           <KeyboardAvoidingView>
             <Text className="font-primary text-5 mb-1 mt-2">Username</Text>
@@ -78,69 +79,7 @@ export const LoginScreen = () => {
         </View>
         {error && <Text className="text-red-500 text-5 text-center font-primary text-5">{error}</Text>}
     </View>
-    // <SafeAreaView style={loginStyle.content}>
-    //   <PaperProvider>
-    //     <Card>
-    //       <Card.Title title="Community of Hope Login" />
-    //       <Card.Content>
-    //         <TextInput 
-    //           label="Username" 
-    //           value={username}
-    //           onChangeText={setUsername} 
-    //           autoCapitalize="none"
-    //           style={styles.input}
-    //         />
-    //         <TextInput 
-    //           label="Password" 
-    //           value={password}
-    //           secureTextEntry 
-    //           onChangeText={setPassword}
-    //           style={styles.input}
-    //         />
-    //         <Button 
-    //           mode="contained" 
-    //           onPress={handleLogin}
-    //           loading={isLoading}
-    //           disabled={isLoading}
-    //           style={styles.button}
-    //         >
-    //           Login
-    //         </Button>
-    //       </Card.Content>
-    //     </Card>
-    //   </PaperProvider>
-    // </SafeAreaView>
   );
 };
-
-// export const loginStyle = StyleSheet.create({
-//   content: {
-//     flex: 1,
-//     backgroundColor: '#F7ACCF',
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-// });
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F7ACCF',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  input: {
-    marginBottom: 16,
-  },
-  button: {
-    marginTop: 8,
-  },
-  // fontStyle: {
-  //   fontFamily: Platform.select({
-  //     android: 'Inter_900Black',
-  //     ios: 'Inter-Black',
-  //   }),
-  // }
-});
 
 export default LoginScreen;
