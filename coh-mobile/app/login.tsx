@@ -1,6 +1,6 @@
 // Start of Selection
 import React, {useState} from 'react';
-import { SafeAreaView, StyleSheet, View, Alert, Text, Button, Pressable, TextInput, Platform } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Alert, Text, Button, Pressable, TextInput, Platform, KeyboardAvoidingView } from 'react-native';
 import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';
 import { BACKEND_URL } from './config';
@@ -56,22 +56,25 @@ export const LoginScreen = () => {
   return (
     <View className="flex-1 bg-gray-100 items-center justify-center">
       <Text className="font-primary text-pink-400 text-10 text-center">Welcome to Epic</Text>
-        <View className="m-7">
-          <Text className="font-primary text-5 mb-1 mt-5">Username</Text>
-            <TextInput
-               value={username}
-               onChangeText={setUsername} 
-               autoCapitalize="none"
-               className="font-primary text-6 h-8 w-12 bg-gray-200 pl-4 rounded-md focus:border-2 border-blue-400"
-             />
-          <Text className="font-primary text-5 mt-5 mb-1">Password</Text>
-             <TextInput
-               value={password}
-               secureTextEntry 
-             onChangeText={setPassword}
-               className="font-primary text-6 h-8 w-12 mb-5 bg-gray-200 pl-4 rounded-md focus:border-2 border-blue-400"
-             />
+        <View className="mx-4 mt-3">
+          <KeyboardAvoidingView>
+            <Text className="font-primary text-5 mb-1 mt-2">Username</Text>
+              <TextInput
+                value={username}
+                onChangeText={setUsername} 
+                autoCapitalize="none"
+                className="font-primary text-6 h-8 w-12 bg-gray-200 pl-4 rounded-md focus:border-2 border-blue-400"
+              />
+            
+            <Text className="font-primary text-5 mt-5 mb-1">Password</Text>
+              <TextInput
+                value={password}
+                secureTextEntry 
+              onChangeText={setPassword}
+                className="font-primary text-6 h-8 w-12 mb-5 bg-gray-200 pl-4 rounded-md focus:border-2 border-blue-400"
+              />
           <PrimaryButton text="Login" onPress={handleLogin}/>
+          </KeyboardAvoidingView>
         </View>
         {error && <Text className="text-red-500 text-5 text-center font-primary text-5">{error}</Text>}
     </View>
