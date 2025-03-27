@@ -74,7 +74,7 @@ export const LoginScreen = () => {
               onChangeText={setPassword}
                 className="font-primary text-6 h-8 w-12 mb-5 bg-gray-200 pl-4 rounded-md focus:border-2 border-blue-400"
               />
-          <PrimaryButton text="Login" onPress={handleLogin}/>
+            <PrimaryButton text="Login" onPress={handleLogin}/>
           </KeyboardAvoidingView>
         </View>
         {error && <Text className="text-red-500 text-5 text-center font-primary text-5">{error}</Text>}
