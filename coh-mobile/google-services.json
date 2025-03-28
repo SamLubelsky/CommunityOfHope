@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "110151692366",
+    "project_id": "communityofhope-test",
+    "storage_bucket": "communityofhope-test.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:110151692366:android:abfacc6c2a1dfd6d59131f",
+        "android_client_info": {
+          "package_name": "com.sammy56lt.cohmobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSc-qj-PGHBKxXygWzO_bJBcy_AYF8or0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
