@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
-import {ScrollView, View, Text, TextInput, StyleSheet, Image} from 'react-native';
+import {ScrollView, View, Text, TextInput, StyleSheet, Image, SafeAreaView} from 'react-native';
 import MyButton from '@/components/MyButton';
 import { AppState } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,7 +11,9 @@ import { BACKEND_URL } from '../config';
 import { Chat, Message } from '@/types';
 
 
+
 export default function Page(){
+
     const chatId = Number(useLocalSearchParams().slug);
 
     const id = useBoundStore((state) => state.id);
@@ -98,8 +100,8 @@ export default function Page(){
                 );
             }});
     }
-    return (
-        <View className="flex-1 bg-gray-100">
+    return ( 
+        <SafeAreaView className="flex-1 bg-gray-100">
             <View className="w-full flex-row items-center justify-start py-2 px-2 bg-gray-300 mb-5">
                 <Ionicons className="mr-4" name="arrow-back" size={24} color="black" onPress={()=>{router.back()}}/>
                 <Image resizeMode="contain" className="w-7 h-7 rounded-full mr-4" source={{uri: otherProfileLink}} />
@@ -129,6 +131,6 @@ export default function Page(){
             </View>
             {/* <MyButton label="Send" onPress={sendMessage}/> */}
             </ScrollView>
-        </View>
+        </SafeAreaView>
     );
 }
