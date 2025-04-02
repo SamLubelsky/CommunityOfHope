@@ -88,5 +88,3 @@ export const createHelpRequest = async (data: HelpRequest): Promise<any> => {
   await executeQuery('INSERT INTO help_requests (mom_id, description, emergency, active) VALUES ($1, $2, $3, TRUE)', [mom_id, description, emergency]);
   return;
 };
-
-// Add other model functions (getById, update, delete)...
