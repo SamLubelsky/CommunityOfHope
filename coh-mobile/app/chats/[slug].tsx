@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
 import {ScrollView, View, Text, TextInput, StyleSheet, Image, SafeAreaView} from 'react-native';
-import MyButton from '@/components/MyButton';
+// import MyButton from '@/components/MyButton';
 import { AppState } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 // import { socket } from "../socket";
