@@ -14,7 +14,7 @@ type User = {
     id: string;
     role: string;
 }
-export default function EditUser(){
+const EditUser = () => {
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
@@ -22,8 +22,9 @@ export default function EditUser(){
     const [userData, setUserData] = useState<User | null>(null);
     const id = searchParams.get("id");
     const [success, setSuccess] = useState(null);
+    const navigate = useNavigate();
     useEffect(()=>{
-        const navigate = useNavigate();
+        // console.log("hello");
         const loadUserData = async () =>{
             const response = await fetch(`${BACKEND_URL}/api/users/${id}`,{
                 method: 'GET',
@@ -106,3 +107,4 @@ export default function EditUser(){
     </div>
     );
 }
+export default EditUser;

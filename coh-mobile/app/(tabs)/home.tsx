@@ -27,7 +27,10 @@ export default function Home(){
     const throwError = useContext(ErrorContext);
 
     function handleRegistrationError(errorMessage: string) {
-      // handleError(throwError, {message: errorMessage});
+      console.log("notification error!");
+      if(Platform.OS === 'android'){
+        handleError(throwError, {message: `notification error: ${errorMessage}`});
+      }
     }
   
     async function registerForPushNotificationsAsync() {
@@ -65,7 +68,7 @@ export default function Home(){
             await uploadPushToken(pushTokenString);
             return pushTokenString;
             } catch (e: unknown) {
-            handleRegistrationError(`${e}`);
+              handleRegistrationError(`${e}`);
             }
         } else {
             handleRegistrationError('Must use physical device for push notifications');

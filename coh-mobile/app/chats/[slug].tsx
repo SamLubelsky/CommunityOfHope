@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
 import {ScrollView, View, Text, TextInput, StyleSheet, Image, SafeAreaView} from 'react-native';
-// import MyButton from '@/components/MyButton';
 import { AppState } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 // import { socket } from "../socket";
@@ -74,9 +73,7 @@ export default function Page(){
         if(socket){
             socket.emit('message', data);
         }
-        // console.log(`Sent message:`, data);
         setMessages([...messages, data]);
-        // console.log(messages);
         setCurMessage('');
     }
     function displayMessages(){
@@ -110,8 +107,6 @@ export default function Page(){
             <ScrollView 
             ref={scrollViewRef}
             onContentSizeChange={() => scrollViewRef.current?.scrollToEnd({ animated: true })}>
-            {/* ref={ref=> {this.scrollView=ref}}
-            onContentSizeChange={()=> this.scrollView.scrollToEnd({animated: true})}> */}
             {displayMessages()}
             <View className="mx-6 flex-row justify-start items-center">
                 <View key={-1} className="flex-1 self-end items-start justify-center border-2 border-blue-300 p-2 m-1 bg-blue-100 rounded-2xl">
@@ -129,7 +124,6 @@ export default function Page(){
                 </View>
                 <Ionicons name="send-outline" size={26} color="black" onPress={sendMessage}/>
             </View>
-            {/* <MyButton label="Send" onPress={sendMessage}/> */}
             </ScrollView>
         </SafeAreaView>
     );

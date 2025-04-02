@@ -9,6 +9,8 @@ import { BACKEND_URL } from '../app/config';
 import React, {useState} from 'react';
 import { ErrorContext } from '@/components/ErrorBoundary';
 import {handleError} from '@/utils/error';
+import { PrimaryButton } from './PrimaryButton';
+import { SecondaryButton } from './SecondaryButton';
 type Props = {
     isVisible: boolean;
     onClose: () => void;
@@ -23,6 +25,8 @@ type FormData = {
 export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus, setDescription}: Props){
     const firstName = useBoundStore((state) => state.firstName);
     const id = useBoundStore((state) => state.id);
+    const [isConfirming, setIsConfirming] = useState(false);
+    const [data, setData] = useState<FormData | null>(null);
     const {control, watch, handleSubmit, formState: {errors}} = useForm({
         defaultValues: {
             emergency: false,
@@ -32,9 +36,13 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
     });
     const emergencyValue = watch('emergency')
     const throwError = React.useContext(ErrorContext);
-    const onSubmit: SubmitHandler<FormData> = async (data) => {
-        const {description, emergency, info } = data;
+    const onConfirm = async () =>{
+        if(data === null){
+            console.log("The program encountered an unexpected error")
+            return;
+        }
         const mom_id = id;
+        const {description, emergency, info} = data;
         const response = await fetch(`${BACKEND_URL}/api/help_requests`, {
             method: 'POST', 
             headers: { 'Content-Type': 'application/json' },
@@ -48,10 +56,20 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
         setHelpStatus("Requested");
         setDescription(description);
         onClose();
+        setIsConfirming(false);
     }
+    const onSubmit: SubmitHandler<FormData> = async (data) => {
+        setData(data);
+        setIsConfirming(true);
+        if(!data.emergency){
+            onConfirm();
+        }
+    }
+    
     return (
         // <SafeAreaProvider>
         //     <SafeAreaView style = {styles.container}>
+        <>
         <Modal animationType="slide" visible={isVisible} transparent={true}>
             <View className="rounded-xl mt-3 justify-center px-2 py-5 self-center bg-gray-200"> 
                 <Text className="font-primary text-pink-400 text-7 text-center mt-2">Request a Volunteer</Text>
@@ -89,5 +107,13 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
                 </Pressable>
             </View>
         </Modal>
+         <Modal animationType="slide" visible={isConfirming} transparent={true}>
+            <View className="w-12 rounded-xl p-5 z-10 absolute left bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 bg-gray-300">
+                <Text className={'text-red-500 font-primary font-7 text-5 mb-5 text-center'}>Are you sure this is NOT a medical emergency </Text>
+                <SecondaryButton text="Yes, this is NOT a medical emergency" onPress={onConfirm}/>
+                <PrimaryButton text="No" onPress={()=>setIsConfirming(false)}/>
+            </View>
+         </Modal>
+         </>
     )
 }
