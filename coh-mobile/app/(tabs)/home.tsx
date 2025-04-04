@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef, useContext} from 'react';
-import { Platform, View, Text, StyleSheet, Pressable } from 'react-native';
+import { ScrollView, Image, Platform, View, Text, StyleSheet, Pressable } from 'react-native';
 import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';
 import { BACKEND_URL } from '../config';
@@ -12,6 +12,7 @@ import RequestAVolunteer from '@/components/RequestAVolunteer';
 import { ErrorContext } from '@/components/ErrorBoundary';
 import {handleError} from '@/utils/error';
 import "../../global.css";
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function Home(){
     const [expoPushToken, setExpoPushToken] = useState("");
@@ -131,13 +132,37 @@ export default function Home(){
     }, [isFocused]);
 
     return (
-        <View className="flex-1 bg-gray-100 items-center justify-center mx-2 my-1">
-            <Text className="font-primary py-5 text-pink-300 text-center text-9"> Welcome to EPIC!</Text>
+      <SafeAreaView className="flex-1">
+        <ScrollView>
+          <View className="bg-gray-100 items-center justify-start mx-2 my-1">
+            <Image className="max-w-12 max-h-10 self-center" source={require('@/assets/images/icon.png')} />
+            <Text className="font-primary text-gray-500 text-center text-6 mt-2"> Powered by Community of Hope</Text>
+            <Text className="text-pink-300 mb-4">"We're here to help, not judge."</Text>
             {role === "Mom" ? <RequestAVolunteer /> : <HelpRequests />}
-          {/* <Pressable className="my-5 w-10 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2" onPress={handleLogout}> */}
-          {/* <Pressable className="" onPress={handleLogout}> */}
-          <Text className="mb-3 text-blue-600 text-6 text-center font-primary text-5 underline hover:text-blue-400 hover:font-6" onPress={handleLogout}>Logout</Text>
-          {/* </Pressable> */}
-        </View>
+
+            {/* This View ensures Logout is pushed to the bottom when content is short */}
+            <View className="flex-1 justify-end w-full items-center my-4">
+
+            </View>
+          </View>
+        </ScrollView>
+        <Text className="mb-1 text-blue-600 text-6 text-center font-primary text-5 underline hover:text-blue-400 hover:font-6" onPress={handleLogout}>
+                Logout
+        </Text>
+      </SafeAreaView>
     )
+
+    /*
+      <SafeAreaView>
+        <ScrollView contentContainerStyle={{flexGrow: 1}}>
+          <View className="flex-1 bg-gray-100 items-center justify-center mx-2 my-1">
+              <Image className="max-w-12 max-h-10 self-center" source={require('@/assets/images/icon.png')} />
+              <Text className="font-primary text-gray-500 text-center text-6 mt-2"> Powered by Community of Hope</Text>
+              <Text className="text-pink-300 mb-4" >"We're here to help, not judge."</Text>
+              {role === "Mom" ? <RequestAVolunteer /> : <HelpRequests />}
+              <Text className="text-blue-600 text-6 text-center font-primary text-5 underline hover:text-blue-400 hover:font-6" onPress={handleLogout}>Logout</Text>
+          </View>
+        </ScrollView>
+      </SafeAreaView>
+    */
 }

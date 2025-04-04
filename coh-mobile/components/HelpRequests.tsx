@@ -59,7 +59,7 @@ export default function HelpRequests(){
     }
     function HelpCard(){
         return (
-            <View className="my-5 items-center justify-center border-2 border-blue-300 rounded-md bg-gray-200 px-2 py-4">
+            <View className="items-center justify-center border-2 border-blue-300 rounded-md bg-gray-200 px-2 py-4">
                 <Text className="font-primary text-yellow-500 mb-4 text-6"> You are currently helping {momName}</Text>
                 <PrimaryButton text="Open Chat" onPress={()=>router.push(`/chats/${chatId}`)} />
                 <ButtonWithConfirmation className="mb-3 px-2 py-2 bg-gray-100 border self-center rounded-md border-green-500 border-2 hover:bg-blue-200 bg-gray-200"
