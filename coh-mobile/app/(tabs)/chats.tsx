@@ -67,13 +67,14 @@ export default function Chats(){
         if(role === "Volunteer" || role === "Admin"){
             const chatRoomChat =         
             (
-                <Pressable onPress={()=>onSubmit(-1)} key="chatRoom" className="w-full items-center justify-start border-2 border-blue-300 rounded-md bg-gray-200 px-3 py-3 mt-4 flex-row">
-                    <View className="ml-5">
-                        <Text className="font-primary text-blue-600 text-7 mb-3">Volunteer Chat Room</Text>
-                        {/* <Text className="font-primary text-gray-500 text-3">{chat.lastMessage}</Text> */}
-                    </View>
-                    {/* <Text className="ml-auto self-start">{month} {day}</Text> */}
-                </Pressable>
+                <></>
+                // <Pressable onPress={()=>onSubmit(-1)} key="chatRoom" className="w-full items-center justify-start border-2 border-blue-300 rounded-md bg-gray-200 px-3 py-3 mt-4 flex-row">
+                //     <View className="ml-5">
+                //         <Text className="font-primary text-blue-600 text-7 mb-3">Volunteer Chat Room</Text>
+                //         {/* <Text className="font-primary text-gray-500 text-3">{chat.lastMessage}</Text> */}
+                //     </View>
+                //     {/* <Text className="ml-auto self-start">{month} {day}</Text> */}
+                // </Pressable>
             );
             return [chatRoomChat, ...chatsList];
         } else {
