@@ -5,7 +5,7 @@ export default function AboutScreen() {
     return (
       <View className="flex-1 items-center justify-start bg-gray-100 py-6 px-4">
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Image className="max-w-12 max-h-12 rounded-full self-center" source={require('@/assets/images/icon.png')} />
+          <Image className="max-w-12 max-h-10 self-center" source={require('@/assets/images/icon.png')} />
           <Text className="font-primary text-pink-400 text-8 mb-3" >About EPIC</Text>
           <Text className="font-primary text-blue-600 text-5 mb-4">
           At Community of Hope, we believe that the best opportunities for personal growth come from hands-on experiences. This is the inspiration behind our Community Service Programs, 
@@ -22,7 +22,7 @@ export default function AboutScreen() {
           </Text>
           <Text className="font-primary text-black-400 text-5 mb-4">RESOURCES:</Text>
 
-          <Text className="font-primary text-gray-400 text-4 mb-1">  Wellness/Infant:x</Text>
+          <Text className="font-primary text-gray-400 text-4 mb-1"> Wellness/Infant</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Caring 4 Kids (314)-726-5437</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Womens & Infants Center for Fetal Care (314)-747-6539</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Youth In Need (314)-553-9169</Text>
@@ -51,11 +51,6 @@ export default function AboutScreen() {
           <Text className="font-primary text-pink-400 text-sm mb-3">Almost Home (314)-771-4663</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Our Lady's Inn (314)-351-4590</Text>
           <Text className="font-primary text-pink-400 text-sm mb-3">Haven of Grace (314)-621-6507</Text>
-
-          <Text className="font-primary text-gray-400 text-4 mb-1"> Smart Saving Strategies For Moms On A Budget:</Text>
-          <Text className="font-primary text-pink-400 text-sm mb-3">A guide to help navigate the financial challenges of motherhood with practical, 
-            achievable strategies for securing your family's financial well-being: mightymoms.net</Text>
-
 
             <Text className="font-primary text-purple-400 text-5 mb-4"> RESOURCES FOR MOM IN APP: </Text>
             <Text className="font-primary text-blue-600 text-sm mb-4"> *Personal Information from Mom to Volunteer in chats is okay!*</Text>

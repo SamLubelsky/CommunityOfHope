@@ -11,6 +11,7 @@ import { ErrorContext } from '@/components/ErrorBoundary';
 import {handleError} from '@/utils/error';
 import { PrimaryButton } from './PrimaryButton';
 import { SecondaryButton } from './SecondaryButton';
+import GooglePlacesInput from './GooglePlacesInput';
 type Props = {
     isVisible: boolean;
     onClose: () => void;
@@ -65,6 +66,21 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
             onConfirm();
         }
     }
+    const showPlacePicker = () => {
+        // @ts-ignore
+        RNGooglePlacePicker.show((response) => {
+            if (response.didCancel) {
+                console.log('User cancelled GooglePlacePicker');
+            } else if (response.error) {
+                console.log('GooglePlacePicker Error:', response.error);
+            } else {
+                const { name, address } = response;
+                console.log('Selected Place:', name, address);
+                // You can set this info to your form if needed:
+                // setValue('info', `${name}, ${address}`);
+            }
+        });
+    };
     
     return (
         // <SafeAreaProvider>
@@ -96,15 +112,16 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
                     {errors.description  && <Text className="mt-2 mb-1 text-red-500">This field is required</Text>}
                 </View>
 
-                <View className="items-center mt-5">
+                {/* <View className="items-center mt-5">
                     <Text className="font-primary text-blue-500 text-7 mb-3">Additional Information</Text>
                     <Text className="font-primary text-gray-500 text-2 mb-1">Are there any other details you want to share?</Text>
                     <TextareaInput name="info" control={control} required={false} lines={2}/>
-                </View>
+                </View> */}
 
                 <Pressable className="w-11 h-7 mt-5 bg-blue-200 border self-center rounded-md border-none" onPress={handleSubmit(onSubmit)}>
                     <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Submit</Text>
                 </Pressable>
+                <GooglePlacesInput/>
             </View>
         </Modal>
          <Modal animationType="slide" visible={isConfirming} transparent={true}>

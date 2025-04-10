@@ -1,7 +1,7 @@
 import React, {useEffect, useState, useRef, useContext} from 'react';
 import { ScrollView, Image, Platform, View, Text, StyleSheet, Pressable } from 'react-native';
 import { useBoundStore } from '@/store/useBound';
-import { router } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { BACKEND_URL } from '../config';
 import * as Notifications from 'expo-notifications';
 import * as Device from 'expo-device';
@@ -12,8 +12,8 @@ import RequestAVolunteer from '@/components/RequestAVolunteer';
 import { ErrorContext } from '@/components/ErrorBoundary';
 import {handleError} from '@/utils/error';
 import "../../global.css";
+import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 export default function Home(){
     const [expoPushToken, setExpoPushToken] = useState("");
     const [notification, setNotification] = useState<Notifications.Notification | undefined>(undefined);
@@ -26,7 +26,9 @@ export default function Home(){
     const notificationListener = useRef<Notifications.EventSubscription>();
     const responseListener = useRef<Notifications.EventSubscription>();
     const throwError = useContext(ErrorContext);
-
+    function onHelp(){
+      alert("Contact an administrator for help.");
+    }
     function handleRegistrationError(errorMessage: string) {
       console.log("notification error!");
       if(Platform.OS === 'android'){
@@ -132,12 +134,22 @@ export default function Home(){
     }, [isFocused]);
 
     return (
+      <>
+
       <SafeAreaView className="flex-1">
+
         <ScrollView>
+          <View className="rounded-full absolute top-1 right-1 z-10 bg-yellow-100 items-center justify-start mx-2 my-1">
+            <Pressable onPress={onHelp}>
+            <Ionicons name='help-outline' color="#fde047" size={48} />
+            </Pressable>
+          </View>
           <View className="bg-gray-100 items-center justify-start mx-2 my-1">
-            <Image className="max-w-12 max-h-10 self-center" source={require('@/assets/images/icon.png')} />
+            <Pressable>
+            </Pressable>
+            <Image className="mb-5 max-w-12 max-h-10 self-center" source={require('@/assets/images/icon.png')} />
             <Text className="font-primary text-gray-500 text-center text-6 mt-2"> Powered by Community of Hope</Text>
-            <Text className="text-pink-300 mb-4">"We're here to help, not judge."</Text>
+            <Text className="text-pink-300 mb-6">"We're here to help, not judge."</Text>
             {role === "Mom" ? <RequestAVolunteer /> : <HelpRequests />}
 
             {/* This View ensures Logout is pushed to the bottom when content is short */}
@@ -150,6 +162,7 @@ export default function Home(){
                 Logout
         </Text>
       </SafeAreaView>
+      </>
     )
 
     /*
