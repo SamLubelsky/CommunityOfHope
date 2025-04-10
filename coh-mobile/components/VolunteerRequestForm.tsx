@@ -1,4 +1,4 @@
-import {Modal, StyleSheet, Text, Button, View, Pressable} from 'react-native';
+import {Modal, StyleSheet, Text, Button, View, Pressable, KeyboardAvoidingView} from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import {useForm, Controller, SubmitHandler} from 'react-hook-form'; 
 import {SafeAreaView,SafeAreaProvider } from 'react-native-safe-area-context'
@@ -86,7 +86,9 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
         // <SafeAreaProvider>
         //     <SafeAreaView style = {styles.container}>
         <>
+
         <Modal animationType="slide" visible={isVisible} transparent={true}>
+
             <View className="rounded-xl mt-3 justify-center px-2 py-5 self-center bg-gray-200"> 
                 <Text className="font-primary text-pink-400 text-7 text-center mt-2">Request a Volunteer</Text>
                 <View className="absolute top-2 right-2 text-gray-500">
@@ -94,8 +96,11 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
                         <MaterialIcons name="close" color="#fff" size={28} />
                     </Pressable>
                 </View>
-
-                <View className="items-center py-2 gap-2 my-4">
+                {/* <View className="mt-5"> */}
+                {/* <Text className="text-center font-primary text-blue-500 text-7 mb-3">Location</Text> */}
+                <GooglePlacesInput/>
+                {/* </View> */}
+                <View className="items-center py-2 gap-2 my-6">
                     <View className="flex-row items-center gap-2">
                         <Text className="font-primary top-1 text-gray-400 text-4 mb-2">Is this an emergency? </Text>
                         <CheckboxInput name="emergency" control={control} color='gray'/>
@@ -112,6 +117,7 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
                     {errors.description  && <Text className="mt-2 mb-1 text-red-500">This field is required</Text>}
                 </View>
 
+
                 {/* <View className="items-center mt-5">
                     <Text className="font-primary text-blue-500 text-7 mb-3">Additional Information</Text>
                     <Text className="font-primary text-gray-500 text-2 mb-1">Are there any other details you want to share?</Text>
@@ -121,9 +127,10 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
                 <Pressable className="w-11 h-7 mt-5 bg-blue-200 border self-center rounded-md border-none" onPress={handleSubmit(onSubmit)}>
                     <Text className="text-blue-700 text-6 text-center font-primary text-5 m-auto">Submit</Text>
                 </Pressable>
-                <GooglePlacesInput/>
+
             </View>
         </Modal>
+
          <Modal animationType="slide" visible={isConfirming} transparent={true}>
             <View className="w-12 rounded-xl p-5 z-10 absolute left bottom-1/2 right-1/2 translate-x-1/2 translate-y-1/2 bg-gray-300">
                 <Text className={'text-red-500 font-primary font-7 text-5 mb-5 text-center'}>Are you sure this is NOT a medical emergency </Text>
