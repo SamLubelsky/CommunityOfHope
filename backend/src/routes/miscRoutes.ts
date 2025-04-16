@@ -4,6 +4,6 @@ import { getAutocomplete } from '../controllers/locationController'
 
 const router = Router();
 
-router.get('/autocomplete', requireAuth, getAutocomplete);
+router.post('/autocomplete', requireAuth, getAutocomplete);
 
 export default router;
