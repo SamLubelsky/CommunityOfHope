@@ -39,6 +39,7 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
             emergency: false,
             description: '',
             info: '',
+            location: null,
         }
     });
     const emergencyValue = watch('emergency')
@@ -49,11 +50,11 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
             return;
         }
         const mom_id = id;
-        const {description, emergency, info} = data;
+        const {description, emergency, info, location} = data;
         const response = await fetch(`${BACKEND_URL}/api/help_requests`, {
             method: 'POST', 
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mom_id, description, emergency, info}),
+            body: JSON.stringify({ mom_id, description, emergency, info, placeId: location?.placeId, placeName: location?.placeName }),
             credentials: 'include',
         }); 
         const json = await response.json();
@@ -67,9 +68,10 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
     }
     const onSubmit: SubmitHandler<FormData> = async (data) => {
         setData(data);
-        setIsConfirming(true);
         if(!data.emergency){
             onConfirm();
+        } else{
+            setIsConfirming(true);
         }
     }
     const showPlacePicker = () => {
@@ -105,6 +107,15 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
                 {/* <View className="mt-5"> */}
                 {/* <Text className="text-center font-primary text-blue-500 text-7 mb-3">Location</Text> */}
                 {/* </View> */}
+                <Text className="font-primary text-center text-blue-500 text-7 mb-3"> Your Location</Text>
+                <GooglePlacesInput control={control}/>
+                <View className="items-center mt-3">
+                    <Text className="font-primary text-blue-500 text-7 mb-3">Description</Text>
+                    <Text className="font-primary text-gray-500 text-2 mb-1">What do you need help with?</Text>
+                    <TextareaInput name="description" control={control} required={true} lines={1}/>
+                    {errors.description  && <Text className="mt-2 mb-1 text-red-500">This field is required</Text>}
+                </View>
+
                 <View className="items-center py-2 gap-2 my-6">
                     <View className="flex-row items-center gap-2">
                         <Text className="font-primary top-1 text-gray-400 text-4 mb-2">Is this an emergency? </Text>
@@ -115,14 +126,7 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
                         : "Emergencies are time sensitive, crisis situations"}
                     </Text> 
                 </View>
-                <View className="items-center mt-3">
-                    <Text className="font-primary text-blue-500 text-7 mb-3">Description</Text>
-                    <Text className="font-primary text-gray-500 text-2 mb-1">What do you need help with?</Text>
-                    <TextareaInput name="description" control={control} required={true} lines={1}/>
-                    {errors.description  && <Text className="mt-2 mb-1 text-red-500">This field is required</Text>}
-                </View>
-                <Text className="font-primary text-center text-blue-500 text-7 mb-3"> Your Location</Text>
-                <GooglePlacesInput/>
+
 
 
                 {/* <View className="items-center mt-5">

@@ -19,7 +19,7 @@ export default function TextareaInput({name, control, required, lines}: Props){
             value={value}
             onChangeText={onChange}
             onBlur={onBlur}
-            className="bg-gray-100 w-12 p-2 mb-2 rounded-md focus:border-2 border-blue-300"
+            className="bg-gray-100 w-12 p-2 mb-2 rounded-md border-2 border-gray-500 focus:border-blue-500"
             multiline={true}
             numberOfLines={lines}
             placeholderTextColor="#64748b"

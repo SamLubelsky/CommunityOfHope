@@ -164,18 +164,4 @@ export default function Home(){
       </SafeAreaView>
       </>
     )
-
-    /*
-      <SafeAreaView>
-        <ScrollView contentContainerStyle={{flexGrow: 1}}>
-          <View className="flex-1 bg-gray-100 items-center justify-center mx-2 my-1">
-              <Image className="max-w-12 max-h-10 self-center" source={require('@/assets/images/icon.png')} />
-              <Text className="font-primary text-gray-500 text-center text-6 mt-2"> Powered by Community of Hope</Text>
-              <Text className="text-pink-300 mb-4" >"We're here to help, not judge."</Text>
-              {role === "Mom" ? <RequestAVolunteer /> : <HelpRequests />}
-              <Text className="text-blue-600 text-6 text-center font-primary text-5 underline hover:text-blue-400 hover:font-6" onPress={handleLogout}>Logout</Text>
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    */
 }

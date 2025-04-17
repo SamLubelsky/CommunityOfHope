@@ -3,28 +3,19 @@ import { View, TextInput, Text, Pressable } from 'react-native';
 import { BACKEND_URL } from '@/app/config';
 import { getLastNotificationResponseAsync } from 'expo-notifications';
 import _ from 'lodash';
+import { Controller, useFormContext } from 'react-hook-form';
 
 interface Location {
   placeId: string;
   placeName: string;
 }
 type Props = {
-  onSelection: (location: Location) => void;
+  control: any;
 }
-const GooglePlacesInput = ({onSelection}: Props) => {
-  const debouncedFetchAutocomplete = useCallback(
-    _.debounce((text: string) => {
-      fetchAutocomplete(text);
-    }, 300),
-    [] // empty deps ensures it's only created once
-  );
-
-  useEffect(() => {
-    return () => {
-      debouncedFetchAutocomplete.cancel();
-    };
-  }, [debouncedFetchAutocomplete]);
-  
+const GooglePlacesInput = ({control}: Props) => {
+  const [autcompletions, setAutocompletions] = useState<Location[]>([]);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [selected, setSelected] = useState<Location | null>(null);
 
   const fetchAutocomplete = async (text: string) => {
     if (text.trim() === '') {
@@ -49,19 +40,33 @@ const GooglePlacesInput = ({onSelection}: Props) => {
       console.error("Error fetching autocomplete:", err);
     }
   };
+  
+  const debouncedFetchAutocomplete = useCallback(
+    _.debounce((text: string) => {
+      fetchAutocomplete(text);
+    }, 300),
+    [] // empty deps ensures it's only created once
+  );
 
-  const selectAutocomplete = async (location: Location) => {
-    setSelected(location);
-    onSelection(location);
-    onChangeText(location.placeName);
-    setAutocompletions([]);
-  }
-  const AutocompleteOptions: React.FC = () => {
+  useEffect(() => {
+    return () => {
+      debouncedFetchAutocomplete.cancel();
+    };
+  }, [debouncedFetchAutocomplete]);
+  
+
+
+  const AutocompleteOptions = ({onChange}: {onChange: any}) => {
 
     const autcompletionsList = autcompletions.map((location: Location) => {
       return (
         <View key={location.placeId} className="bg-white border-b border-gray-300">
-          <Pressable onPress={()=>selectAutocomplete(location)}>
+          <Pressable onPress={()=>{
+            setSelected(location);
+            setAutocompletions([]);
+            setInputValue(location.placeName);
+            onChange(location);
+          }}>
             <Text className="p-2">{location.placeName}</Text>
           </Pressable>
         </View>
@@ -72,23 +77,41 @@ const GooglePlacesInput = ({onSelection}: Props) => {
     </>
   }
 
-  const [autcompletions, setAutocompletions] = useState<Location[]>([]);
-  const [selected, setSelected] = useState<Location | null>(null);
-  const [value, onChangeText] = useState<string>('');
+
 
   return (
-    <View className="border-2 border-gray-500 rounded-md ">
-      <TextInput
-      editable
-      onChangeText={text=> {onChangeText(text); debouncedFetchAutocomplete(text)}}
-      value={value}
-      placeholder='Your Location Here'
-      className='px-2 py-2 hover:border-blue-500'
+    <Controller
+      control={control}
+      name="location"
+      rules={{
+        required: "Please select a location from the selections",
+        validate: (value) => {
+          if (!value || typeof value !== 'object') {
+            return "Please select a location from the selections";
+          }
+          return true;
+        },
+      }}
+      render={({ field: { onChange, value}, fieldState: {error} }) => (
+        <View className="">
+          <TextInput
+          editable
+          onChangeText={text=> {
+            setInputValue(text); 
+            setSelected(null);
+            debouncedFetchAutocomplete(text); 
+            onChange(null)}}
+          value={inputValue}
+          placeholder='Your Location Here'
+          className='px-2 border-2 rounded-md focus:border-blue-500'
+          />
+          <AutocompleteOptions onChange={onChange}/>  
+          {error?.message && (
+            <Text className="text-red-500 px-2 pt-1 text-sm">{error.message}</Text>
+          )}
+        </View>
+      )}
       />
-
-      <AutocompleteOptions/>
-      
-    </View>
   );
 
 };
