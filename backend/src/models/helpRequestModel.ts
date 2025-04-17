@@ -3,6 +3,7 @@ import { executeQuery } from '../config/database';
 import { HelpRequest } from '../types/helpRequest';
 import { addTravelTime, getTravelTime } from './locationModel';
 import { getGoogleDistanceData } from '../controllers/locationController';
+import { getUnclaimedHelpRequests } from '../controllers/helpController';
 export const getAllHelpRequests = async(): Promise<HelpRequest[]> => {
   const rows = await executeQuery(`SELECT help.active, help.id, help.mom_id, help.volunteer_id, help.description, help.emergency,
                                    vol.firstName || ' ' || vol.lastName as volunteer_name,
@@ -15,16 +16,8 @@ export const getAllHelpRequests = async(): Promise<HelpRequest[]> => {
                                     ORDER BY help.dateCreated DESC`, []);
   return rows;
 };
-export const getAllHelpRequestsRelative = async(volunteer_location: string): Promise<HelpRequest[]> => {
-  const helpRequests = await executeQuery(`SELECT help.active, help.id, help.mom_id, help.volunteer_id, help.description, help.emergency,
-                                   vol.firstName || ' ' || vol.lastName as volunteer_name,
-                                   mom.firstName || ' ' || mom.lastName as mom_name
-                                    FROM help_requests help
-                                      LEFT JOIN users vol
-                                        ON vol.id = help.volunteer_id
-                                      LEFT JOIN users mom
-                                        ON mom.id = help.mom_id
-                                    ORDER BY help.dateCreated DESC`, []);
+export const getAllUnclaimedHelpRequestsRelative = async(volunteer_id: string, volunteer_location: string): Promise<HelpRequest[]> => {
+  const helpRequests = await getAllUnclaimedHelpRequests(volunteer_id);
   const withTravelTimes = await Promise.all(
     helpRequests.map(async(request: HelpRequest) => {
     const cached = await getTravelTime(volunteer_location, request.placeId);
@@ -42,7 +35,7 @@ export const getAllHelpRequestsRelative = async(volunteer_location: string): Pro
       catch(error){
         console.error('Error getting travel time:', error);
       }
-      
+
     }
     return request;
   }))

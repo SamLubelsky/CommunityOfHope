@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { acceptHelpRequest, getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest, getAllUnclaimedHelpRequests, unclaimHelpRequest, getAllHelpRequestsRelative} from '../models/helpRequestModel';
+import { acceptHelpRequest, getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest, getAllUnclaimedHelpRequests, unclaimHelpRequest, getAllUnclaimedHelpRequestsRelative} from '../models/helpRequestModel';
 import { getUserData, getAllUsers, getAllVolunteers } from '../models/userModel';
 import { createChat, getChat } from '../models/chatsModel';
 import { getHeapSnapshot } from 'v8';
 import { sendNotification, sendNotifications } from "../notifications/notifications";
 export const getHelpRequests = async (req: Request, res: Response): Promise<any> => {
   try {
-    const requests = await getAllHelpRequestsRelative("ChIJ-Y7t-qm02IcRW-C7IsrqOb4");
+    const requests = await getAllHelpRequests();
     
     // console.log("requestsWithNames(plural):", requestsWithNames);
     return res.json({ Requests: requests });
@@ -61,6 +61,14 @@ export const getActiveHelpRequests = async (req: Request, res: Response): Promis
 export const getUnclaimedHelpRequests = async (req: Request, res: Response): Promise<void> => {
   try {
     const requests = await getAllUnclaimedHelpRequests(req.session.userId);
+    res.json({ Requests: requests });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
+};
+export const getUnclaimedHelpRequestsRelative = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const requests = await getAllUnclaimedHelpRequestsRelative(req.session.userId, "ChIJ-Y7t-qm02IcRW-C7IsrqOb4");
     res.json({ Requests: requests });
   } catch (error) {
     res.status(500).json({ error: (error as Error).message });
