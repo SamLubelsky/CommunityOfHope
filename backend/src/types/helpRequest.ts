@@ -5,4 +5,6 @@ export interface HelpRequest {
   emergency: boolean;
   description: string;
   active: boolean;
+  placeId?: string;
+  travelTime?: string;
 }

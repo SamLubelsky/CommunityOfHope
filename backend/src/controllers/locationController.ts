@@ -21,3 +21,26 @@ export const getAutocomplete = async (req: Request, res: Response): Promise<any>
         return res.status(500).json({ error: (error as Error).message });
     }
 }
+export const getGoogleDistanceData = async (origin_place_id: string, destination_place_id: string): Promise<any> => {
+    try{
+        const url = new URL('https://maps.googleapis.com/maps/api/distancematrix/json');
+        url.searchParams.append('origins', origin_place_id);
+        url.searchParams.append('destinations', destination_place_id);
+        url.searchParams.append('key', process.env.GOOGLE_MAPS_API_KEY || '');
+        url.searchParams.append('units', 'imperial');
+        url.searchParams.append('mode', 'driving');
+        const response = await fetch(url,
+            {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+        );
+        const data = await response.json();
+    }
+    catch(error){
+        console.error('Error fetching Google Distance Matrix API:', error);
+        throw error;
+    }
+}

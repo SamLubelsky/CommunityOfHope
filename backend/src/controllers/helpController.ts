@@ -1,12 +1,13 @@
 import { Request, Response } from 'express';
-import { acceptHelpRequest, getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest, getAllUnclaimedHelpRequests, unclaimHelpRequest} from '../models/helpRequestModel';
+import { acceptHelpRequest, getAllHelpRequests, createHelpRequest, getAllActiveHelpRequests, deactivateHelpRequest, getHelpRequest, getAllUnclaimedHelpRequests, unclaimHelpRequest, getAllHelpRequestsRelative} from '../models/helpRequestModel';
 import { getUserData, getAllUsers, getAllVolunteers } from '../models/userModel';
 import { createChat, getChat } from '../models/chatsModel';
 import { getHeapSnapshot } from 'v8';
 import { sendNotification, sendNotifications } from "../notifications/notifications";
 export const getHelpRequests = async (req: Request, res: Response): Promise<any> => {
   try {
-    const requests = await getAllHelpRequests();
+    const requests = await getAllHelpRequestsRelative("ChIJ-Y7t-qm02IcRW-C7IsrqOb4");
+    
     // console.log("requestsWithNames(plural):", requestsWithNames);
     return res.json({ Requests: requests });
   } catch (error) {

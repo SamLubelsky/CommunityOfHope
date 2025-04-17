@@ -61,6 +61,7 @@ const createTables = async () => {
           emergency BOOLEAN DEFAULT FALSE,
           active BOOLEAN DEFAULT TRUE,
           dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
+          location INTEGER DEFAULT NULL,
           FOREIGN KEY (mom_id) REFERENCES users(id) ON DELETE SET NULL
           )
         `,[]);
@@ -114,6 +115,12 @@ const createTables = async () => {
                       WITH (OIDS=FALSE);
                       CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON session ("expire");
   `,[]);
-  
+  await executeQuery(`CREATE TABLE IF NOT EXISTS locations (
+    id SERIAL PRIMARY KEY,
+    origin_place_id TEXT NOT NULL,
+    destination_place_id TEXT NOT NULL,
+    travel_time_seconds INTEGER NOT NULL,
+    UNIQUE (origin_place_id, destination_place_id)
+`,[]);
 }
 export {executeQuery, createTables};
