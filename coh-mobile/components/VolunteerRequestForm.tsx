@@ -12,6 +12,10 @@ import {handleError} from '@/utils/error';
 import { PrimaryButton } from './PrimaryButton';
 import { SecondaryButton } from './SecondaryButton';
 import GooglePlacesInput from './GooglePlacesInput';
+interface Location {
+    placeId: string;
+    placeName: string;
+}
 type Props = {
     isVisible: boolean;
     onClose: () => void;
@@ -22,12 +26,14 @@ type FormData = {
     description: string;
     emergency: boolean;
     info?: string;
+    location: Location | null;
 }
 export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus, setDescription}: Props){
     const firstName = useBoundStore((state) => state.firstName);
     const id = useBoundStore((state) => state.id);
     const [isConfirming, setIsConfirming] = useState(false);
     const [data, setData] = useState<FormData | null>(null);
+    const [location, setLocation] = useState<Location | null>(null);
     const {control, watch, handleSubmit, formState: {errors}} = useForm({
         defaultValues: {
             emergency: false,
@@ -98,7 +104,6 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
                 </View>
                 {/* <View className="mt-5"> */}
                 {/* <Text className="text-center font-primary text-blue-500 text-7 mb-3">Location</Text> */}
-                <GooglePlacesInput/>
                 {/* </View> */}
                 <View className="items-center py-2 gap-2 my-6">
                     <View className="flex-row items-center gap-2">
@@ -116,6 +121,8 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
                     <TextareaInput name="description" control={control} required={true} lines={1}/>
                     {errors.description  && <Text className="mt-2 mb-1 text-red-500">This field is required</Text>}
                 </View>
+                <Text className="font-primary text-center text-blue-500 text-7 mb-3"> Your Location</Text>
+                <GooglePlacesInput/>
 
 
                 {/* <View className="items-center mt-5">

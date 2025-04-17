@@ -44,7 +44,6 @@ export default {
       eas: {
         projectId: "2ca0779e-1e24-44fa-83a5-b93323ff1f8d"
       },
-      googleApiKey: process.env.GOOGLE_PLACES_API_KEY,  // Here you add your environment variable
     }
   }
 };
