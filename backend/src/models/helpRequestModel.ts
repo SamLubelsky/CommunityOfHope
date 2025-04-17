@@ -29,6 +29,7 @@ export const getAllUnclaimedHelpRequestsRelative = async(volunteer_id: string, v
         const travelTime = await getGoogleDistanceData(volunteer_location, request.placeId);
         if(travelTime){
           request.travelTime = travelTime;
+
           addTravelTime(volunteer_location, request.placeId, travelTime);
         }
       }

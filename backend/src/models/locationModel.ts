@@ -1,7 +1,7 @@
 import { executeQuery } from "../config/database";
 
 export const getTravelTime = async (origin_place_id: string, destination_place_id: string) => {
-    const rows = await executeQuery('SELECT travel_time_seconds FROM users where origin_place_id=$1 destination_plcae_id=$2',
+    const rows = await executeQuery('SELECT travel_time_seconds FROM users where origin_place_id=$1 destination_place_id=$2',
          [origin_place_id, destination_place_id]);
     if(rows){
         return rows[0];
