@@ -38,6 +38,12 @@ export const getGoogleDistanceData = async (origin_place_id: string, destination
             }
         );
         const data = await response.json();
+        if(data.rows && data.rows.length > 0 && data.rows[0].elements && data.rows[0].elements.length > 0){
+            const travelTime = data.rows[0].elements[0].duration.value;
+            return travelTime;
+        } else {
+            throw new Error('No travel time found');
+        }
     }
     catch(error){
         console.error('Error fetching Google Distance Matrix API:', error);

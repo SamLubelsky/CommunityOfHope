@@ -121,6 +121,7 @@ const createTables = async () => {
     destination_place_id TEXT NOT NULL,
     travel_time_seconds INTEGER NOT NULL,
     UNIQUE (origin_place_id, destination_place_id)
+  )
 `,[]);
 }
 export {executeQuery, createTables};
