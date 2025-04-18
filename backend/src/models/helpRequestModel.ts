@@ -62,7 +62,7 @@ export const getAllActiveHelpRequests = async(): Promise<HelpRequest[]> => {
 export const getAllUnclaimedHelpRequests = async(userId: string): Promise<HelpRequest[]> => {
   //get all help requests that are active and have no volunteer assigned yet, put longest waiting first, put all emergency requests first
   //if a user has already unclaimed a request, don't show it to them
-  const rows = await executeQuery(`SELECT help.id, help.mom_id, help.volunteer_id, help.description, help.emergency,
+  const rows = await executeQuery(`SELECT help.id, help.mom_id, help.volunteer_id, help.description, help.emergency, help.placeId
     vol.firstName || ' ' || vol.lastName as volunteer_name,
     mom.firstName || ' ' || mom.lastName as mom_name
      FROM help_requests help
