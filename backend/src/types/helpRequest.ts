@@ -7,4 +7,5 @@ export interface HelpRequest {
   active: boolean;
   placeId?: string;
   travelTime?: string;
+  placeName?: string;
 }

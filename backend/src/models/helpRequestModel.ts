@@ -5,7 +5,8 @@ import { addTravelTime, getTravelTime } from './locationModel';
 import { getGoogleDistanceData } from '../controllers/locationController';
 import { getUnclaimedHelpRequests } from '../controllers/helpController';
 export const getAllHelpRequests = async(): Promise<HelpRequest[]> => {
-  const rows = await executeQuery(`SELECT help.active, help.id, help.mom_id, help.volunteer_id, help.description, help.emergency,
+  const rows = await executeQuery(`SELECT help.active, help.id, help.mom_id, help.volunteer_id, help.description, help.emergency, help.placeId as "placeId",
+                                   help.placeName as "placeName",
                                    vol.firstName || ' ' || vol.lastName as volunteer_name,
                                    mom.firstName || ' ' || mom.lastName as mom_name
                                     FROM help_requests help
@@ -46,7 +47,8 @@ export const getAllUnclaimedHelpRequestsRelative = async(volunteer_id: string, v
 };
 
 export const getAllActiveHelpRequests = async(): Promise<HelpRequest[]> => {
-  const rows = await executeQuery(`SELECT help.id, help.mom_id, help.volunteer_id, help.description, help.emergency,
+  const rows = await executeQuery(`SELECT help.id, help.mom_id, help.volunteer_id, help.description, help.emergency, help.placeId as "placeId",
+    help.placeName as "placeName",
     vol.firstName || ' ' || vol.lastName as volunteer_name,
     mom.firstName || ' ' || mom.lastName as mom_name
      FROM help_requests help
@@ -63,6 +65,7 @@ export const getAllUnclaimedHelpRequests = async(userId: string): Promise<HelpRe
   //get all help requests that are active and have no volunteer assigned yet, put longest waiting first, put all emergency requests first
   //if a user has already unclaimed a request, don't show it to them
   const rows = await executeQuery(`SELECT help.id, help.mom_id, help.volunteer_id, help.description, help.emergency, help.placeId as "placeId",
+    help.placeName as "placeName",
     vol.firstName || ' ' || vol.lastName as volunteer_name,
     mom.firstName || ' ' || mom.lastName as mom_name
      FROM help_requests help
@@ -111,11 +114,11 @@ export const unclaimHelpRequest = async(helpId: string, volunteerId: string): Pr
   return;
 }
 export const createHelpRequest = async (data: HelpRequest): Promise<any> => {
-  const { mom_id, description, emergency, placeId } = data;
+  const { mom_id, description, emergency, placeId, placeName } = data;
   const activeHelpRequests = await executeQuery('SELECT * FROM help_requests WHERE mom_id = $1 AND active = TRUE', [mom_id]);
   if(activeHelpRequests.length > 0){
     return Promise.reject(new Error('Mom already has an active help request'));
   }
-  await executeQuery('INSERT INTO help_requests (mom_id, description, emergency, placeId, active) VALUES ($1, $2, $3, $4, TRUE)', [mom_id, description, emergency, placeId]);
+  await executeQuery('INSERT INTO help_requests (mom_id, description, emergency, placeId, placeName, active) VALUES ($1, $2, $3, $4, $5, TRUE)', [mom_id, description, emergency, placeId, placeName]);
   return;
 };
