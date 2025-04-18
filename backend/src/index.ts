@@ -36,6 +36,7 @@ const pool = new Pool({
   user: process.env.DB_USER || 'quickstart-user',
   password: process.env.DB_PASSWORD || 'password',
   database: process.env.DB_NAME || 'coh-data',
+
   // ssl: process.env.NODE_ENV === 'production' ? {rejectUnauthorized: false} : false
 })
 const pgSession = PgSimple(session);
