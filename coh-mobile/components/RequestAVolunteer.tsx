@@ -73,9 +73,9 @@ const RequestAVolunteer = () => {
     if(helpStatus === "Requested"){
       return (
         <View className="py-3 my-3 px-3 mx-3 rounded-md border-blue-300 border-2 bg-gray-200">
-          <Text className="mb-4 font-primary text-blue-600 text-8 text-center">You have requested help for {description}</Text>
+          <Text className="mb-4 font-primary text-gray-500 text-8 text-center">You have requested help for {description}</Text>
           <Text className="mb-4 font-primary text-yellow-500 text-7 text-center">Please wait for a volunteer to accept</Text>
-          <ButtonWithConfirmation className="bg-gray-200 w-12 h-7 bg-gray-100 border self-center rounded-md border-blue-300 border-2" 
+          <ButtonWithConfirmation className="bg-gray-300 w-12 h-7 bg-gray-100 border self-center rounded-md border-blue-500 border-2" 
           onConfirm={deactiveRequest} 
           confirmText={`Are you sure you would like to cancel your help request?`}
           danger={true}>

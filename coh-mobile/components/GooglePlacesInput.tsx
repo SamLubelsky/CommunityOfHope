@@ -67,7 +67,7 @@ const GooglePlacesInput = ({control}: Props) => {
             setInputValue(location.placeName);
             onChange(location);
           }}>
-            <Text className="p-2">{location.placeName}</Text>
+            <Text className="px-2 py-3 text-3">{location.placeName}</Text>
           </Pressable>
         </View>
       );

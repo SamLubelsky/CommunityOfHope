@@ -135,6 +135,7 @@ export default function HelpRequests(){
             return (
                 <View key={index} className={`${emergency ? "border-red-500 bg-red-100" : "border-blue-300 bg-gray-200"} my-5 items-center justify-center border-2 rounded-lg p-4`}>
                     <Text className="font-primary text-yellow-500 text-6 mb-2 w-12 text-center"> {request.mom_name} needs help with {request.description}</Text>
+                    <Text className="font-primary text-blue-500 text-5 mb-2 w-12 text-center"> at {request.placeName}</Text>
                     <ButtonWithConfirmation className="py-2 px-4 mt-3 bg-blue-200 border self-center rounded-md border-none"
                       danger={false}
                       onConfirm={()=>acceptHelpRequest(request.id)}
