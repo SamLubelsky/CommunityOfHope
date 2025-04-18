@@ -62,6 +62,8 @@ const createTables = async () => {
           active BOOLEAN DEFAULT TRUE,
           dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
           placeId TEXT DEFAULT NULL,
+          placeName TEXT DEFAULT NULL,
+          FOREIGN KEY (volunteer_id) REFERENCES users(id) ON DELETE SET NULL,
           FOREIGN KEY (mom_id) REFERENCES users(id) ON DELETE SET NULL
           )
         `,[]);
