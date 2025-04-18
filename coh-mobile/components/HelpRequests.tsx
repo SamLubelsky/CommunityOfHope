@@ -96,10 +96,12 @@ export default function HelpRequests(){
       }
     }
     async function fetchData(){
-        await getRequests();
-        await getHelpStatus();
+        const helping = await getHelpStatus();
+        if(!helping){
+          await getRequests();
+        }
     }
-    async function getHelpStatus(){
+    async function getHelpStatus(): Promise<boolean>{
         const response = await fetch(`${BACKEND_URL}/api/help_status`,{
           method: 'GET',
           credentials: 'include',
@@ -113,6 +115,12 @@ export default function HelpRequests(){
           setMomName(data.momName);
           setHelpId(data.helpId);
           setChatId(data.chatId);
+          return true;
+        } else{
+          setHelping(false);
+          setMomName(null);
+          setHelpId(null);
+          return false;
         }
     }
     async function getRequests(){
