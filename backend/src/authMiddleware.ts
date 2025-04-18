@@ -25,9 +25,9 @@ interface SessionData {
 //   };
 // };
 export const requireAuth = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
-  // if (!req.session || !req.session.userId || !req.session.role) {
-  //   return res.status(401).json({ message: 'Unauthorized'});
-  // }
+  if (!req.session || !req.session.userId || !req.session.role) {
+    return res.status(401).json({ message: 'Unauthorized'});
+  }
   next();
 };
 export const requireAdmin = async (req: Request, res: Response, next: NextFunction): Promise<any> => {
