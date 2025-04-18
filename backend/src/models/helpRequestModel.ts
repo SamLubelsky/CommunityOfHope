@@ -24,8 +24,9 @@ export const getAllUnclaimedHelpRequestsRelative = async(volunteer_id: string, v
     if(cached){
       request.travelTime = cached;
     } else{
-      //get travel time from google api
+      //get travel time from google api 
       try{
+        console.log("request", request);
         const travelTime = await getGoogleDistanceData(volunteer_location, request.placeId);
         if(travelTime){
           request.travelTime = travelTime;
@@ -110,11 +111,11 @@ export const unclaimHelpRequest = async(helpId: string, volunteerId: string): Pr
   return;
 }
 export const createHelpRequest = async (data: HelpRequest): Promise<any> => {
-  const { mom_id, description, emergency } = data;
+  const { mom_id, description, emergency, placeId } = data;
   const activeHelpRequests = await executeQuery('SELECT * FROM help_requests WHERE mom_id = $1 AND active = TRUE', [mom_id]);
   if(activeHelpRequests.length > 0){
     return Promise.reject(new Error('Mom already has an active help request'));
   }
-  await executeQuery('INSERT INTO help_requests (mom_id, description, emergency, active) VALUES ($1, $2, $3, TRUE)', [mom_id, description, emergency]);
+  await executeQuery('INSERT INTO help_requests (mom_id, description, emergency, placeId, active) VALUES ($1, $2, $3, TRUE)', [mom_id, description, emergency, placeId]);
   return;
 };

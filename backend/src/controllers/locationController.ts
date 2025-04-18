@@ -23,6 +23,7 @@ export const getAutocomplete = async (req: Request, res: Response): Promise<any>
 }
 export const getGoogleDistanceData = async (origin_place_id: string, destination_place_id: string): Promise<any> => {
     try{
+        console.log("ids:", origin_place_id, destination_place_id);
         const url = new URL('https://maps.googleapis.com/maps/api/distancematrix/json');
         url.searchParams.append('origins', 'place_id:' + origin_place_id);
         url.searchParams.append('destinations', 'place_id:' + destination_place_id);
