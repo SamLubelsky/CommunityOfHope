@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback, useEffect, useRef} from 'react';
 import { View, TextInput, Text, Pressable } from 'react-native';
 import { BACKEND_URL } from '@/app/config';
 import { getLastNotificationResponseAsync } from 'expo-notifications';
@@ -16,7 +16,7 @@ const GooglePlacesInput = ({control}: Props) => {
   const [autcompletions, setAutocompletions] = useState<Location[]>([]);
   const [inputValue, setInputValue] = useState<string>('');
   const [selected, setSelected] = useState<Location | null>(null);
-
+  const inputRef = useRef<TextInput>(null);
   const fetchAutocomplete = async (text: string) => {
     if (text.trim() === '') {
       setAutocompletions([]);
@@ -61,8 +61,13 @@ const GooglePlacesInput = ({control}: Props) => {
     const autcompletionsList = autcompletions.map((location: Location) => {
       return (
         <View key={location.placeId} className="bg-white border-b border-gray-300">
-          <Pressable onPress={()=>{
-            setSelected(location);
+          
+          <Pressable
+            onPressIn={() => {
+              inputRef.current?.blur(); // blur early
+            }}
+          onPress={()=>{
+            setSelected(location);  
             setAutocompletions([]);
             setInputValue(location.placeName);
             onChange(location);
@@ -95,6 +100,7 @@ const GooglePlacesInput = ({control}: Props) => {
       render={({ field: { onChange, value}, fieldState: {error} }) => (
         <View className="">
           <TextInput
+          ref={inputRef}
           editable
           onChangeText={text=> {
             setInputValue(text); 

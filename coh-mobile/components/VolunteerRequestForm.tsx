@@ -67,10 +67,25 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
         setIsConfirming(false);
     }
     const onSubmit: SubmitHandler<FormData> = async (data) => {
-        setData(data);
+        console.log("Submitting");
         if(!data.emergency){
-            onConfirm();
+            const {description, emergency, info, location} = data;
+            const mom_id = id;
+            const response = await fetch(`${BACKEND_URL}/api/help_requests`, {
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ mom_id, description, emergency, info, placeId: location?.placeId, placeName: location?.placeName }),
+                credentials: 'include',
+            }); 
+            const json = await response.json();
+            if(!response.ok){
+                handleError(throwError, json);
+            }  
+            setHelpStatus("Requested");
+            setDescription(description);
+            onClose();
         } else{
+            setData(data);
             setIsConfirming(true);
         }
     }

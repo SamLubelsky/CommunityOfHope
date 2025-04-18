@@ -14,9 +14,11 @@ import {handleError} from '@/utils/error';
 import "../../global.css";
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import HelpModal from '@/components/HelpModal';
 export default function Home(){
     const [expoPushToken, setExpoPushToken] = useState("");
     const [notification, setNotification] = useState<Notifications.Notification | undefined>(undefined);
+    const [helpVisible, setHelpVisible] = useState(false);
 
     const isFocused = useIsFocused();
 
@@ -26,9 +28,6 @@ export default function Home(){
     const notificationListener = useRef<Notifications.EventSubscription>();
     const responseListener = useRef<Notifications.EventSubscription>();
     const throwError = useContext(ErrorContext);
-    function onHelp(){
-      alert("Contact an administrator for help.");
-    }
     function handleRegistrationError(errorMessage: string) {
       console.log("notification error!");
       if(Platform.OS === 'android'){
@@ -140,7 +139,7 @@ export default function Home(){
 
         <ScrollView>
           <View className="rounded-full absolute top-1 right-1 z-10 bg-yellow-100 items-center justify-start mx-2 my-1">
-            <Pressable onPress={onHelp}>
+            <Pressable onPress={()=>setHelpVisible(!helpVisible)}>
             <Ionicons name='help-outline' color="#fde047" size={48} />
             </Pressable>
           </View>
@@ -162,6 +161,7 @@ export default function Home(){
                 Logout
         </Text>
       </SafeAreaView>
+      <HelpModal isVisible={helpVisible} onClose={()=>setHelpVisible(false)}/>
       </>
     )
 }

@@ -9,6 +9,7 @@ import { useBoundStore } from '@/store/useBound';
 import axios from 'axios';
 import { ErrorContext } from '@/components/ErrorBoundary';
 import {handleError} from '@/utils/error';
+import { SafeAreaView } from 'react-native-safe-area-context';
 export default function Chats(){
     const isFocused = useIsFocused();
     const [chats, setChats] = useState<Chat[]>([]);
@@ -38,7 +39,7 @@ export default function Chats(){
 
     function getChatsList(){
         if(chats.length === 0 && role === "Mom"){
-            return <Text className="text-7 m-2"> You don't have any chats open yet</Text>
+            return <Text className="text-7 m-2 text-center text-blue-400"> You do not have any open chats</Text>
         }
         const chatsList = chats.map((chat: any, index: any) => {   
             const date = new Date(chat.lastMessageTime);
@@ -82,6 +83,7 @@ export default function Chats(){
         }
     }       
     return (
+        <SafeAreaView className="flex-1">
         <ErrorBoundary>
         <View className="px-2 text-gray-200 items-center justify-center py-5">
         <Text className="font-primary text-pink-400 text-7 mb-7"> All Chats</Text>
@@ -90,5 +92,6 @@ export default function Chats(){
         </ScrollView>
         </View>
         </ErrorBoundary>
+        </SafeAreaView>
         );
 }

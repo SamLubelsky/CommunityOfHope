@@ -1,8 +1,10 @@
 import {Image, Platform, Text, View, StyleSheet, ScrollView} from 'react-native';
 import { HelloWave } from '@/components/HelloWave'
+import { SafeAreaView } from 'react-native-safe-area-context';
 export default function AboutScreen() {
     
     return (
+      <SafeAreaView className="flex-1">
       <View className="flex-1 items-center justify-start bg-gray-100 py-6 px-4">
         <ScrollView showsVerticalScrollIndicator={false}>
           <Image className="max-w-12 max-h-10 self-center" source={require('@/assets/images/icon.png')} />
@@ -73,6 +75,7 @@ export default function AboutScreen() {
               start a conversation. Use the provided link to chat with the mother and coordinate how you can help. (This chat will be recorded and stored.) </Text>
         </ScrollView>
       </View>
+      </SafeAreaView>
       );
 }
   
