@@ -116,7 +116,7 @@ const createTables = async () => {
                       CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON session ("expire");
   `,[]);
   await executeQuery(`CREATE TABLE IF NOT EXISTS locations (
-    id SERIAL PRIMARY KEY,
+    id SERIAL PRIMARY KEY,  
     origin_place_id TEXT NOT NULL,
     destination_place_id TEXT NOT NULL,
     travel_time_seconds INTEGER NOT NULL,
