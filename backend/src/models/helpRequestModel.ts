@@ -116,6 +116,6 @@ export const createHelpRequest = async (data: HelpRequest): Promise<any> => {
   if(activeHelpRequests.length > 0){
     return Promise.reject(new Error('Mom already has an active help request'));
   }
-  await executeQuery('INSERT INTO help_requests (mom_id, description, emergency, placeId, active) VALUES ($1, $2, $3, TRUE)', [mom_id, description, emergency, placeId]);
+  await executeQuery('INSERT INTO help_requests (mom_id, description, emergency, placeId, active) VALUES ($1, $2, $3, $4, TRUE)', [mom_id, description, emergency, placeId]);
   return;
 };
