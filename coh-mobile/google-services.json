@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "110151692366",
-    "project_id": "communityofhope-test",
-    "storage_bucket": "communityofhope-test.firebasestorage.app"
+    "project_number": "552765741399",
+    "project_id": "fl24-community-of-hope",
+    "storage_bucket": "fl24-community-of-hope.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:110151692366:android:abfacc6c2a1dfd6d59131f",
+        "mobilesdk_app_id": "1:552765741399:android:de7fd6c29241ec21a30612",
         "android_client_info": {
-          "package_name": "com.sammy56lt.cohmobile"
+          "package_name": "com.epic.cohmobile"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDSc-qj-PGHBKxXygWzO_bJBcy_AYF8or0"
+          "current_key": "AIzaSyBCejfZf4_9IZvzIFtymbCx9gtal1DgW3M"
         }
       ],
       "services": {

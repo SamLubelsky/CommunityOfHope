@@ -23,7 +23,7 @@ export default {
         foregroundImage: "./assets/images/adaptive-icon.png",
         backgroundColor: "#ffffff"
       },
-      package: "com.sammy56lt.cohmobile",
+      package: "com.epic.cohmobile",
       googleServicesFile: "./google-services.json"
     },
     web: {
