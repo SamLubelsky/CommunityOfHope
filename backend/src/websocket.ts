@@ -66,7 +66,7 @@ export const initializeWebSocket = (httpServer: any) => {
             await createMessage(chatId, senderId, message, new Date().toISOString());
             const sender = await getUserData(senderId);
             const senderName = sender.firstName + ' ' + sender.lastName;
-            const messageBody = "You received a message from" + senderName
+            const messageBody = 'You received a message from ' + senderName
             const notificationData = {
                 sound: 'default',
                 body: messageBody,
@@ -75,7 +75,7 @@ export const initializeWebSocket = (httpServer: any) => {
             const {momId, volunteerId} = chat;
             if(senderId === momId){
               sendNotification(volunteerId, notificationData);
-              
+
               if(connectedUsers.has(volunteerId)){
                 //volunteer is currently in the chat
                 io.to(connectedUsers.get(volunteerId)).emit('message', msg);
@@ -83,7 +83,7 @@ export const initializeWebSocket = (httpServer: any) => {
               }
 
             }
-            if(senderId === volunteerId && connectedUsers.has(momId)){
+            if(senderId === volunteerId){
               sendNotification(momId, notificationData);
 
               if(connectedUsers.has(momId)){
