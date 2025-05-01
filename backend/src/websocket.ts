@@ -74,22 +74,22 @@ export const initializeWebSocket = (httpServer: any) => {
               }
             const {momId, volunteerId} = chat;
             if(senderId === momId){
+              sendNotification(volunteerId, notificationData);
+              
               if(connectedUsers.has(volunteerId)){
                 //volunteer is currently in the chat
                 io.to(connectedUsers.get(volunteerId)).emit('message', msg);
 
-              } else{
-                sendNotification(volunteerId, notificationData);
               }
+
             }
             if(senderId === volunteerId && connectedUsers.has(momId)){
+              sendNotification(momId, notificationData);
 
               if(connectedUsers.has(momId)){
                 //mom is currently in the chat
                 io.to(connectedUsers.get(momId)).emit('message', msg);
-              } else{
-                
-                sendNotification(momId, notificationData);
+
               }
             }
           }
