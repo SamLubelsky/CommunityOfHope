@@ -102,7 +102,7 @@ export default function Page(){
             <View className="w-full flex-row items-center justify-start py-2 px-2 bg-gray-300 mb-5">
                 <Ionicons className="mr-4" name="arrow-back" size={24} color="black" onPress={()=>{router.back()}}/>
                 <Image resizeMode="contain" className="w-7 h-7 rounded-full mr-4" source={{uri: otherProfileLink}} />
-                <Text className="font-primary text-7 text-pink-500">{otherName}</Text>
+                <Text className="font-primary text-6 text-pink-500">{otherName}</Text>
             </View>
             <ScrollView 
             ref={scrollViewRef}
