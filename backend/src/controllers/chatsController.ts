@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { getMessageData, getChatById, createChat, createMessage, getChats, getChatRoomMessages, getChatByIdWithName } from '../models/chatsModel'
 import {Chat} from '../utils/definitions';
 import { getAllUsers, getUserData } from '../models/userModel';
+import { sendNotification } from '../notifications/notifications';
 //gets all chats for associated chat id
 export const getMessages = async (req: Request, res: Response): Promise<any> =>{
     const {chatId} = req.params;
@@ -28,7 +29,16 @@ export const getMessages = async (req: Request, res: Response): Promise<any> =>{
 export const sendChat = async(req: Request, res: Response): Promise<any> =>{
     const {chatId, senderId, message} = req.body;
     const dateSent = new Date().toISOString();
+    const sender = await getUserData(senderId);
+    const senderName = sender.firstName + ' ' + sender.lastName;
+    const messageBody = "You received a message from" + senderName
+    const notificationData = {
+        sound: 'default',
+        body: messageBody,
+        data: {},
+      }
     try{
+        sendNotification(senderId, notificationData);
         await createMessage(chatId, senderId, message, dateSent);
         return res.status(201).json({message: 'Message sent'});
     } catch (error) {
