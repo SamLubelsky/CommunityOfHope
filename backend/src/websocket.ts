@@ -3,6 +3,7 @@ import {createChatRoomMessage, createMessage, getChatById} from './models/chatsM
 import {parse} from 'cookie';
 import { getSessionData, getUserIdFromSessionId } from './models/sessionModel';
 import { getUserData } from './models/userModel';
+import { sendNotification } from './notifications/notifications';
 const connectedUsers = new Map();
 async function socketRequireAuth(socket, next){
   try {
@@ -59,23 +60,37 @@ export const initializeWebSocket = (httpServer: any) => {
           // console.log("connected users: ", connectedUsers);
           const {senderId, message, chatId} = msg;
           socket.to(socket.id).emit('messageReceived', msg);
-          if(chatId === -1){ //this means the chat is going to the volunteer help room
-            await createChatRoomMessage(senderId, message, new Date().toISOString());
-            socket.to("volunteerRoom").emit('message', msg);
-            return;
-          }
           const chat = await getChatById(chatId);
           // console.log("chat: ", chat);
           if(chat){
             await createMessage(chatId, senderId, message, new Date().toISOString());
+            const sender = await getUserData(senderId);
+            const senderName = sender.firstName + ' ' + sender.lastName;
+            const messageBody = "You received a message from" + senderName
+            const notificationData = {
+                sound: 'default',
+                body: messageBody,
+                data: {},
+              }
             const {momId, volunteerId} = chat;
-            if(senderId === momId && connectedUsers.has(volunteerId)){
-              // console.log("sending message to volunteer");
-              io.to(connectedUsers.get(volunteerId)).emit('message', msg);
+            if(senderId === momId){
+              if(connectedUsers.has(volunteerId)){
+                //volunteer is currently in the chat
+                io.to(connectedUsers.get(volunteerId)).emit('message', msg);
+
+              } else{
+                sendNotification(volunteerId, notificationData);
+              }
             }
             if(senderId === volunteerId && connectedUsers.has(momId)){
-              // console.log("sending message to mom");
-              io.to(connectedUsers.get(momId)).emit('message', msg);
+
+              if(connectedUsers.has(momId)){
+                //mom is currently in the chat
+                io.to(connectedUsers.get(momId)).emit('message', msg);
+              } else{
+                
+                sendNotification(momId, notificationData);
+              }
             }
           }
         });
