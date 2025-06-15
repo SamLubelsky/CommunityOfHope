@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getMessageData, getChatById, createChat, createMessage, getChats, getChatRoomMessages, getChatByIdWithName } from '../models/chatsModel'
+import { retrieveAllChats, getMessageData, getChatById, createChat, createMessage, getChats, getChatRoomMessages, getChatByIdWithName } from '../models/chatsModel'
 import {Chat} from '../utils/definitions';
 import { getAllUsers, getUserData } from '../models/userModel';
 import { sendNotification } from '../notifications/notifications';
@@ -46,6 +46,15 @@ export const sendChat = async(req: Request, res: Response): Promise<any> =>{
     }
 }
 export const getAllChats = async (req: Request, res: Response): Promise<any> =>{
+    try{
+        const chats = await retrieveAllChats();
+        return res.status(200).json(chats);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({ error: (error as Error).message });
+    }
+}
+export const getUserChats = async (req: Request, res: Response): Promise<any> =>{
     if(!req.session || !req.session.userId || !req.session.role){
         return res.status(401).json({error: 'You are not logged in'});
     }

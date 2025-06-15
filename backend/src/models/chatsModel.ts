@@ -75,7 +75,30 @@ export const getChats = async (userId: string, role: string): Promise<Chat[] | n
                                         [userId]);
     return rows;
 }
-
+export const retrieveAllChats = async (): Promise<Chat[] | null> => {
+  // This function retrieves all chats, regardless of the user
+  // It gets the name of the mom and volunteer associated with each chat
+  const rows = await executeQuery(`SELECT chats.id, chats.momid as "momId", chats.volunteerid as "volunteerId", chats.lastMessageTime as "lastMessageTime",
+                                     mom.firstName || ' ' || mom.lastName as "momName", volunteer.firstName || ' ' || volunteer.lastName as "volunteerName", 
+                                     recent_messages.message AS "lastMessage" 
+                                      FROM 
+                                        chats
+                                        LEFT JOIN users mom
+                                          ON chats.momid = users.id 
+                                        LEFT JOIN users volunteer
+                                          ON chats.volunteerId = users.id 
+                                        LEFT JOIN (
+                                          SELECT chatId, MAX(dateSent) AS maxDate
+                                          FROM messages
+                                          GROUP BY chatId
+                                        ) recent_messages_info
+                                        ON chats.id = recent_messages_info.chatId
+                                        LEFT JOIN messages recent_messages
+                                        ON recent_messages.chatId = chats.id AND recent_messages.dateSent = recent_messages_info.maxDate
+                                      ORDER BY lastMessageTime DESC`, 
+                                        []);
+    return rows;
+}
 export const getMessageData = async (chatId: string) => {
   const rows = await executeQuery('SELECT id, chatid as "chatId", message, senderid as "senderId", datesent as "dateSent" FROM messages where chatId=$1', [chatId]);
   return rows;
