@@ -38,6 +38,11 @@ function App() {
           </Link>
         </div>
         <div className="m-auto">
+          <Link to="/chat-history">
+            <Button label="See Chat History"/>
+          </Link>
+        </div>
+        <div className="m-auto">
           <Link to="/logout">
             <Button label="Logout"/>
           </Link>
