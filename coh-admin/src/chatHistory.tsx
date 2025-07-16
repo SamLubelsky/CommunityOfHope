@@ -9,6 +9,7 @@ import Fuse from 'fuse.js';
 type Chat = {
     momName: string;
     volunteerName: string;
+    id: string;
 }
 export default function ChatHistory(){
     const navigate = useNavigate();
@@ -63,18 +64,23 @@ export default function ChatHistory(){
         })
         const results = fuse.search(term);
         return results.map(result => result.item);
-        const lowerTerm = term.toLowerCase();
-        return chats.filter(chat => 
-            chat.momName.toLowerCase().includes(lowerTerm) || 
-            chat.volunteerName.toLowerCase().includes(lowerTerm)
-        );
     }
     const ChatDisplay = (chat: Chat, index: number) => {
         return (
             <div key={`chat-${index}`} className="p-4 border-b border-gray-200">
-                <p className="text-lg font-semibold text-gray-800">{chat.momName}</p>
-                <p className="text-md text-gray-600">{chat.volunteerName}</p>
+                <div className="flex flex-row items-center justify-between">
+                    <div>
+                        <p className="text-lg font-semibold text-gray-800">{chat.momName}</p>
+                        <p className="text-lg text-gray-600">{chat.volunteerName}</p>
+                    </div>
+                    <button className="mt-2 bg-blue-200 hover:bg-blue-300 text-white font-bold py-2 px-4 rounded">
+                        <Link to={`/chat/${chat.id}`} className="text-blue-600 hover:underline">
+                            View Chat
+                        </Link>
+                    </button>
+                </div>
             </div>
+
         );
     }
     return (

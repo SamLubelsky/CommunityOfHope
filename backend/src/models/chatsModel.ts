@@ -17,11 +17,13 @@ export const createChatRoomMessage = async (senderId: string, message: string, d
 };
 export const getChatById = async (chatId: string): Promise<Chat | null> => {
   const rows = await executeQuery(`SELECT chats.id, chats.momId as "momId", chats.volunteerId as "volunteerId",
-                                   users.firstName || ' ' || users.lastName AS "otherName", users.profileLink AS "otherProfileLink"
+                                   momUser.firstName || ' ' || momUser.lastName AS "momName",
+                                   volUser.firstName || ' ' || volUser.lastName AS "volName"
                                    FROM chats 
-                                   JOIN users
-                                   ON (users.id = chats.volunteerId)
-                                   OR (users.id = chats.momId)
+                                   JOIN users volUser
+                                   ON volUser.id = chats.volunteerId
+                                   JOIN users momUser
+                                   ON momUser.id = chats.momId
                                    where chats.id=$1`, [chatId]);
   if(rows){
     return rows[0];
@@ -84,9 +86,9 @@ export const retrieveAllChats = async (): Promise<Chat[] | null> => {
                                       FROM 
                                         chats
                                         LEFT JOIN users mom
-                                          ON chats.momid = users.id 
+                                          ON chats.momid = mom.id 
                                         LEFT JOIN users volunteer
-                                          ON chats.volunteerId = users.id 
+                                          ON chats.volunteerId = volunteer.id 
                                         LEFT JOIN (
                                           SELECT chatId, MAX(dateSent) AS maxDate
                                           FROM messages

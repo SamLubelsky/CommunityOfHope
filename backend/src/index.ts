@@ -30,7 +30,6 @@ if(isDevelopment){
   app.set('trust proxy', true);
   app.use(cors({origin: ["https://fl24-community-of-hope.web.app","http://localhost:5173","http://localhost:8081"], credentials: true}));
 }
-
 const pool = new Pool({
   host: process.env.DB_HOST || `/cloudsql/${process.env.DB_INSTANCE}`,
   user: process.env.DB_USER || 'quickstart-user',

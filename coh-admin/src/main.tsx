@@ -11,6 +11,7 @@ import Users from './Users.tsx'
 import EditUser from './EditUser.tsx'
 import HelpRequests from './HelpRequests.tsx'
 import ChatHistory from './chatHistory.tsx'
+import MessageHistory from './messageHistory.tsx'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
@@ -50,6 +51,11 @@ createRoot(document.getElementById('root')!).render(
         <Route path="/chat-history" element={
           <RequireAuth>
             <ChatHistory />
+          </RequireAuth>
+        } />
+        <Route path="/chat/:chatId" element={
+          <RequireAuth>
+            <MessageHistory />
           </RequireAuth>
         } />
       </Routes>

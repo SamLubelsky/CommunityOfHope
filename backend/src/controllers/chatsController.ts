@@ -77,3 +77,28 @@ export const getChat = async (req: Request, res: Response): Promise<any> =>{
         return res.status(500).json({ error: (error as Error).message });
     }
 }
+export const getChatInfo = async (req: Request, res: Response): Promise<any> => {
+    const { chatId } = req.params;
+    try {
+        const chat = await getChatById(chatId);
+        if (!chat) {
+            return res.status(404).json({ error: 'Chat not found' });
+        }
+        return res.status(200).json(chat);
+    } catch (error) {
+        return res.status(500).json({ error: (error as Error).message });
+    }
+}
+
+export const getMessagesByChatId = async (req: Request, res: Response): Promise<any> => {   
+    const { chatId } = req.params;
+    try {
+        const messages = await getMessageData(chatId);
+        if (!messages) {
+            return res.status(404).json({ error: 'Messages not found' });
+        }
+        return res.status(200).json(messages);
+    } catch (error) {
+        return res.status(500).json({ error: (error as Error).message });
+    }
+}
