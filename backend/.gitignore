@@ -72,3 +72,6 @@ node_modules/
 *.jpg
 *.png
 cloud-sql-proxy
+
+#iam credentials
+fl24-community-of-hope-*.json

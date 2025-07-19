@@ -24,11 +24,11 @@ const app = express()
 const isDevelopment = process.env.NODE_ENV == 'development'
 if(isDevelopment){
   console.log("In Development Mode");
-  app.use(cors({origin: ["http://localhost:8081", "http://localhost:5173"], credentials: true}));
+  app.use(cors({origin: ["http://localhost:8081", "http://localhost:5176"], credentials: true}));
 } else{
   console.log("In Production Mode");
   app.set('trust proxy', true);
-  app.use(cors({origin: ["https://fl24-community-of-hope.web.app","http://localhost:5173","http://localhost:8081"], credentials: true}));
+  app.use(cors({origin: ["https://fl24-community-of-hope.web.app","http://localhost:5176","http://localhost:8081"], credentials: true}));
 }
 const pool = new Pool({
   host: process.env.DB_HOST || `/cloudsql/${process.env.DB_INSTANCE}`,
