@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useContext, useEffect, useState} from 'react';
-import { View, Text, StyleSheet, Platform, Pressable, Button } from 'react-native';
+import { useEffect, useState} from 'react';
+import { View, Text } from 'react-native';
 import VolunteerRequestForm from "@/components/VolunteerRequestForm";
 import { BACKEND_URL } from '../app/config';
 import "../global.css";
@@ -8,8 +8,6 @@ import { router } from 'expo-router';
 import { PrimaryButton } from './PrimaryButton';
 import { SecondaryButton } from './SecondaryButton';
 import { ButtonWithConfirmation } from './ButtonWithConfirmation';
-import { ErrorContext } from '@/components/ErrorBoundary';
-import {handleError} from '@/utils/error';
 type HelpStatus =  "Not Requested" | "Requested" | "Accepted" 
 
 const RequestAVolunteer = () => {
@@ -18,7 +16,6 @@ const RequestAVolunteer = () => {
   const [volunteerName, setVolunteerName] = useState<string | null>("");
   const [description, setDescription] = useState<string | null>(null);
   const [chatId, setChatId] = useState<number | null>(null);
-  const throwError = useContext(ErrorContext);
   const requestVolunteer = () => {
     setIsModalVisible(true);
   };  
@@ -33,7 +30,7 @@ const RequestAVolunteer = () => {
     });
     const data = await response.json();
     if(!response.ok){
-      handleError(throwError, data);
+      console.error(data);
     }
     setHelpStatus(data.status);
     setDescription(data.description);
@@ -62,7 +59,7 @@ const RequestAVolunteer = () => {
     });
     if(!response.ok){
       const data = await response.json();
-      handleError(throwError, data);
+      console.error(data);
     }
   }
   function HelpCard(){

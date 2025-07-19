@@ -1,9 +1,8 @@
 import React, {useState, useCallback, useEffect, useRef} from 'react';
 import { View, TextInput, Text, Pressable } from 'react-native';
 import { BACKEND_URL } from '@/app/config';
-import { getLastNotificationResponseAsync } from 'expo-notifications';
 import _ from 'lodash';
-import { Controller, useFormContext } from 'react-hook-form';
+import { Controller } from 'react-hook-form';
 
 interface Location {
   placeId: string;

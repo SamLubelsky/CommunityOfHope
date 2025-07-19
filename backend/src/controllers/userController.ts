@@ -16,6 +16,8 @@ interface MulterRequest extends Request {
 }
 const storage = new Storage();
 const bucketName = "coh-profile-pictures";
+
+
 export const getUsers = async (req: Request, res: Response): Promise<any> => {
   try {
     const users = await getAllUsers();

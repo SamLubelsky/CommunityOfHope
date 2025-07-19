@@ -1,13 +1,10 @@
-import React, {useEffect, useState, useRef} from 'react';
-import { Platform, View, Text, StyleSheet, Pressable, ScrollView } from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { View, Text, ScrollView } from 'react-native';
 import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';
 import { BACKEND_URL } from '../app/config';
 import {ButtonWithConfirmation} from '@/components/ButtonWithConfirmation';
 import {PrimaryButton} from '@/components/PrimaryButton';
-import { SecondaryButton } from '@/components/SecondaryButton';
-import { ErrorContext } from '@/components/ErrorBoundary';
-import {handleError} from '@/utils/error';
 type HelpRequest ={
   mom_name: string;
   category: string;
@@ -22,7 +19,6 @@ export default function HelpRequests(){
     const [chatId, setChatId] = useState<number | null>(null);
     const [momFirst, setMomFirst] = useState<string | null>(null); 
     const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn);
-    const throwError = React.useContext(ErrorContext);
 
       const role = useBoundStore((state) => state.role);
       useEffect(() => {
@@ -39,7 +35,7 @@ export default function HelpRequests(){
       })
       if(!response.ok){
         const data = await response.json();
-        handleError(throwError, data);
+        console.error(data);
       }
       setHelping(false);
       setMomName(null);
@@ -52,7 +48,7 @@ export default function HelpRequests(){
       })
       if(!response.ok){
         const data = await response.json();
-        handleError(throwError, data);
+        console.error(data);
       }
       setHelping(false);
       setMomName(null);
@@ -92,7 +88,7 @@ export default function HelpRequests(){
         setRequests(requests.filter(request => request.id !== id));
       } else{
         const data = await response.json();
-        handleError(throwError, data);
+        console.error(data);
       }
     }
     async function fetchData(){
@@ -108,7 +104,7 @@ export default function HelpRequests(){
         });
         const data = await response.json();
         if(!response.ok){
-          handleError(throwError, data);
+          console.error(data);
         }
         if(data.status === 'Accepted'){
           setHelping(true);
@@ -130,7 +126,7 @@ export default function HelpRequests(){
         });
         const json = await response.json();
         if(!response.ok){
-          handleError(throwError, json);
+          console.error(json);
         }
         setRequests(json.Requests);
     }

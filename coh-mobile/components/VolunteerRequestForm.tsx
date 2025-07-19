@@ -1,14 +1,11 @@
-import {Modal, StyleSheet, Text, Button, View, Pressable, KeyboardAvoidingView} from 'react-native';
+import {Modal, Text, View, Pressable} from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import {useForm, Controller, SubmitHandler} from 'react-hook-form'; 
-import {SafeAreaView,SafeAreaProvider } from 'react-native-safe-area-context'
+import {useForm, SubmitHandler} from 'react-hook-form'; 
 import TextareaInput from './TextareaInput';
 import CheckboxInput from './CheckboxInput';
 import { useBoundStore } from '@/store/useBound';
 import { BACKEND_URL } from '../app/config';
 import React, {useState} from 'react';
-import { ErrorContext } from '@/components/ErrorBoundary';
-import {handleError} from '@/utils/error';
 import { PrimaryButton } from './PrimaryButton';
 import { SecondaryButton } from './SecondaryButton';
 import GooglePlacesInput from './GooglePlacesInput';
@@ -43,7 +40,6 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
         }
     });
     const emergencyValue = watch('emergency')
-    const throwError = React.useContext(ErrorContext);
     const onConfirm = async () =>{
         if(data === null){
             console.log("The program encountered an unexpected error")
@@ -59,7 +55,7 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
         }); 
         const json = await response.json();
         if(!response.ok){
-            handleError(throwError, json);
+            console.error(json);
         }  
         setHelpStatus("Requested");
         setDescription(description);
@@ -79,7 +75,7 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
             }); 
             const json = await response.json();
             if(!response.ok){
-                handleError(throwError, json);
+                console.error(json);
             }  
             setHelpStatus("Requested");
             setDescription(description);

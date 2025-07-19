@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import { Modal, View, Text } from 'react-native';
 import CheckboxInput from './CheckboxInput';
-import { useForm, SubmitHandler} from 'react-hook-form';
+import { SubmitHandler, useForm} from 'react-hook-form';
 import { PrimaryButton } from './PrimaryButton';
 type Props = {
     children: React.ReactNode;
@@ -13,7 +13,7 @@ type FormData = {
 export const ConsentScreen = ({children, onSuccess}: Props) => {
     const [error, setError] = useState<null | string>(null);
 
-    const {control, watch, handleSubmit, formState: {errors}} = useForm({
+    const {control, watch, handleSubmit} = useForm({
         defaultValues: {
             consent: false,
         }

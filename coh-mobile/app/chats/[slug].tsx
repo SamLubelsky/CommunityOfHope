@@ -1,15 +1,12 @@
-import React, {useEffect, useState} from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
-import {ScrollView, View, Text, TextInput, StyleSheet, Image, SafeAreaView} from 'react-native';
+import React, {useEffect, useState} from 'react';
+import { Image, SafeAreaView, ScrollView, Text, TextInput, View } from 'react-native';
 import { AppState } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-// import { socket } from "../socket";
-import { useBoundStore } from '@/store/useBound';
 import { io } from 'socket.io-client';
+import { Ionicons } from '@expo/vector-icons';
+import { useBoundStore } from '@/store/useBound';
 import { BACKEND_URL } from '../config';
-import { Chat, Message } from '@/types';
-
-
+import { Message } from '@/types';
 
 export default function Page(){
 

@@ -12,15 +12,7 @@ export default function CheckboxInput({name, control, color}: Props){
     return (
         <Controller 
         control={control}
-        render={({field: {onChange, onBlur, value}}) => (
-            // <TextInput 
-            // placeholder={name}
-            // value={value}
-            // onChangeText={onChange}
-            // onBlur={onBlur}
-            // style={styles.input}
-            // placeholderTextColor="#64748b"
-            // />
+        render={({field: {onChange, value}}) => (
             <Pressable style={styles.container} onPress={() => onChange(!value)} >
                 <View style={[styles.box, value && styles.checkedBox, {borderColor: color}]}>
                     {value && <MaterialIcons name="check" size={20} color={color}/>}

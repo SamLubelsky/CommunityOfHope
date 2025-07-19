@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet } from "react-native";
-import { Redirect, Slot, useRouter } from 'expo-router';
+import { Redirect } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { View, StyleSheet } from "react-native";
 
 export default function RootLayout() {
   return (
