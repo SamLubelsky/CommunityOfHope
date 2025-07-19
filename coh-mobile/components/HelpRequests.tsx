@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+  import React, {useEffect, useState} from 'react';
 import { View, Text, ScrollView } from 'react-native';
 import { useBoundStore } from '@/store/useBound';
 import { router } from 'expo-router';

@@ -34,7 +34,7 @@ const pool = new Pool({
   host: process.env.DB_HOST || `/cloudsql/${process.env.DB_INSTANCE}`,
   user: process.env.DB_USER || 'quickstart-user',
   password: process.env.DB_PASSWORD || 'password',
-  database: process.env.DB_NAME || 'coh-data',
+  database: process.env.DB_NAME || 'coh-data-tests',
 
   // ssl: process.env.NODE_ENV === 'production' ? {rejectUnauthorized: false} : false
 })

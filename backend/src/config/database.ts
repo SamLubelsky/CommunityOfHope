@@ -5,7 +5,7 @@ dotenv.config();
 const instanceConnectionName = process.env.DB_INSTANCE || "fl24-community-of-hope:us-central1:coh-postgres";
 const dbUser = process.env.DB_USER || "quickstart-user";
 const dbPassword = process.env.DB_PASSWORD || "password";
-const dbName = process.env.DB_NAME || "coh-data"; 
+const dbName = process.env.DB_NAME || "coh-data-test"; 
 const connector = new Connector()
 let pool: Pool;
 type Value = string | number | boolean | string[];
