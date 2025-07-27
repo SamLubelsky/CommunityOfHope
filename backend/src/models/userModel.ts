@@ -54,10 +54,10 @@ export const createUser = async (username: string, password: string, firstName: 
   }
   
   const hashedPass = bcrypt.hashSync(password, 10);
-  const query = 'INSERT INTO users (username, password, firstName, lastName, role, profileLink) VALUES ($1, $2, $3, $4, $5, $6)'
+  const query = 'INSERT INTO users (username, password, firstName, lastName, role, profileLink) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, username, firstName, lastName, role, profileLink'
   const values = [username, hashedPass, firstName, lastName, role, profileLink]
-  executeQuery(query, values);
-  return;
+  const result = await executeQuery(query, values);
+  return result[0];
 };
 
 export const deleteUserByUsername = (username: string) => {

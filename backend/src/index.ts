@@ -21,7 +21,8 @@ createTables(); //create database tables if they don't exist
 dotenv.config()
 const app = express()
 
-const isDevelopment = process.env.NODE_ENV == 'development'
+const isDevelopment = process.env.NODE_ENV == 'development' || process.env.NODE_ENV == 'test'
+
 if(isDevelopment){
   console.log("In Development Mode");
   app.use(cors({origin: ["http://localhost:8081", "http://localhost:5176"], credentials: true}));
@@ -80,4 +81,4 @@ httpServer.listen(port, () => {
 });
 
 initializeWebSocket(httpServer);
-export {sessionMiddleware}
+export {sessionMiddleware, app}

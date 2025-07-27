@@ -1,32 +1,24 @@
-import {Connector} from '@google-cloud/cloud-sql-connector'
 import { Pool } from 'pg'
 const dotenv = require('dotenv')
 dotenv.config();
+
 const instanceConnectionName = process.env.DB_INSTANCE || "fl24-community-of-hope:us-central1:coh-postgres";
 const dbUser = process.env.DB_USER || "quickstart-user";
 const dbPassword = process.env.DB_PASSWORD || "password";
 const dbName = process.env.DB_NAME || "coh-data-test"; 
-const connector = new Connector()
-let pool: Pool;
+
+// Use the same connection approach as your main app
+const pool = new Pool({
+  host: process.env.DB_HOST || `/cloudsql/${instanceConnectionName}`,
+  user: dbUser,
+  password: dbPassword,
+  database: dbName,
+});
+
 type Value = string | number | boolean | string[];
-const initializePool = async () => {
-  if(!pool){
-    const clientOpts = await connector.getOptions({
-      instanceConnectionName
-    });
-    const dbConfig = {
-      ...clientOpts,
-      user: dbUser,
-      password: dbPassword,
-      database: dbName,
-    }
-    pool = new Pool(dbConfig);
-  }
-} 
 
 const executeQuery = async (query: string, values: Value[]) => {
     try {
-      if(!pool) await initializePool();
       const client = await pool.connect();
       try{
         const res = await client.query(query, values);
@@ -40,8 +32,25 @@ const executeQuery = async (query: string, values: Value[]) => {
     }
   };
 const createTables = async () => {
-  await executeQuery(`
-          CREATE TABLE IF NOT EXISTS users (
+  const client = await pool.connect();
+  try {
+    // Start an explicit transaction
+    await client.query('BEGIN');
+    
+    // Drop all tables first to ensure clean state
+    await client.query('DROP TABLE IF EXISTS messages CASCADE');
+    await client.query('DROP TABLE IF EXISTS pushTokens CASCADE');
+    await client.query('DROP TABLE IF EXISTS unclaimedHistory CASCADE');
+    await client.query('DROP TABLE IF EXISTS chats CASCADE');
+    await client.query('DROP TABLE IF EXISTS help_requests CASCADE');
+    await client.query('DROP TABLE IF EXISTS locations CASCADE');
+    await client.query('DROP INDEX IF EXISTS "IDX_session_expire"');
+    await client.query('DROP TABLE IF EXISTS session CASCADE');
+    await client.query('DROP TABLE IF EXISTS users CASCADE');
+    
+    // Now create all tables in the correct order
+    await client.query(`
+          CREATE TABLE users (
           id SERIAL PRIMARY KEY,
           username TEXT,
           password TEXT,
@@ -51,9 +60,10 @@ const createTables = async () => {
           profileLink TEXT,
           dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           pushToken TEXT DEFAULT NULL
-        )`,[]);
-  await executeQuery(`
-          CREATE TABLE IF NOT EXISTS help_requests (
+        )`);
+    
+    await client.query(`
+          CREATE TABLE help_requests (
           id SERIAL PRIMARY KEY,
           mom_id INTEGER,
           volunteer_id INTEGER,
@@ -66,9 +76,10 @@ const createTables = async () => {
           FOREIGN KEY (volunteer_id) REFERENCES users(id) ON DELETE SET NULL,
           FOREIGN KEY (mom_id) REFERENCES users(id) ON DELETE SET NULL
           )
-        `,[]);
-  await executeQuery(`
-          CREATE TABLE IF NOT EXISTS chats (
+        `);
+    
+    await client.query(`
+          CREATE TABLE chats (
           id SERIAL PRIMARY KEY,
           momId INTEGER,
           volunteerId INTEGER,
@@ -77,9 +88,10 @@ const createTables = async () => {
           FOREIGN KEY (momId) REFERENCES users(id) ON DELETE SET NULL,
           FOREIGN KEY (volunteerId) REFERENCES users(id) ON DELETE SET NULL
           )
-        `,[]);
-  await executeQuery(`
-          CREATE TABLE IF NOT EXISTS messages (
+        `);
+    
+    await client.query(`
+          CREATE TABLE messages (
           id SERIAL PRIMARY KEY,
           chatId INTEGER,
           message TEXT, 
@@ -88,18 +100,20 @@ const createTables = async () => {
           FOREIGN KEY (senderId) REFERENCES users(id) ON DELETE SET NULL,
           FOREIGN KEY (chatId) REFERENCES chats(id)
           )
-        `,[]);
-  await executeQuery(`
-          CREATE TABLE IF NOT EXISTS pushTokens (
+        `);
+    
+    await client.query(`
+          CREATE TABLE pushTokens (
           id SERIAL PRIMARY KEY,
           userId INTEGER,
           token TEXT,
           dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
           )
-        `,[]);
-  await executeQuery(`
-          CREATE TABLE IF NOT EXISTS unclaimedHistory (
+        `);
+    
+    await client.query(`
+          CREATE TABLE unclaimedHistory (
           id SERIAL PRIMARY KEY,
           helpId INTEGER,
           userId INTEGER,
@@ -107,23 +121,33 @@ const createTables = async () => {
           FOREIGN KEY (userId) REFERENCES users(id) ON DELETE SET NULL,
           FOREIGN KEY (helpId) REFERENCES help_requests(id)
     )
-  `,[]);
-  //create session database for express-session
-  await executeQuery(`CREATE TABLE IF NOT EXISTS session (
+  `);
+    
+    await client.query(`CREATE TABLE session (
                       sid VARCHAR NOT NULL PRIMARY KEY,
                       sess JSON NOT NULL,
                       expire TIMESTAMP(6) NOT NULL
                       )
-                      WITH (OIDS=FALSE);
-                      CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON session ("expire");
-  `,[]);
-  await executeQuery(`CREATE TABLE IF NOT EXISTS locations (
+                      WITH (OIDS=FALSE)`);
+    
+    await client.query(`CREATE INDEX "IDX_session_expire" ON session ("expire")`);
+    
+    await client.query(`CREATE TABLE locations (
     id SERIAL PRIMARY KEY,  
     origin_place_id TEXT NOT NULL,
     destination_place_id TEXT NOT NULL,
     travel_time_seconds INTEGER NOT NULL,
     UNIQUE (origin_place_id, destination_place_id)
-  )
-`,[]);
+  )`);
+    
+    // Commit the transaction - this makes all tables visible
+    await client.query('COMMIT');
+  } catch (error) {
+    // Rollback on error
+    await client.query('ROLLBACK');
+    throw error;
+  } finally {
+    client.release();
+  }
 }
 export {executeQuery, createTables};

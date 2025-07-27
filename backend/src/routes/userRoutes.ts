@@ -1,7 +1,6 @@
 import { Router } from 'express'
 import { getUsers, addUser, loginUser, deleteUser, logoutUser, editUser, getUser, verifySession} from '../controllers/userController'
 import { requireAuth, requireAdmin } from '../authMiddleware';
-import { verify } from 'crypto';
 import multer from 'multer'
 import path from 'path'
 
