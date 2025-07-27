@@ -80,4 +80,4 @@ export const processReceipts = async () => {
     }
 }
 
-setInterval(processReceipts, 1000 * 60 * 15) //process receipts every 15 minutes;
+export const interval = setInterval(processReceipts, 1000 * 60 * 15) //process receipts every 15 minutes;

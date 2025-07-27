@@ -81,4 +81,4 @@ httpServer.listen(port, () => {
 });
 
 initializeWebSocket(httpServer);
-export {sessionMiddleware, app}
+export {sessionMiddleware, app, httpServer}
