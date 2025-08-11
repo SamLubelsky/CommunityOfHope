@@ -1,9 +1,9 @@
 import { Router } from 'express'
-import {requireAuth} from '../authMiddleware'
+import { requireAuth } from '../authMiddleware'
 import { getAutocomplete } from '../controllers/locationController'
 
-const router = Router();
+const router = Router()
 
-router.post('/autocomplete', requireAuth, getAutocomplete);
+router.post('/autocomplete', requireAuth, getAutocomplete)
 
-export default router;
+export default router

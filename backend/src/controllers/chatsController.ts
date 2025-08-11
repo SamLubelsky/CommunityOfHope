@@ -20,13 +20,11 @@ export const getMessages = async (
   try {
     if (chatId === '-1') {
       const messages = await getChatRoomMessages()
-      return res
-        .status(200)
-        .json({
-          messages: messages,
-          otherName: 'Volunteer Chat Room',
-          otherProfileLink: '',
-        })
+      return res.status(200).json({
+        messages: messages,
+        otherName: 'Volunteer Chat Room',
+        otherProfileLink: '',
+      })
     }
     const chat = await getChatByIdWithName(chatId, userId)
     if (!chat) {

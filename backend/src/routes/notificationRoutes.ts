@@ -1,9 +1,9 @@
 import { Router } from 'express'
-import {requireAuth} from '../authMiddleware'
-import { uploadToken } from '../controllers/notificationController';
+import { requireAuth } from '../authMiddleware'
+import { uploadToken } from '../controllers/notificationController'
 
-const router = Router();
+const router = Router()
 
-router.post('/upload-token', requireAuth, uploadToken);
+router.post('/upload-token', requireAuth, uploadToken)
 
-export default router;
+export default router
