@@ -8,6 +8,7 @@ import {
   getHelpRequest,
   unclaimHelpRequest,
   getUnclaimedHelpRequests,
+  getActiveHelpRequestsByMomId,
 } from '../models/helpRequestModel'
 import { getUserData, getAllUsers, getAllVolunteers } from '../models/userModel'
 import { createChat, getChat } from '../models/chatsModel'
@@ -45,7 +46,20 @@ export const addHelpRequest = async (
       .json({ error: 'You already have an active help request' })
   }
   try {
-    const id = await createHelpRequest(req.body)
+    const activeHelpRequests = await getActiveHelpRequestsByMomId(userId)
+    if (activeHelpRequests.length > 0) {
+      return res
+        .status(400)
+        .json({ error: 'You already have an active help request' })
+    }
+    const { description, emergency, placeId, placeName } = req.body
+    const id = await createHelpRequest(
+      userId,
+      description,
+      emergency,
+      placeId,
+      placeName,
+    )
     const messageBody = req.body.emergency
       ? 'An EMERGENCY help request was posted to EPIC!'
       : 'A help request was posted to EPIC!'

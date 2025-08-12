@@ -1,6 +1,8 @@
 import { app } from '../index'
 import { createUser } from '../models/userModel'
 import request from 'supertest'
+import { log } from 'console'
+import bcrypt from 'bcrypt'
 
 export async function loginAsAdmin(adminUsername: string) {
   await createAdminUser(adminUsername)
@@ -30,9 +32,10 @@ export async function loginAsVolunteer(volunteerUsername: string) {
 }
 
 export async function createAdminUser(username: string) {
+  const hashedPass = bcrypt.hashSync('password', 10)
   const userData = await createUser(
     username,
-    'password',
+    hashedPass,
     'Admin',
     'Admin',
     'Admin',
@@ -41,9 +44,10 @@ export async function createAdminUser(username: string) {
   return userData
 }
 export async function createMomUser(username: string) {
+  const hashedPass = bcrypt.hashSync('password', 10)
   const userData = await createUser(
     username,
-    'password',
+    hashedPass,
     'Mom',
     'Mom',
     'Mom',
@@ -52,9 +56,10 @@ export async function createMomUser(username: string) {
   return userData
 }
 export async function createVolunteerUser(username: string) {
+  const hashedPass = bcrypt.hashSync('password', 10)
   const userData = await createUser(
     username,
-    'password',
+    hashedPass,
     'Test',
     'Volunteer',
     'Volunteer',

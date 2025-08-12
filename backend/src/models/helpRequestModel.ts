@@ -87,7 +87,6 @@ export const acceptHelpRequest = async (
     'UPDATE help_requests SET volunteer_id = $1 WHERE id = $2',
     [volunteerId, helpRequestId],
   )
-  return
 }
 
 export const deactivateHelpRequest = async (
@@ -96,7 +95,6 @@ export const deactivateHelpRequest = async (
   await executeQuery('UPDATE help_requests SET active = FALSE WHERE id = $1', [
     helpRequestId,
   ])
-  return
 }
 
 export const unclaimHelpRequest = async (
@@ -111,21 +109,26 @@ export const unclaimHelpRequest = async (
     'INSERT INTO unclaimedHistory (helpId, userId) VALUES ($1, $2)',
     [helpRequestId, volunteerId],
   )
-  return
 }
-
-export const createHelpRequest = async (data: HelpRequest): Promise<any> => {
-  const { mom_id, description, emergency, placeId, placeName } = data
-  const activeHelpRequests = await executeQuery(
-    'SELECT * FROM help_requests WHERE mom_id = $1 AND active = TRUE',
-    [mom_id],
-  )
-  if (activeHelpRequests.length > 0) {
-    return Promise.reject(new Error('Mom already has an active help request'))
-  }
+export const getActiveHelpRequestsByMomId = async (
+  momId: string,
+): Promise<HelpRequest[]> => {
   const rows = await executeQuery(
+    'SELECT * FROM help_requests WHERE mom_id = $1 AND active = TRUE',
+    [momId],
+  )
+  return rows
+}
+export const createHelpRequest = async (
+  mom_id: string,
+  description: string,
+  emergency: boolean,
+  placeId: string,
+  placeName: string,
+): Promise<any> => {
+  const result = await executeQuery(
     'INSERT INTO help_requests (mom_id, description, emergency, placeId, placeName, active) VALUES ($1, $2, $3, $4, $5, TRUE) RETURNING id',
     [mom_id, description, emergency, placeId, placeName],
   )
-  return rows[0].id
+  return result[0].id
 }

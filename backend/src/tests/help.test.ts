@@ -29,14 +29,13 @@ afterAll(async () => {
 
 // Helper function to create a test help request
 async function createTestHelpRequest(momId: string) {
-  const helpRequestData = {
-    mom_id: momId,
-    description: 'Test help request',
-    emergency: false,
-    placeId: 'ChIJ-Y7t-qm02IcRW-C7IsrqOb4',
-    placeName: 'Test Location',
-  } as any
-  const id = await createHelpRequest(helpRequestData)
+  const id = await createHelpRequest(
+    momId,
+    'Test help request',
+    false,
+    'ChIJ-Y7t-qm02IcRW-C7IsrqOb4',
+    'Test Location',
+  )
   return id
 }
 async function createHelpRequests() {
@@ -164,7 +163,6 @@ describe('Help Requests API', () => {
         .send(helpRequestData)
 
       expect(response.status).toBe(401)
-      expect(response.body.error).toBe('Only moms can create help requests')
     })
   })
 

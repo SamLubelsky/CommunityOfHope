@@ -8,7 +8,7 @@ import {
   editUserInfo,
   getUserData,
 } from '../models/userModel'
-import { verifySessionRequest } from '../utils/functions'
+import { validateUserInput, verifySessionRequest } from '../utils/functions'
 import { User } from '../utils/definitions'
 import {
   deleteSessionBySessionId,
@@ -53,6 +53,10 @@ export const addUser = async (
   const { username, password, firstName, lastName, role } = req.body
   const profilePic = req.file
   // const profilePath = '/images/' + path.basename(profilePic.path);
+  const existingUser = await findUserByUsername(username)
+  if (existingUser) {
+    return res.status(400).json({ message: 'Username already exists' })
+  }
   if (!username || !password) {
     fs.unlink(profilePic.path, (err) => {
       if (err) console.error('Error deleting file:', err)
@@ -71,14 +75,26 @@ export const addUser = async (
     await storage.bucket(bucketName).upload(profilePic.path, options)
     // const profilePicUrl = `https://storage.cloud.google.com/${bucketName}/${destFileName}`;
     const profilePicUrl = `https://storage.googleapis.com/${bucketName}/${destFileName}`
+    const validationError = validateUserInput({
+      user: username,
+      password,
+      firstName,
+      lastName,
+      role,
+    })
+    if (validationError) {
+      return res.status(400).json({ message: validationError })
+    }
+    const hashedPass = bcrypt.hashSync(password, 10)
     const newUserID = await createUser(
       username,
-      password,
+      hashedPass,
       firstName,
       lastName,
       role,
       profilePicUrl,
     )
+
     fs.unlink(profilePic.path, (err) => {
       if (err) console.error('Error deleting file:', err)
     })
@@ -91,6 +107,7 @@ export const addUser = async (
     return res.status(500).json({ message: error.message })
   }
 }
+
 export const editUser = async (
   req: MulterRequest,
   res: Response,
@@ -119,9 +136,20 @@ export const editUser = async (
     fs.unlink(profilePic.path, (err) => {
       if (err) console.error('Error deleting file:', err)
     })
+    const validationError = validateUserInput({
+      user: username,
+      password,
+      firstName,
+      lastName,
+      role,
+    })
+    if (validationError) {
+      return res.status(400).json({ message: validationError })
+    }
+    const hashedPass = bcrypt.hashSync(password, 10)
     await editUserInfo(
       username,
-      password,
+      hashedPass,
       firstName,
       lastName,
       role,
@@ -136,6 +164,7 @@ export const editUser = async (
     res.status(500).json({ message: (error as Error).message })
   }
 }
+
 export const deleteUser = async (req: Request, res: Response) => {
   const { id } = req.params
   try {
@@ -154,6 +183,7 @@ export const deleteUser = async (req: Request, res: Response) => {
     res.status(500).json({ message: (error as Error).message })
   }
 }
+
 export const verifySession = async (
   req: Request,
   res: Response,
@@ -168,6 +198,7 @@ export const verifySession = async (
     .status(201)
     .json({ message: 'Session verified', userId, firstName, lastName, role })
 }
+
 export const loginUser = async (req: Request, res: Response): Promise<any> => {
   const { username, password } = req.body
   if (!username || !password) {

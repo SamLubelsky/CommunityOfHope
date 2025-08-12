@@ -6,6 +6,7 @@ import fs from 'fs'
 import { interval } from '../notifications/notifications'
 import { loginAsAdmin, loginAsMom } from './utils'
 import { recreateTables } from '../config/database'
+import { log } from 'console'
 
 beforeEach(async () => {
   await recreateTables()
@@ -116,24 +117,16 @@ describe('Test adding user endpoint', () => {
     if (fs.existsSync(testImagePath)) {
       fs.unlinkSync(testImagePath)
     }
-
-    expect(response.status).toBe(500)
+    expect(response.status).toBe(400)
     expect(response.body.message).toBe('Username already exists')
   })
 })
 
 describe('Test login endpoint', () => {
   test('Should login successfully', async () => {
-    await createUser(
-      'TestUser',
-      'password',
-      'Test',
-      'User',
-      'Volunteer',
-      'https://example.com/profile.jpg',
-    )
+    const adminData = await loginAsAdmin('Admin')
     const response = await request(app).post('/api/login').send({
-      username: 'TestUser',
+      username: 'Admin',
       password: 'password',
     })
     expect(response.status).toBe(201)

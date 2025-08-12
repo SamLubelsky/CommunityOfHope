@@ -42,72 +42,30 @@ export const findUserByUsername = async (username: string): Promise<User> => {
 }
 export const editUserInfo = async (
   username: string,
-  password: string,
+  hashedPass: string,
   firstName: string,
   lastName: string,
   role: string,
   id: string,
   profileLink: string,
 ) => {
-  const validationError = validateUserInput({
-    user: username,
-    password,
-    firstName,
-    lastName,
-    role,
-  })
-  if (validationError) {
-    return Promise.reject(new Error(validationError))
-  }
-  const existingUser = await getUserData(id)
-  if (!existingUser) {
-    return Promise.reject(
-      new Error('User not found in database, try adding a user instead'),
-    )
-  }
-  const hashedPass = bcrypt.hashSync(password, 10)
-  const query =
-    'UPDATE users SET username=$1, password=$2, firstName=$3, lastName=$4, role=$5, profileLink=$6 WHERE id=$7'
-  const values = [
-    username,
-    hashedPass,
-    firstName,
-    lastName,
-    role,
-    profileLink,
-    id,
-  ]
-  return await executeQuery(query, values)
+  return await executeQuery(
+    'UPDATE users SET username=$1, password=$2, firstName=$3, lastName=$4, role=$5, profileLink=$6 WHERE id=$7',
+    [username, hashedPass, firstName, lastName, role, profileLink, id],
+  )
 }
 export const createUser = async (
   username: string,
-  password: string,
+  hashedPass: string,
   firstName: string,
   lastName: string,
   role: string,
   profileLink: string,
 ) => {
-  const validationError = validateUserInput({
-    user: username,
-    password,
-    firstName,
-    lastName,
-    role,
-  })
-  if (validationError) {
-    return Promise.reject(new Error(validationError))
-  }
-
-  const existingUser = await findUserByUsername(username)
-  if (existingUser) {
-    return Promise.reject(new Error('Username already exists'))
-  }
-
-  const hashedPass = bcrypt.hashSync(password, 10)
-  const query =
-    'INSERT INTO users (username, password, firstName, lastName, role, profileLink) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, username, firstName, lastName, role, profileLink'
-  const values = [username, hashedPass, firstName, lastName, role, profileLink]
-  const result = await executeQuery(query, values)
+  const result = await executeQuery(
+    'INSERT INTO users (username, password, firstName, lastName, role, profileLink) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id, username, firstName, lastName, role, profileLink',
+    [username, hashedPass, firstName, lastName, role, profileLink],
+  )
   return result[0]
 }
 
