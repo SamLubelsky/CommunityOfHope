@@ -1,9 +1,5 @@
 import { Server } from 'socket.io'
-import {
-  createChatRoomMessage,
-  createMessage,
-  getChatById,
-} from './models/chatsModel'
+import { createMessage, getChatById } from './models/chatsModel'
 import { parse } from 'cookie'
 import { getSessionData, getUserIdFromSessionId } from './models/sessionModel'
 import { getUserData } from './models/userModel'

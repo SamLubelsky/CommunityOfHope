@@ -9,10 +9,11 @@ export const getMostRecentMessage = async (chatId: string) => {
   return rows
 }
 export const createChat = async (volunteer_id: string, mom_id: string) => {
-  executeQuery('INSERT INTO chats (volunteerId, momId) VALUES ($1, $2)', [
-    volunteer_id,
-    mom_id,
-  ])
+  const rows = await executeQuery(
+    'INSERT INTO chats (volunteerId, momId) VALUES ($1, $2) RETURNING id',
+    [volunteer_id, mom_id],
+  )
+  return rows[0].id
 }
 export const getChatRoomMessages = async () => {
   const rows = await executeQuery(
@@ -20,16 +21,6 @@ export const getChatRoomMessages = async () => {
     [],
   )
   return rows
-}
-export const createChatRoomMessage = async (
-  senderId: string,
-  message: string,
-  dateSent: string,
-) => {
-  executeQuery(
-    'INSERT INTO messages (chatId, senderId, message, dateSent) VALUES ($1, $2, $3, $4)',
-    [-1, senderId, message, dateSent],
-  )
 }
 export const getChatById = async (chatId: string): Promise<Chat | null> => {
   const rows = await executeQuery(
@@ -85,10 +76,7 @@ export const getChat = async (
   return rows[0]
 }
 
-export const getChats = async (
-  userId: string,
-  role: string,
-): Promise<Chat[] | null> => {
+export const getChats = async (userId: string): Promise<Chat[] | null> => {
   const rows = await executeQuery(
     `SELECT chats.id, chats.momid as "momId", chats.volunteerid as "volunteerId", chats.lastMessageTime as "lastMessageTime",
                                      users.firstName || ' ' || users.lastName as "otherName", users.profileLink as "otherProfileLink", recent_messages.message AS "lastMessage" 
@@ -153,11 +141,11 @@ export const createMessage = async (
   message: string,
   dateSent: string,
 ) => {
-  executeQuery(
+  await executeQuery(
     'INSERT INTO messages (chatId, senderId, message, dateSent) VALUES ($1, $2, $3, $4)',
     [chatId, senderId, message, dateSent],
   )
-  executeQuery('UPDATE chats SET lastMessageTime=$1 WHERE id=$2', [
+  await executeQuery('UPDATE chats SET lastMessageTime=$1 WHERE id=$2', [
     dateSent,
     chatId,
   ])

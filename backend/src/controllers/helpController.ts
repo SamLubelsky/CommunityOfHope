@@ -34,12 +34,10 @@ export const addHelpRequest = async (
   req: Request,
   res: Response,
 ): Promise<any> => {
-  if (req.session.role !== 'Mom') {
-    return res.status(401).json({ error: 'Only moms can create help requests' })
-  }
+  const { userId } = req.session
   const activeHelpRequests = await getAllActiveHelpRequests()
   const userRequests = activeHelpRequests.filter(
-    (request) => request.mom_id === req.session.userId,
+    (request) => request.mom_id === userId,
   )
   if (userRequests.length > 0) {
     return res
@@ -231,14 +229,12 @@ export const getRequestStatus = async (
         const mom_name = mom_data.firstName + ' ' + mom_data.lastName
         const chat = await getChat(mom_id, userId)
         const chatId = chat.id
-        res
-          .status(200)
-          .json({
-            status: 'Accepted',
-            momName: mom_name,
-            helpId: helpRequest.id,
-            chatId,
-          })
+        res.status(200).json({
+          status: 'Accepted',
+          momName: mom_name,
+          helpId: helpRequest.id,
+          chatId,
+        })
       } else {
         res.status(200).json({ status: 'Not Accepted' })
       }

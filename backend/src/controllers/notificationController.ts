@@ -5,7 +5,7 @@ export const uploadToken = async (
   res: Response,
 ): Promise<any> => {
   try {
-    const userId = req.session.userId
+    const { userId } = req.session
     const { pushToken } = req.body
     try {
       const tokens = await getPushTokens(userId)

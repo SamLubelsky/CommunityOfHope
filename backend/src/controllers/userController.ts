@@ -158,9 +158,6 @@ export const verifySession = async (
   req: Request,
   res: Response,
 ): Promise<any> => {
-  if (!req.session || !req.session.userId || !req.session.role) {
-    return res.status(400).json({ message: 'Session could not be verified' })
-  }
   const { userId, role } = req.session
   const userData = await getUserData(String(userId))
   if (!userData) {

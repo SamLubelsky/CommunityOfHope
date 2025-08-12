@@ -18,14 +18,6 @@ export const getMessages = async (
   const { chatId } = req.params
   const { userId, role } = req.session
   try {
-    if (chatId === '-1') {
-      const messages = await getChatRoomMessages()
-      return res.status(200).json({
-        messages: messages,
-        otherName: 'Volunteer Chat Room',
-        otherProfileLink: '',
-      })
-    }
     const chat = await getChatByIdWithName(chatId, userId)
     if (!chat) {
       return res.status(400).json({ error: 'Chat not found' })
@@ -42,7 +34,10 @@ export const getMessages = async (
     return res.status(500).json({ error: (error as Error).message })
   }
 }
-export const sendChat = async (req: Request, res: Response): Promise<any> => {
+export const sendMessage = async (
+  req: Request,
+  res: Response,
+): Promise<any> => {
   const { chatId, senderId, message } = req.body
   const dateSent = new Date().toISOString()
   const sender = await getUserData(senderId)
@@ -73,22 +68,21 @@ export const getAllChats = async (
     return res.status(500).json({ error: (error as Error).message })
   }
 }
+
 export const getUserChats = async (
   req: Request,
   res: Response,
 ): Promise<any> => {
-  if (!req.session || !req.session.userId || !req.session.role) {
-    return res.status(401).json({ error: 'You are not logged in' })
-  }
-  const { userId, role } = req.session
+  const { userId } = req.session
   try {
-    const chats = await getChats(userId, role)
+    const chats = await getChats(userId)
     return res.status(200).json(chats)
   } catch (error) {
     console.log(error)
     return res.status(500).json({ error: (error as Error).message })
   }
 }
+
 export const getChat = async (req: Request, res: Response): Promise<any> => {
   const { chatId } = req.params
   const { userId } = req.session
