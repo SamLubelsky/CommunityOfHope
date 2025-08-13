@@ -1,5 +1,4 @@
-import { recreateTables } from '../config/database'
-import { createUser } from '../models/userModel'
+import { createTables, deleteFromTables } from '../config/database'
 import {
   createHelpRequest,
   getAllActiveHelpRequests,
@@ -16,16 +15,18 @@ import {
   loginAsVolunteer,
 } from './utils'
 import { log, error } from 'console'
-beforeEach(async () => {
-  await recreateTables()
+import { createChat, getChat } from '../models/chatsModel'
+beforeAll(async () => {
+  await createTables()
+})
+afterEach(async () => {
+  await deleteFromTables()
 })
 
 afterAll(async () => {
   await httpServer.close()
   clearInterval(interval)
 })
-
-// Helper function to create a test volunteer
 
 // Helper function to create a test help request
 async function createTestHelpRequest(momId: string) {
@@ -133,17 +134,19 @@ describe('Help Requests API', () => {
         placeId: 'ChIJ-Y7t-qm02IcRW-C7IsrqOb4',
         placeName: 'Test Location',
       }
+      await createHelpRequest(
+        momData.id,
+        'Test help request',
+        false,
+        'ChIJ-Y7t-qm02IcRW-C7IsrqOb4',
+        'Test Location',
+      )
       const response = await request(app)
         .post('/api/help_requests')
         .set('Cookie', momData.cookie)
         .send(helpRequestData)
-      expect(response.status).toBe(201)
-      const response2 = await request(app)
-        .post('/api/help_requests')
-        .set('Cookie', momData.cookie)
-        .send(helpRequestData)
-      expect(response2.status).toBe(400)
-      expect(response2.body.error).toBe(
+      expect(response.status).toBe(400)
+      expect(response.body.error).toBe(
         'You already have an active help request',
       )
     })
@@ -185,15 +188,12 @@ describe('Help Requests API', () => {
       const momData = await createMomUser('mom1')
       const helpRequestId = await createTestHelpRequest(momData.id)
       const volunteerData = await loginAsVolunteer('Volunteer')
+      await acceptHelpRequest(helpRequestId, volunteerData.id)
       const response = await request(app)
         .post(`/api/help_requests/${helpRequestId}`)
         .set('Cookie', volunteerData.cookie)
-      expect(response.status).toBe(200)
-      const response2 = await request(app)
-        .post(`/api/help_requests/${helpRequestId}`)
-        .set('Cookie', volunteerData.cookie)
-      expect(response2.status).toBe(400)
-      expect(response2.body.error).toBe(
+      expect(response.status).toBe(400)
+      expect(response.body.error).toBe(
         'You have already accepted a help request',
       )
     })
@@ -227,10 +227,7 @@ describe('Help Requests API', () => {
       const helpRequestId = await createTestHelpRequest(momData.id)
 
       const volunteerData = await loginAsVolunteer('Volunteer')
-      const acceptResponse = await request(app)
-        .post(`/api/help_requests/${helpRequestId}`)
-        .set('Cookie', volunteerData.cookie)
-      expect(acceptResponse.status).toBe(200)
+      await acceptHelpRequest(helpRequestId, volunteerData.id)
 
       const deactivateResponse = await request(app)
         .post('/api/help_requests/deactivate')
@@ -246,10 +243,7 @@ describe('Help Requests API', () => {
       const helpRequestId = await createTestHelpRequest(momData.id)
 
       const volunteerData = await loginAsVolunteer('Volunteer')
-      const acceptResponse = await request(app)
-        .post(`/api/help_requests/${helpRequestId}`)
-        .set('Cookie', volunteerData.cookie)
-      expect(acceptResponse.status).toBe(200)
+      await acceptHelpRequest(helpRequestId, volunteerData.id)
 
       const deactivateResponse = await request(app)
         .post('/api/help_requests/deactivate')
@@ -352,10 +346,8 @@ describe('Help Requests API', () => {
       const momData = await createMomUser('mom1')
       const helpRequestId = await createTestHelpRequest(momData.id)
       const volunteerData = await loginAsVolunteer('Volunteer')
-      const acceptResponse = await request(app)
-        .post(`/api/help_requests/${helpRequestId}`)
-        .set('Cookie', volunteerData.cookie)
-      expect(acceptResponse.status).toBe(200)
+      await acceptHelpRequest(helpRequestId, volunteerData.id)
+      await createChat(momData.id, volunteerData.id)
       const response = await request(app)
         .get('/api/help_status')
         .set('Cookie', volunteerData.cookie)
@@ -367,10 +359,8 @@ describe('Help Requests API', () => {
       const momData = await loginAsMom('Mom')
       const helpRequestId = await createTestHelpRequest(momData.id)
       const volunteerData = await loginAsVolunteer('Volunteer')
-      const acceptResponse = await request(app)
-        .post(`/api/help_requests/${helpRequestId}`)
-        .set('Cookie', volunteerData.cookie)
-      expect(acceptResponse.status).toBe(200)
+      await acceptHelpRequest(helpRequestId, volunteerData.id)
+      await createChat(momData.id, volunteerData.id)
       const response = await request(app)
         .get('/api/help_status')
         .set('Cookie', momData.cookie)

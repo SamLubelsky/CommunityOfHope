@@ -125,7 +125,7 @@ export const acceptRequest = async (
     } catch (error) {
       console.log(error)
       console.log('Chat does not exist, creating chat')
-      await createChat(volunteer_id, mom_id)
+      await createChat(mom_id, volunteer_id)
     }
     await acceptHelpRequest(id, volunteer_id)
 

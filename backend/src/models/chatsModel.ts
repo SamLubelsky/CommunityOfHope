@@ -8,10 +8,10 @@ export const getMostRecentMessage = async (chatId: string) => {
   )
   return rows
 }
-export const createChat = async (volunteer_id: string, mom_id: string) => {
+export const createChat = async (momId: string, volunteerId: string) => {
   const rows = await executeQuery(
-    'INSERT INTO chats (volunteerId, momId) VALUES ($1, $2) RETURNING id',
-    [volunteer_id, mom_id],
+    'INSERT INTO chats (momId, volunteerId) VALUES ($1, $2) RETURNING id',
+    [momId, volunteerId],
   )
   return rows[0].id
 }

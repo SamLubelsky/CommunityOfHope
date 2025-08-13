@@ -1,17 +1,19 @@
-import { createUser } from '../models/userModel'
+import { createUser, getAllUsers } from '../models/userModel'
 import { app, httpServer } from '../index'
 import request from 'supertest'
 import path from 'path'
 import fs from 'fs'
 import { interval } from '../notifications/notifications'
 import { loginAsAdmin, loginAsMom } from './utils'
-import { recreateTables } from '../config/database'
+import { createTables, deleteFromTables } from '../config/database'
 import { log } from 'console'
 
-beforeEach(async () => {
-  await recreateTables()
+beforeAll(async () => {
+  await createTables()
 })
-
+afterEach(async () => {
+  await deleteFromTables()
+})
 afterAll(async () => {
   await httpServer.close()
   clearInterval(interval)
