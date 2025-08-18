@@ -48,8 +48,9 @@ export const initializeWebSocket = (httpServer: any) => {
   })
   io.use(socketRequireAuth)
   io.on('connection', (socket) => {
+    console.log(`User ${socket.id} connected`)
     socket.on('disconnect', function () {
-      // console.log(`User ${socket.id} disconnected`);
+      console.log(`User ${socket.id} disconnected`)
       connectedUsers.delete(socket.id)
     })
     socket.on('message', async (msg) => {

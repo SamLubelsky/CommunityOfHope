@@ -120,7 +120,7 @@ export const getActiveHelpRequestsByMomId = async (
   return rows
 }
 export const createHelpRequest = async (
-  mom_id: string,
+  momId: string,
   description: string,
   emergency: boolean,
   placeId: string,
@@ -128,7 +128,7 @@ export const createHelpRequest = async (
 ): Promise<any> => {
   const result = await executeQuery(
     'INSERT INTO help_requests (mom_id, description, emergency, placeId, placeName, active) VALUES ($1, $2, $3, $4, $5, TRUE) RETURNING id',
-    [mom_id, description, emergency, placeId, placeName],
+    [momId, description, emergency, placeId, placeName],
   )
   return result[0].id
 }

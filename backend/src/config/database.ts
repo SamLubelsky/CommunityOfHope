@@ -8,10 +8,6 @@ const dbUser = process.env.DB_USER || 'quickstart-user'
 const dbPassword = process.env.DB_PASSWORD || 'password'
 const dbName = getDbName()
 const host = process.env.DB_HOST || 'localhost'
-console.log(`dbUser: ${dbUser}`)
-console.log(`dbPassword: ${dbPassword}`)
-console.log(`dbName: ${dbName}`)
-console.log(`host: ${host}`)
 // Use the same connection approach as your main app
 const pool = new Pool({
   host: host,
