@@ -40,7 +40,14 @@ export default function Page() {
       })
       const responseData = await response.json()
       if (!responseData.error) {
-        setMessages(responseData.messages)
+        // Set received status for existing messages (they were already delivered)
+        const messagesWithStatus = responseData.messages.map(
+          (msg: Message) => ({
+            ...msg,
+            received: true,
+          }),
+        )
+        setMessages(messagesWithStatus)
         setOtherName(responseData.otherName)
         setOtherProfileLink(responseData.otherProfileLink)
       }
@@ -55,7 +62,16 @@ export default function Page() {
 
     // Subscribe to message received confirmation
     const unsubscribeMessageReceived = on('messageReceived', (msg: any) => {
-      console.log('Message successfully received by server')
+      console.log('Message successfully received by server:', msg)
+      if (msg.messageId) {
+        setMessages((prevMessages) =>
+          prevMessages.map((message) =>
+            message.messageId === msg.messageId
+              ? { ...message, received: true }
+              : message,
+          ),
+        )
+      }
     })
 
     //RELOAD MESSAGES
@@ -80,8 +96,15 @@ export default function Page() {
     if (curMessage === '') {
       return
     }
-
-    const data = { message: curMessage, senderId: id, chatId }
+    const messageId =
+      Date.now().toString() + Math.random().toString(36).substr(2, 9)
+    const data = {
+      message: curMessage,
+      senderId: id,
+      chatId,
+      messageId,
+      received: false,
+    }
     const success = emit('message', data)
 
     if (success) {
@@ -105,6 +128,18 @@ export default function Page() {
               {' '}
               {message.message}
             </Text>
+            {message.received !== undefined && (
+              <View className='mt-1 flex-row justify-end items-center'>
+                <Ionicons
+                  name={message.received ? 'checkmark-circle' : 'time-outline'}
+                  size={16}
+                  color={message.received ? '#10B981' : '#6B7280'}
+                />
+                <Text className='font-primary text-xs ml-1 text-gray-500'>
+                  {message.received ? 'Sent' : 'Sending...'}
+                </Text>
+              </View>
+            )}
           </View>
         )
       } else {

@@ -1,10 +1,12 @@
 export type Chat = {
-    chatId: number;
-    volunteerId: number;
-    momId: number;
-    otherProfileLink: string;
+  chatId: number
+  volunteerId: number
+  momId: number
+  otherProfileLink: string
 }
 export type Message = {
-    senderId: number;
-    message: string;
+  senderId: number
+  message: string
+  received?: boolean
+  messageId?: string
 }

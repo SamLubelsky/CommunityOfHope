@@ -24,21 +24,22 @@ export class ChatHandler {
 
   private async handleMessage(socket: Socket, msg: ChatMessage): Promise<void> {
     const { senderId, message, chatId } = msg
-    
-    // Echo message back to sender
-    socket.to(socket.id).emit('messageReceived', msg)
-    
+
+    // Echo message back to sender using wsManager
+    console.log('Echoing message back to sender', msg)
+    this.wsManager.emitToUser(senderId, 'messageReceived', msg)
+
     const chat = await getChatById(chatId)
-    
+
     if (chat) {
       // Save message to database
       await createMessage(chatId, senderId, message, new Date().toISOString())
-      
+
       // Get sender information
       const sender = await getUserData(senderId)
       const senderName = sender.firstName + ' ' + sender.lastName
       const messageBody = 'You received a message from ' + senderName
-      
+
       const notificationData = {
         sound: 'default',
         body: messageBody,
@@ -52,17 +53,17 @@ export class ChatHandler {
       if (senderId === momId) {
         sendNotification(volunteerId, notificationData)
         console.log('Sending notification to volunteer:', volunteerId)
-        
+
         if (userConnectionManager.isUserConnected(volunteerId)) {
           this.wsManager.emitToUser(volunteerId, 'message', msg)
         }
       }
-      
+
       // Handle message from volunteer to mom
       if (senderId === volunteerId) {
         sendNotification(momId, notificationData)
         console.log('Sending notification to mom:', momId)
-        
+
         if (userConnectionManager.isUserConnected(momId)) {
           this.wsManager.emitToUser(momId, 'message', msg)
         }
