@@ -33,7 +33,11 @@ if (isDevelopment) {
   console.log('In Development Mode')
   app.use(
     cors({
-      origin: ['http://localhost:8081', 'http://localhost:5176'],
+      origin: [
+        'http://localhost:8081',
+        'http://localhost:5176',
+        'http://localhost:3000',
+      ],
       credentials: true,
     }),
   )

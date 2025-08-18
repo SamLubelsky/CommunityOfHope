@@ -21,6 +21,7 @@ export default function Chats() {
       const responseData = await response.json()
       if (!response.ok) {
         console.error(responseData)
+        return
       }
       console.log(responseData)
       setChats(responseData)
@@ -108,15 +109,15 @@ export default function Chats() {
 
   return (
     <SafeAreaView className='flex-1'>
-        <View className='px-2 text-gray-200 items-center justify-center py-5'>
-          <Text className='font-primary text-pink-400 text-7 mb-7'>
-            {' '}
-            All Chats
-          </Text>
-          <ScrollView showsVerticalScrollIndicator={false}>
-            {getChatsList()}
-          </ScrollView>
-        </View>
+      <View className='px-2 text-gray-200 items-center justify-center py-5'>
+        <Text className='font-primary text-pink-400 text-7 mb-7'>
+          {' '}
+          All Chats
+        </Text>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          {getChatsList()}
+        </ScrollView>
+      </View>
     </SafeAreaView>
   )
 }

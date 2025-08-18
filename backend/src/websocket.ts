@@ -34,7 +34,7 @@ async function socketRequireAuth(socket, next) {
       next(new Error('Authentication error'))
     }
   } catch (err) {
-    console.log('Other auth error')
+    console.log('Other auth error:', err)
     next(new Error('Authentication error'))
   }
 }
