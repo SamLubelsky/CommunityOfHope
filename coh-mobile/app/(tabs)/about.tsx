@@ -1,9 +1,10 @@
 import { Image, Text, View, ScrollView } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-
+import { WebSocketStatus } from '@/components/WebSocketStatus'
 export default function AboutScreen() {
   return (
     <SafeAreaView className='flex-1'>
+      <WebSocketStatus />
       <View className='flex-1 items-center justify-start bg-gray-100 py-6 px-4'>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Image

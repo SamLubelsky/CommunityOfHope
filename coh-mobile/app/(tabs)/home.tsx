@@ -13,6 +13,7 @@ import { BACKEND_URL } from '../config'
 import { useWebSocketContext } from '@/components/WebSocketProvider'
 import { useNotifications } from '@/utils/notification'
 import { useNotificationSetup } from '@/hooks/useNotificationSetup'
+import { WebSocketStatus } from '@/components/WebSocketStatus'
 
 export default function Home() {
   const [helpVisible, setHelpVisible] = useState(false)
@@ -47,6 +48,7 @@ export default function Home() {
   return (
     <>
       <SafeAreaView className='flex-1'>
+        <WebSocketStatus />
         <ScrollView>
           <View className='rounded-full absolute top-1 right-1 z-10 bg-yellow-100 items-center justify-start mx-2 my-1'>
             <Pressable onPress={() => setHelpVisible(!helpVisible)}>

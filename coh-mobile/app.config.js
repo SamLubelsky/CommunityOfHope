@@ -1,49 +1,47 @@
-import 'dotenv/config';
+import 'dotenv/config'
 
 export default {
   expo: {
-    name: "coh-mobile",
-    slug: "coh-mobile",
-    version: "1.0.0",
-    orientation: "portrait",
-    icon: "./assets/images/icon.png",
-    scheme: "myapp",
-    userInterfaceStyle: "automatic",
+    name: 'coh-mobile',
+    slug: 'coh-mobile',
+    version: '1.0.0',
+    orientation: 'portrait',
+    icon: './assets/images/icon.png',
+    scheme: 'myapp',
+    userInterfaceStyle: 'automatic',
     splash: {
-      image: "./assets/images/splash.png",
-      resizeMode: "contain",
-      backgroundColor: "#ffffff"
+      image: './assets/images/splash.png',
+      resizeMode: 'contain',
+      backgroundColor: '#ffffff',
     },
     ios: {
       supportsTablet: true,
-      bundleIdentifier: "com.sammy56lt.cohmobile"
+      bundleIdentifier: 'com.sammy56lt.cohmobile',
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: "./assets/images/adaptive-icon.png",
-        backgroundColor: "#ffffff"
+        foregroundImage: './assets/images/adaptive-icon.png',
+        backgroundColor: '#ffffff',
       },
-      package: "com.epic.cohmobile",
-      googleServicesFile: "./google-services.json"
+      package: 'com.epic.cohmobile',
+      googleServicesFile: './google-services.json',
     },
     web: {
-      bundler: "metro",
-      output: "static",
-      favicon: "./assets/images/favicon.png"
+      bundler: 'metro',
+      output: 'static',
+      favicon: './assets/images/favicon.png',
     },
-    plugins: [
-      "expo-router"
-    ],
+    plugins: ['expo-router'],
     experiments: {
-      typedRoutes: true
+      typedRoutes: true,
     },
     extra: {
       router: {
-        origin: false
+        origin: false,
       },
       eas: {
-        projectId: "2ca0779e-1e24-44fa-83a5-b93323ff1f8d"
+        projectId: '2ca0779e-1e24-44fa-83a5-b93323ff1f8d',
       },
-    }
-  }
-};
+    },
+  },
+}

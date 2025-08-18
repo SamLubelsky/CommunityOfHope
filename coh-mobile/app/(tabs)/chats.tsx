@@ -6,6 +6,7 @@ import { Image, Pressable, ScrollView, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Chat } from '../../types'
 import { BACKEND_URL } from '../config'
+import { WebSocketStatus } from '@/components/WebSocketStatus'
 
 export default function Chats() {
   const isFocused = useIsFocused()
@@ -109,6 +110,7 @@ export default function Chats() {
 
   return (
     <SafeAreaView className='flex-1'>
+      <WebSocketStatus />
       <View className='px-2 text-gray-200 items-center justify-center py-5'>
         <Text className='font-primary text-pink-400 text-7 mb-7'>
           {' '}

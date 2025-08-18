@@ -14,6 +14,7 @@ import { useBoundStore } from '@/store/useBound'
 import { BACKEND_URL } from '../config'
 import { Message } from '@/types'
 import { useWebSocketContext } from '@/components/WebSocketProvider'
+import { WebSocketStatus } from '@/components/WebSocketStatus'
 
 export default function Page() {
   const chatId = Number(useLocalSearchParams().slug)
@@ -159,6 +160,7 @@ export default function Page() {
 
   return (
     <SafeAreaView className='flex-1 bg-gray-100'>
+      <WebSocketStatus />
       <View className='w-full flex-row items-center justify-start py-2 px-2 bg-gray-300 mb-5'>
         <Ionicons
           className='mr-4'
