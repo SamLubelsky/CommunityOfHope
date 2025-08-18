@@ -17,6 +17,8 @@ import {
   sendNotifications,
   sendNotificationToVolunteers,
 } from '../notifications/notifications'
+import { getHelpStatusHandler } from '../websocket'
+
 export const getHelpRequests = async (
   req: Request,
   res: Response,
@@ -60,6 +62,13 @@ export const addHelpRequest = async (
       placeId,
       placeName,
     )
+
+    // Send websocket notification to all connected volunteers
+    const helpStatusHandler = getHelpStatusHandler()
+    if (helpStatusHandler) {
+      await helpStatusHandler.notifyHelpRequestsChanged()
+    }
+
     const messageBody = req.body.emergency
       ? 'An EMERGENCY help request was posted to EPIC!'
       : 'A help request was posted to EPIC!'
@@ -129,6 +138,12 @@ export const acceptRequest = async (
     }
     await acceptHelpRequest(id, volunteer_id)
 
+    // Send websocket notification to all connected volunteers
+    const helpStatusHandler = getHelpStatusHandler()
+    if (helpStatusHandler) {
+      await helpStatusHandler.notifyHelpRequestsChanged()
+    }
+
     const notificationData = {
       sound: 'default',
       body: 'Your help request has been accepted!',
@@ -161,6 +176,13 @@ export const deactivateRequest = async (
       }
       const acceptedHelpRequest = acceptedHelpRequests[0]
       await deactivateHelpRequest(acceptedHelpRequest.id)
+
+      // Send websocket notification to all connected volunteers
+      const helpStatusHandler = getHelpStatusHandler()
+      if (helpStatusHandler) {
+        await helpStatusHandler.notifyHelpRequestsChanged()
+      }
+
       res.status(200).json({ message: 'Help request deactivated successfully' })
     }
     if (req.session.role === 'Mom') {
@@ -175,6 +197,13 @@ export const deactivateRequest = async (
       }
       const userRequest = userRequests[0]
       await deactivateHelpRequest(userRequest.id)
+
+      // Send websocket notification to all connected volunteers
+      const helpStatusHandler = getHelpStatusHandler()
+      if (helpStatusHandler) {
+        await helpStatusHandler.notifyHelpRequestsChanged()
+      }
+
       res.status(200).json({ message: 'Help request deactivated successfully' })
     }
   } catch (error) {
@@ -193,6 +222,13 @@ export const deactivateRequestById = async (
   try {
     const { id } = req.params
     await deactivateHelpRequest(id)
+
+    // Send websocket notification to all connected volunteers
+    const helpStatusHandler = getHelpStatusHandler()
+    if (helpStatusHandler) {
+      await helpStatusHandler.notifyHelpRequestsChanged()
+    }
+
     res.status(200).json({ message: 'Help request deactivated successfully' })
   } catch (error) {
     res.status(500).json({ error: (error as Error).message })
@@ -214,6 +250,13 @@ export const unclaimRequest = async (
     const acceptedHelpRequest = acceptedHelpRequests[0]
     await unclaimHelpRequest(acceptedHelpRequest.id, req.session.userId)
     const mom_id = acceptedHelpRequest.mom_id
+
+    // Send websocket notification to all connected volunteers
+    const helpStatusHandler = getHelpStatusHandler()
+    if (helpStatusHandler) {
+      await helpStatusHandler.notifyHelpRequestsChanged()
+    }
+
     const notificationData = {
       sound: 'default',
       body: 'Your help request has been returned to the help list.',

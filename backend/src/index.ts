@@ -103,5 +103,21 @@ httpServer.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`)
 })
 
-initializeWebSocket(httpServer)
+// Initialize WebSocket with CORS configuration that includes ngrok
+const wsCorsOptions = {
+  origin: isDevelopment
+    ? [
+        'http://localhost:8081',
+        'http://localhost:5176',
+        'http://localhost:3000',
+      ]
+    : [
+        'https://fl24-community-of-hope.web.app',
+        'http://localhost:5176',
+        'http://localhost:8081',
+      ],
+  credentials: true,
+}
+
+initializeWebSocket(httpServer, { cors: wsCorsOptions })
 export { sessionMiddleware, app, httpServer }

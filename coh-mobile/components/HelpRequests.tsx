@@ -5,6 +5,7 @@ import { router } from 'expo-router'
 import { BACKEND_URL } from '../app/config'
 import { ButtonWithConfirmation } from '@/components/ButtonWithConfirmation'
 import { PrimaryButton } from '@/components/PrimaryButton'
+import { useWebSocket } from '@/hooks/useWebSocket'
 type HelpRequest = {
   mom_name: string
   category: string
@@ -18,16 +19,20 @@ export default function HelpRequests() {
   const [helpId, setHelpId] = useState<number | null>(null)
   const [chatId, setChatId] = useState<number | null>(null)
   const [momFirst, setMomFirst] = useState<string | null>(null)
+  const { on } = useWebSocket()
   const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn)
 
   const role = useBoundStore((state) => state.role)
   useEffect(() => {
     fetchData()
-    const intervalId = setInterval(fetchData, 10000) // 10000 milliseconds = 20 seconds
-    return () => {
-      clearInterval(intervalId)
-    }
-  }, [])
+    const unsubscribe = on('helpRequestsUpdate', (data: any) => {
+      console.log('Help requests updated via WebSocket:', data)
+      if (data.Requests) {
+        setRequests(data.Requests)
+      }
+    })
+    return () => unsubscribe()
+  }, [helping])
   async function deactivateHelpRequest() {
     const response = await fetch(
       `${BACKEND_URL}/api/help_requests/deactivate/`,
