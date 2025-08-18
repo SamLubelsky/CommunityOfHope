@@ -142,6 +142,8 @@ export const acceptRequest = async (
     const helpStatusHandler = getHelpStatusHandler()
     if (helpStatusHandler) {
       await helpStatusHandler.notifyHelpRequestsChanged()
+      // Also notify both the volunteer and mom about their help status changes
+      await helpStatusHandler.notifyUserHelpStatusChange(mom_id, 'Mom')
     }
 
     const notificationData = {
@@ -181,6 +183,11 @@ export const deactivateRequest = async (
       const helpStatusHandler = getHelpStatusHandler()
       if (helpStatusHandler) {
         await helpStatusHandler.notifyHelpRequestsChanged()
+        // Also notify the volunteer about their help status change
+        await helpStatusHandler.notifyUserHelpStatusChange(
+          acceptedHelpRequest.mom_id,
+          'Mom',
+        )
       }
 
       res.status(200).json({ message: 'Help request deactivated successfully' })
@@ -202,6 +209,11 @@ export const deactivateRequest = async (
       const helpStatusHandler = getHelpStatusHandler()
       if (helpStatusHandler) {
         await helpStatusHandler.notifyHelpRequestsChanged()
+        // Also notify the mom about her help status change
+        await helpStatusHandler.notifyUserHelpStatusChange(
+          userRequest.volunteer_id,
+          'Volunteer',
+        )
       }
 
       res.status(200).json({ message: 'Help request deactivated successfully' })
@@ -227,6 +239,16 @@ export const deactivateRequestById = async (
     const helpStatusHandler = getHelpStatusHandler()
     if (helpStatusHandler) {
       await helpStatusHandler.notifyHelpRequestsChanged()
+      // For admin deactivation, we need to get the help request data first to notify the mom
+      const helpRequest = await getHelpRequest(id)
+      await helpStatusHandler.notifyUserHelpStatusChange(
+        helpRequest.mom_id,
+        'Mom',
+      )
+      await helpStatusHandler.notifyUserHelpStatusChange(
+        helpRequest.volunteer_id,
+        'Volunteer',
+      )
     }
 
     res.status(200).json({ message: 'Help request deactivated successfully' })
@@ -255,6 +277,8 @@ export const unclaimRequest = async (
     const helpStatusHandler = getHelpStatusHandler()
     if (helpStatusHandler) {
       await helpStatusHandler.notifyHelpRequestsChanged()
+      // Also notify both the volunteer and mom about their help status changes
+      await helpStatusHandler.notifyUserHelpStatusChange(mom_id, 'Mom')
     }
 
     const notificationData = {

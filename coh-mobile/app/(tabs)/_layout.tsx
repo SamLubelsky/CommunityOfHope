@@ -1,9 +1,14 @@
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Tabs } from 'expo-router'
 import '../../global.css'
-
+import { WebSocketStatus } from '@/components/WebSocketStatus'
+import { SafeAreaView } from 'react-native-safe-area-context'
 export default function TabLayout() {
   return (
+    <>
+      <SafeAreaView>
+        <WebSocketStatus />
+      </SafeAreaView>
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: '#ffd33d',
@@ -72,5 +77,6 @@ export default function TabLayout() {
           }}
         />
       </Tabs>
+    </>
   )
 }

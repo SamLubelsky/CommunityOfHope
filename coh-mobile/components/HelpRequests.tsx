@@ -25,13 +25,32 @@ export default function HelpRequests() {
   const role = useBoundStore((state) => state.role)
   useEffect(() => {
     fetchData()
-    const unsubscribe = on('helpRequestsUpdate', (data: any) => {
+    const unsubscribeRequests = on('helpRequestsUpdate', (data: any) => {
       console.log('Help requests updated via WebSocket:', data)
       if (data.Requests) {
         setRequests(data.Requests)
       }
     })
-    return () => unsubscribe()
+
+    const unsubscribeStatus = on('helpStatusUpdate', (data: any) => {
+      console.log('Help status updated via WebSocket:', data)
+      if (data.status === 'Accepted') {
+        setHelping(true)
+        setMomName(data.momName)
+        setHelpId(data.helpId)
+        setChatId(data.chatId)
+      } else {
+        setHelping(false)
+        setMomName(null)
+        setHelpId(null)
+        setChatId(null)
+      }
+    })
+
+    return () => {
+      unsubscribeRequests()
+      unsubscribeStatus()
+    }
   }, [helping])
   async function deactivateHelpRequest() {
     const response = await fetch(

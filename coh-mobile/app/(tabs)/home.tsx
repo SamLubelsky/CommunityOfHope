@@ -5,7 +5,6 @@ import { useBoundStore } from '@/store/useBound'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useIsFocused } from '@react-navigation/native'
 import React, { useState } from 'react'
-import { WebSocketStatus } from '@/components/WebSocketStatus'
 import { Image, Pressable, ScrollView, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
@@ -48,7 +47,6 @@ export default function Home() {
   return (
     <>
       <SafeAreaView className='flex-1'>
-        <WebSocketStatus />
         <ScrollView>
           <View className='rounded-full absolute top-1 right-1 z-10 bg-yellow-100 items-center justify-start mx-2 my-1'>
             <Pressable onPress={() => setHelpVisible(!helpVisible)}>

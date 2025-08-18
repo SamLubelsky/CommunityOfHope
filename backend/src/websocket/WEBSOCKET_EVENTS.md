@@ -94,6 +94,24 @@ Client can emit this event to request the current list of help requests.
 
 **Payload:** None required
 
+### `helpStatusUpdate`
+
+Received by a user when their personal help status changes (e.g., when their help request is accepted, deactivated, etc.).
+
+**Payload:**
+
+```javascript
+{
+  status: 'Accepted' | 'Not Accepted' | 'Requested' | 'Not Requested',
+  momName?: string,        // For volunteers: name of the mom they're helping
+  volunteerName?: string,  // For moms: name of the volunteer helping them
+  helpId?: string,         // For volunteers: ID of the help request
+  chatId?: string,         // Chat ID for communication
+  description?: string,    // For moms: description of their help request
+  timestamp: string
+}
+```
+
 ## Frontend Usage Examples
 
 ### Listening for Help Request Updates
@@ -115,6 +133,13 @@ socket.on('unclaimedHelpRequestsUpdated', (data) => {
 
 // Request current help requests
 socket.emit('requestHelpRequestsUpdate')
+
+// Listen for personal help status changes
+socket.on('helpStatusUpdate', (data) => {
+  console.log('Help status updated:', data)
+  // Update UI based on the new status
+  updateHelpStatus(data)
+})
 ```
 
 ### Listening for Chat Messages

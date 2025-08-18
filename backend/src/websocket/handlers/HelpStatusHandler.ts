@@ -4,6 +4,8 @@ import {
   getAllActiveHelpRequests,
   getUnclaimedHelpRequests,
 } from '../../models/helpRequestModel'
+import { getUserData } from '../../models/userModel'
+import { getChat } from '../../models/chatsModel'
 
 import { HelpRequest } from '../../types/helpRequest'
 
@@ -104,6 +106,75 @@ export class HelpStatusHandler {
       )
     } catch (error) {
       console.error('Error sending unclaimed help requests to user:', error)
+    }
+  }
+
+  /**
+   * Notify a user about their personal help status change
+   */
+  public async notifyUserHelpStatusChange(
+    userId: string,
+    userRole: string,
+  ): Promise<void> {
+    try {
+      const activeHelpRequests = await getAllActiveHelpRequests()
+      let statusData: any = {}
+
+      if (userRole === 'Volunteer' || userRole === 'Admin') {
+        const userRequests = activeHelpRequests.filter(
+          (request) => request.volunteer_id === userId,
+        )
+        if (userRequests.length > 0) {
+          const helpRequest = userRequests[0]
+          const { mom_id } = helpRequest
+          const mom_data = await getUserData(mom_id)
+          const mom_name = mom_data.firstName + ' ' + mom_data.lastName
+          const chat = await getChat(mom_id, userId)
+          const chatId = chat.id
+          statusData = {
+            status: 'Accepted',
+            momName: mom_name,
+            helpId: helpRequest.id,
+            chatId,
+          }
+        } else {
+          statusData = { status: 'Not Accepted' }
+        }
+      } else if (userRole === 'Mom') {
+        const userRequests = activeHelpRequests.filter(
+          (request) => request.mom_id === userId,
+        )
+        if (userRequests.length > 0) {
+          const helpRequest = userRequests[0]
+          const { volunteer_id, description } = helpRequest
+          if (volunteer_id) {
+            const volunteer_data = await getUserData(volunteer_id)
+            const volunteer_name =
+              volunteer_data.firstName + ' ' + volunteer_data.lastName
+            const chat = await getChat(userId, volunteer_id)
+            const chatId = chat.id
+            statusData = {
+              status: 'Accepted',
+              volunteerName: volunteer_name,
+              chatId,
+            }
+          } else {
+            statusData = { status: 'Requested', description }
+          }
+        } else {
+          statusData = { status: 'Not Requested' }
+        }
+      }
+
+      this.wsManager.emitToUser(userId, 'helpStatusUpdate', {
+        ...statusData,
+        timestamp: new Date().toISOString(),
+      })
+      console.log(
+        `Help status update sent to user ${userId}: ${statusData.status}`,
+      )
+    } catch (error) {
+      console.error('Error sending help status update to user:', error)
     }
   }
 
