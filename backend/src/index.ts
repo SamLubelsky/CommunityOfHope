@@ -22,7 +22,7 @@ import { createAdminUserIfNotExists } from './utils/functions'
 dotenv.config()
 
 createTables() //create database tables if they don't exist
-createAdminUserIfNotExists()
+// createAdminUserIfNotExists()
 
 const app = express()
 
