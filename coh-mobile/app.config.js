@@ -2,15 +2,15 @@ import 'dotenv/config'
 
 export default {
   expo: {
-    name: 'coh-mobile',
-    slug: 'coh-mobile',
+    name: 'Epic',
+    slug: 'epic',
     version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
     scheme: 'myapp',
     userInterfaceStyle: 'automatic',
     splash: {
-      image: './assets/images/splash.png',
+      image: './assets/images/icon.png',
       resizeMode: 'contain',
       backgroundColor: '#ffffff',
     },
@@ -20,16 +20,17 @@ export default {
     },
     android: {
       adaptiveIcon: {
-        foregroundImage: './assets/images/adaptive-icon.png',
+        foregroundImage: './assets/images/icon.png',
         backgroundColor: '#ffffff',
       },
       package: 'com.epic.cohmobile',
-      googleServicesFile: './google-services.json',
+      googleServicesFile:
+        '/Users/samlubelsky/CommunityOfHope/coh-mobile/google-services.json',
     },
     web: {
       bundler: 'metro',
       output: 'static',
-      favicon: './assets/images/favicon.png',
+      favicon: './assets/images/icon.png',
     },
     plugins: ['expo-router'],
     experiments: {

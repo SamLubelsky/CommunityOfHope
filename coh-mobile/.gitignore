@@ -22,3 +22,4 @@ expo-env.d.ts
 android
 ios
 credentials.json
+google-services.json
