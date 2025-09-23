@@ -24,7 +24,8 @@ export default {
         backgroundColor: '#ffffff',
       },
       package: 'com.epic.cohmobile',
-      googleServicesFile: 'google-services.json',
+      googleServicesFile:
+        '/Users/samlubelsky/CommunityOfHope/coh-mobile/google-services.json',
     },
     web: {
       bundler: 'metro',
