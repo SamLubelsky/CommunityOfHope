@@ -3,7 +3,7 @@ import 'dotenv/config'
 export default {
   expo: {
     name: 'Epic',
-    slug: 'epic',
+    slug: 'coh-mobile',
     version: '1.0.0',
     orientation: 'portrait',
     icon: './assets/images/icon.png',
@@ -24,8 +24,7 @@ export default {
         backgroundColor: '#ffffff',
       },
       package: 'com.epic.cohmobile',
-      googleServicesFile:
-        '/Users/samlubelsky/CommunityOfHope/coh-mobile/google-services.json',
+      googleServicesFile: 'google-services.json',
     },
     web: {
       bundler: 'metro',
