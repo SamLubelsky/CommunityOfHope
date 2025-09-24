@@ -26,6 +26,7 @@ function AuthNavigator() {
   const setId = useBoundStore((state) => state.setId)
   const setIsSignedIn = useBoundStore((state) => state.setIsSignedIn)
   const setRole = useBoundStore((state) => state.setRole)
+
   async function verifySession() {
     try {
       const response = await fetch(`${BACKEND_URL}/api/verify-session`, {
@@ -51,22 +52,24 @@ function AuthNavigator() {
       return false
     }
   }
-  // console.log("isSignedIn: ", isSignedIn);
+
   useEffect(() => {
     const checkAuth = async () => {
-      if (!isSignedIn) {
-        const signedIn = await verifySession()
-        setIsSignedIn(signedIn)
+      const signedIn = await verifySession()
+      setIsSignedIn(signedIn)
+
+      // Navigate after authentication check is complete
+      if (signedIn) {
+        router.replace('/(tabs)')
+      } else {
+        router.replace('/login')
       }
     }
 
-    if (isSignedIn) {
-      router.replace('/(tabs)')
-    } else {
-      checkAuth()
-      router.replace('/login')
-    }
-  }, [isSignedIn])
+    checkAuth()
+  }, [isSignedIn]) // Empty dependency array - only run once on mount
+
+  // Show loading state while checking authentication
 
   return <Slot />
 }

@@ -122,11 +122,11 @@ class NotificationServiceImpl implements NotificationService {
     const { notificationListener, responseListener } = listeners
 
     if (notificationListener) {
-      Notifications.removeNotificationSubscription(notificationListener)
+      notificationListener.remove()
     }
 
     if (responseListener) {
-      Notifications.removeNotificationSubscription(responseListener)
+      responseListener.remove()
     }
   }
 
