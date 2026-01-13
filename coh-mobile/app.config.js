@@ -32,7 +32,12 @@ export default {
       output: 'static',
       favicon: './assets/images/icon.png',
     },
-    plugins: ['expo-router'],
+    plugins: [
+      'expo-router',
+      'expo-secure-store',
+      'expo-web-browser',
+      'expo-font',
+    ],
     experiments: {
       typedRoutes: true,
     },

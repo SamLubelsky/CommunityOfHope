@@ -98,7 +98,7 @@ export default function Page() {
       return
     }
     const messageId =
-      Date.now().toString() + Math.random().toString(36).substr(2, 9)
+      id + '-' + chatId + '-' + new Date().getTime().toString()
     const data = {
       message: curMessage,
       senderId: id,
