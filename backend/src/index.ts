@@ -35,7 +35,7 @@ if (isDevelopment) {
     cors({
       origin: [
         'http://localhost:8081',
-        'http://localhost:5176',
+        'http://localhost:5173',
         'http://localhost:3000',
       ],
       credentials: true,
@@ -48,7 +48,7 @@ if (isDevelopment) {
     cors({
       origin: [
         'https://fl24-community-of-hope.web.app',
-        'http://localhost:5176',
+        'http://localhost:5173',
         'http://localhost:8081',
       ],
       credentials: true,
@@ -108,12 +108,12 @@ const wsCorsOptions = {
   origin: isDevelopment
     ? [
         'http://localhost:8081',
-        'http://localhost:5176',
+        'http://localhost:5173',
         'http://localhost:3000',
       ]
     : [
         'https://fl24-community-of-hope.web.app',
-        'http://localhost:5176',
+        'http://localhost:5173',
         'http://localhost:8081',
       ],
   credentials: true,

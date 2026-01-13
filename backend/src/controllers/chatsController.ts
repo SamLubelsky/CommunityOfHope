@@ -7,6 +7,7 @@ import {
   getChats,
   getChatRoomMessages,
   getChatByIdWithName,
+  idAlreadyExists,
 } from '../models/chatsModel'
 import { getUserData } from '../models/userModel'
 import { sendNotification } from '../notifications/notifications'
@@ -38,7 +39,7 @@ export const sendMessage = async (
   req: Request,
   res: Response,
 ): Promise<any> => {
-  const { chatId, senderId, message } = req.body
+  const { chatId, senderId, message, messageId } = req.body
   const dateSent = new Date().toISOString()
   const sender = await getUserData(senderId)
   const senderName = sender.firstName + ' ' + sender.lastName
@@ -48,9 +49,13 @@ export const sendMessage = async (
     body: messageBody,
     data: {},
   }
+  if(idAlreadyExists(messageId)){
+    return res.status(400).json({ error: 'Message ID already exists' })
+  }
   try {
     sendNotification(senderId, notificationData)
     await createMessage(chatId, senderId, message, dateSent)
+    console.log("Sent message:", { chatId, senderId, message, messageId})
     return res.status(201).json({ message: 'Message sent' })
   } catch (error) {
     return res.status(500).json({ error: (error as Error).message })
