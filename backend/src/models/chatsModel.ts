@@ -150,3 +150,10 @@ export const createMessage = async (
     chatId,
   ])
 }
+export const idAlreadyExists = async (messageId: string) => {
+  const rows = await executeQuery(
+    'SELECT id FROM messages where id=$1',
+    [messageId],
+  )
+  return rows.length > 0
+}

@@ -54,13 +54,12 @@ export const addHelpRequest = async (
         .status(400)
         .json({ error: 'You already have an active help request' })
     }
-    const { description, emergency, placeId, placeName } = req.body
+    const { description, emergency, zip } = req.body
     const id = await createHelpRequest(
       userId,
       description,
       emergency,
-      placeId,
-      placeName,
+      zip,
     )
 
     // Send websocket notification to all connected volunteers

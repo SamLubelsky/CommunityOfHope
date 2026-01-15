@@ -4,8 +4,7 @@ import { HelpRequest } from '../types/helpRequest'
 
 export const getAllHelpRequests = async (): Promise<HelpRequest[]> => {
   const rows = await executeQuery(
-    `SELECT help.active, help.id, help.mom_id, help.volunteer_id, help.description, help.emergency, help.placeId as "placeId",
-                                   help.placeName as "placeName",
+    `SELECT help.active, help.id, help.mom_id, help.volunteer_id, help.description, help.emergency, help.zip,
                                    vol.firstName || ' ' || vol.lastName as volunteer_name,
                                    mom.firstName || ' ' || mom.lastName as mom_name
                                     FROM help_requests help
@@ -21,8 +20,7 @@ export const getAllHelpRequests = async (): Promise<HelpRequest[]> => {
 
 export const getAllActiveHelpRequests = async (): Promise<HelpRequest[]> => {
   const rows = await executeQuery(
-    `SELECT help.id, help.mom_id, help.volunteer_id, help.description, help.emergency, help.placeId as "placeId",
-    help.placeName as "placeName",
+    `SELECT help.id, help.mom_id, help.volunteer_id, help.description, help.emergency, help.zip,
     vol.firstName || ' ' || vol.lastName as volunteer_name,
     mom.firstName || ' ' || mom.lastName as mom_name
      FROM help_requests help
@@ -43,8 +41,7 @@ export const getUnclaimedHelpRequests = async (
   //get all help requests that are active and have no volunteer assigned yet, put longest waiting first, put all emergency requests first
   //if a user has already unclaimed a request, don't show it to them
   const rows = await executeQuery(
-    `SELECT help.id, help.mom_id, help.volunteer_id, help.description, help.emergency, help.placeId as "placeId",
-    help.placeName as "placeName",
+    `SELECT help.id, help.mom_id, help.volunteer_id, help.description, help.emergency, help.zip,
     vol.firstName || ' ' || vol.lastName as volunteer_name,
     mom.firstName || ' ' || mom.lastName as mom_name
      FROM help_requests help
@@ -123,12 +120,11 @@ export const createHelpRequest = async (
   momId: string,
   description: string,
   emergency: boolean,
-  placeId: string,
-  placeName: string,
+  zip: string
 ): Promise<any> => {
   const result = await executeQuery(
-    'INSERT INTO help_requests (mom_id, description, emergency, placeId, placeName, active) VALUES ($1, $2, $3, $4, $5, TRUE) RETURNING id',
-    [momId, description, emergency, placeId, placeName],
+    'INSERT INTO help_requests (mom_id, description, emergency, zip, active) VALUES ($1, $2, $3, $4, TRUE) RETURNING id',
+    [momId, description, emergency, zip],
   )
   return result[0].id
 }

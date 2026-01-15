@@ -54,8 +54,7 @@ const createTables = async () => {
     emergency BOOLEAN DEFAULT FALSE,
     active BOOLEAN DEFAULT TRUE,
     dateCreated TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-    placeId TEXT DEFAULT NULL,
-    placeName TEXT DEFAULT NULL,
+    zip TEXT DEFAULT NULL,
     FOREIGN KEY (volunteer_id) REFERENCES users(id) ON DELETE SET NULL,
     FOREIGN KEY (mom_id) REFERENCES users(id) ON DELETE SET NULL
   )`)
