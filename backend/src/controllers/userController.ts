@@ -200,6 +200,7 @@ export const verifySession = async (
 }
 
 export const loginUser = async (req: Request, res: Response): Promise<any> => {
+  console.log(req)
   const { username, password } = req.body
   if (!username || !password) {
     return res
