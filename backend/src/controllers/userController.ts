@@ -200,9 +200,9 @@ export const verifySession = async (
 }
 
 export const loginUser = async (req: Request, res: Response): Promise<any> => {
-  console.log(req)
-  console.log(req.body)
-  const { username, password } = req.body
+  const { password } = req.body
+  const username = req.body.username?.trim()
+  console.log(`Login attempt for username:|${username}|`);
   if (!username || !password) {
     return res
       .status(400)

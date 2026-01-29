@@ -18,7 +18,6 @@ import { initializeWebSocket } from './websocket'
 import http from 'http'
 import path from 'path'
 import { createAdminUserIfNotExists } from './utils/functions'
-
 dotenv.config()
 
 createTables() //create database tables if they don't exist
