@@ -56,7 +56,6 @@ export default function Home() {
             </Pressable>
           </View>
           <View className='bg-gray-100 items-center justify-start mx-2 my-1'>
-            <Pressable></Pressable>
             <Image
               className='mb-5 max-w-12 max-h-10 self-center'
               source={require('@/assets/images/icon.png')}
@@ -75,7 +74,7 @@ export default function Home() {
           </View>
         </ScrollView>
         <Text
-          className='mb-1 text-blue-600 text-6 text-center font-primary text-5 underline hover:text-blue-400 hover:font-6'
+          className='mb-1 text-blue-600 font-semibold text-6 text-center font-primary text-5 underline hover:text-blue-400 hover:font-6'
           onPress={handleLogout}>
           Logout
         </Text>

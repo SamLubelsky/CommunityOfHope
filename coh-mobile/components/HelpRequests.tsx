@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, Pressable } from 'react-native'
 import { useBoundStore } from '@/store/useBound'
 import { router } from 'expo-router'
 import { BACKEND_URL } from '../app/config'
 import { ButtonWithConfirmation } from '@/components/ButtonWithConfirmation'
 import { PrimaryButton } from '@/components/PrimaryButton'
 import { useWebSocket } from '@/hooks/useWebSocket'
+import Ionicons from '@expo/vector-icons/Ionicons'
 type HelpRequest = {
   mom_name: string
   category: string
   id: number
+  zip: string
 }
 
 export default function HelpRequests() {
@@ -172,29 +174,29 @@ export default function HelpRequests() {
     setRequests(json.Requests)
   }
   function getRequestsList() {
-    if (!requests) {
+    if (!requests || requests.length === 0) {
       return (
-        <Text className='text-yellow-7 font-primary'>No requests found</Text>
+        <Text className='text-yellow-500 text-6 font-primary'>No requests found</Text>
       )
     }
     const requestsList = requests.map((request: any, index: any) => {
-      const { emergency } = request
-      console.log(emergency)
       return (
         <View
           key={index}
           className={`${
-            emergency
+            request.emergency
               ? 'border-red-500 bg-red-100'
               : 'border-blue-300 bg-gray-200'
           } my-5 items-center justify-center border-2 rounded-lg p-4`}>
-          <Text className='font-primary text-yellow-500 text-6 mb-2 w-12 text-center'>
+          <Text className='font-primary font-medium text-black-600 text-6 mb-2 w-12 text-center'>
             {' '}
-            {request.mom_name} needs help with {request.description}
+            {request.mom_name}
           </Text>
-          <Text className='font-primary text-blue-500 text-5 mb-2 w-12 text-center'>
-            {' '}
-            at {request.placeName}
+          <Text className='font-primary text-blue-800 text-5 mb-2 w-12 text-center'>
+            Request description: {request.description}
+          </Text>
+          <Text className='font-primary text-gray-600 text-5 mb-2 w-12 text-center'>
+            Zip Code: {request.zip}
           </Text>
           <ButtonWithConfirmation
             className='py-2 px-4 mt-3 bg-blue-200 border self-center rounded-md border-none'
@@ -210,10 +212,6 @@ export default function HelpRequests() {
     })
     return (
       <>
-        <Text className='font-primary text-center text-blue-200 text-7 mb-5'>
-          {' '}
-          All Current Help Requests
-        </Text>
         <ScrollView showsVerticalScrollIndicator={false}>
           {requestsList}
         </ScrollView>
@@ -229,6 +227,12 @@ export default function HelpRequests() {
   }
   return (
     <View className='flex-1 bg-gray-100 items-center'>
+        <Pressable>
+          <View className="py-2 active:bg-blue-400 px-1 border-2 border-blue-700 bg-blue-100 flex-row items-center justify-center mb-2">
+            <Text className="text-blue-700 text-6"> Refresh </Text>
+            <Ionicons name="refresh-outline" size={36} color='#3b82f6' onPress={fetchData} />
+          </View>
+        </Pressable>
       <MainContent />
     </View>
   )

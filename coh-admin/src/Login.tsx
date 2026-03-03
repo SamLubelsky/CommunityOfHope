@@ -22,12 +22,21 @@ export default function Login(){
         const formData = new FormData(event.currentTarget)
         const username = formData.get('username');
         const password = formData.get('password');
-        const response = await fetch(`${BACKEND_URL}/api/login`, {
+        let response;
+        try{
+            response = await fetch(`${BACKEND_URL}/api/login`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ username, password }),    
             credentials: 'include'
         });
+        } catch (err) {
+            console.error("Network error:", err);
+            setError("Network error. Please try again later.");
+            setIsLoading(false);
+            return;
+        }
+
         const responseData = await response.json();
         const {role} = responseData;
         if (!response.ok) {

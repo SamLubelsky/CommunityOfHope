@@ -133,3 +133,8 @@ dist
 
 #SQLite database file
 database.db
+*.aab
+*.ipa
+*.apk
+.DS_Store
+*.cache

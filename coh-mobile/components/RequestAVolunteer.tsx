@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useEffect, useState } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Pressable } from 'react-native'
 import VolunteerRequestForm from '@/components/VolunteerRequestForm'
 import { BACKEND_URL } from '../app/config'
 import '../global.css'
@@ -9,6 +9,7 @@ import { PrimaryButton } from './PrimaryButton'
 import { SecondaryButton } from './SecondaryButton'
 import { ButtonWithConfirmation } from './ButtonWithConfirmation'
 import { useWebSocket } from '@/hooks/useWebSocket'
+import Ionicons from '@expo/vector-icons/Ionicons'
 type HelpStatus = 'Not Requested' | 'Requested' | 'Accepted'
 
 const RequestAVolunteer = () => {
@@ -129,6 +130,12 @@ const RequestAVolunteer = () => {
   }
   return (
     <View className='flex-1'>
+        <Pressable>
+          <View className="py-2 active:bg-blue-400 px-1 border-2 border-blue-700 bg-blue-100 flex-row items-center justify-center mb-2">
+            <Text className="text-blue-700 text-6"> Refresh </Text>
+            <Ionicons name="refresh-outline" size={36} color='#3b82f6' onPress={fetchHelpStatus} />
+          </View>
+        </Pressable>
       {helpStatus === 'Not Requested' ? (
         <PrimaryButton text='Request a volunteer' onPress={requestVolunteer} />
       ) : (

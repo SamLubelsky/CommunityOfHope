@@ -7,6 +7,7 @@ type HelpRequest = {
     mom_name: string;
     volunteer_name: string;
     active: boolean;
+    zip: string;
 }
 export default function HelpRequests(){
     const navigate = useNavigate();
@@ -39,20 +40,20 @@ export default function HelpRequests(){
         if(HelpRequests){
             const formattedList = HelpRequests.map((helpRequest: HelpRequest, index)=>{
                 return <>
-                    <p key={`user-${index}-0`} className="p-2 text-gray-700 text-xl font-semibold">{helpRequest.mom_name}</p>
-                    <p key={`user-${index}-1`} className="p-2 text-gray-700 text-xl font-semibold">{helpRequest.volunteer_name}</p>
+                    <p key={`user-${index}-0`} className="p-4 text-gray-700 text-xl font-semibold">{helpRequest.mom_name}</p>
+                    <p key={`user-${index}-1`} className="p-4 text-gray-700 text-xl font-semibold">{helpRequest.volunteer_name}</p>
                     {helpRequest.active ? <p key={`user-${index}-2`} className="p-2 text-red-700 text-xl font-semibold">No</p> 
-                    : <p key={`user-${index}-2`} className="p-2 text-green-700 text-xl font-semibold">Yes</p>}
+                    : <p key={`user-${index}-2`} className="p-4 text-green-700 text-xl font-semibold">Yes</p>}
+                    <p key={`user-${index}-3`} className="p-4 text-gray-700 text-xl font-semibold">{helpRequest.zip}</p>
                 </>
         })
-            return  <div className="grid grid-cols-3">
-                    <p key='th-1' className="p-2 text-gray-700 text-xl font-semibold">Mom</p>
-                    <p key='th-2' className="p-2 text-gray-700 text-xl font-semibold">Volunteer</p>
-                    {/* <p key='th-3' className="p-2 text-gray-700 text-xl font-semibold">Description</p> */}
-                    <p key='th-4' className="p-2 text-gray-700 text-xl font-semibold">Completed?</p>
-                    {/* <p key='th-5' className="p-2 text-gray-700 text-xl font-semibold">Date Created</p> */}
+            return  (<div className="grid grid-cols-4">
+                    <p key='th-1' className="p-4 text-gray-700 text-xl font-semibold">Mom</p>
+                    <p key='th-2' className="p-4 text-gray-700 text-xl font-semibold">Volunteer</p>
+                    <p key='th-3' className="p-4 text-gray-700 text-xl font-semibold">Completed?</p>
+                    <p key='th-4' className="pl-8 p-2 text-gray-700 text-xl font-semibold">Zip Code</p>
                     {formattedList}
-                    </div>
+                    </div>)
         } else{
             return <p className="font-semibold text-xl text-slate-700">Loading help requests...</p>
         }

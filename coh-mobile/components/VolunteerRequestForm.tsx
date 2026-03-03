@@ -23,7 +23,7 @@ type FormData = {
     description: string;
     emergency: boolean;
     info?: string;
-    location: Location | null;
+    zip: string;
 }
 export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus, setDescription}: Props){
     const firstName = useBoundStore((state) => state.firstName);
@@ -36,7 +36,7 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
             emergency: false,
             description: '',
             info: '',
-            location: null,
+            zip: '',
         }
     });
     const emergencyValue = watch('emergency')
@@ -46,11 +46,11 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
             return;
         }
         const mom_id = id;
-        const {description, emergency, info, location} = data;
+        const {description, emergency, info, zip} = data;
         const response = await fetch(`${BACKEND_URL}/api/help_requests`, {
             method: 'POST', 
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ mom_id, description, emergency, info, placeId: location?.placeId, placeName: location?.placeName }),
+            body: JSON.stringify({ mom_id, description, emergency, info, zip}),
             credentials: 'include',
         }); 
         const json = await response.json();
@@ -65,12 +65,12 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
     const onSubmit: SubmitHandler<FormData> = async (data) => {
         console.log("Submitting");
         if(!data.emergency){
-            const {description, emergency, info, location} = data;
+            const {description, emergency, info, zip} = data;
             const mom_id = id;
             const response = await fetch(`${BACKEND_URL}/api/help_requests`, {
                 method: 'POST', 
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ mom_id, description, emergency, info, placeId: location?.placeId, placeName: location?.placeName }),
+                body: JSON.stringify({ mom_id, description, emergency, info, zip}),
                 credentials: 'include',
             }); 
             const json = await response.json();
@@ -109,7 +109,7 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
         <Modal animationType="slide" visible={isVisible} transparent={true}>
 
             <View className="rounded-xl mt-3 justify-center px-2 py-5 self-center bg-gray-200"> 
-                <Text className="font-primary text-pink-400 text-7 text-center mt-2">Request a Volunteer</Text>
+                <Text className="font-primary text-black-400 text-5 text-center mt-2">Request a Volunteer</Text>
                 <View className="absolute top-2 right-2 text-gray-500">
                     <Pressable onPress={onClose}>
                         <MaterialIcons name="close" color="#fff" size={28} />
@@ -118,22 +118,27 @@ export default function VolunteerRequestForm({isVisible, onClose, setHelpStatus,
                 {/* <View className="mt-5"> */}
                 {/* <Text className="text-center font-primary text-blue-500 text-7 mb-3">Location</Text> */}
                 {/* </View> */}
-                <Text className="font-primary text-center text-blue-500 text-7 mb-3"> Your Location</Text>
-                <GooglePlacesInput control={control}/>
                 <View className="items-center mt-3">
-                    <Text className="font-primary text-blue-500 text-7 mb-3">Description</Text>
+                    <Text className="font-primary text-blue-800 text-6 mb-1">Description</Text>
                     <Text className="font-primary text-gray-500 text-2 mb-1">What do you need help with?</Text>
-                    <TextareaInput name="description" control={control} required={true} lines={1}/>
-                    {errors.description  && <Text className="mt-2 mb-1 text-red-500">This field is required</Text>}
+                    <TextareaInput name="description" control={control} required={true} lines={1} placeholder={"e.g. need baby supplies"}/>
+                    {errors.description  && <Text className="mt-2 mb-1 text-red-500">{errors.description.message}</Text>}
+                </View>
+                <View className= "items-center mt-3">
+                    <Text className="font-primary text-center text-blue-800 text-6 mb-1">Zip Code</Text>
+                    <Text className="font-primary text-gray-500 text-2 mb-1">Where will the volunteer need to go?</Text>
+                    <TextareaInput name="zip" control={control} required={true} lines={1} placeholder="e.g. 63130" minLength={5} maxLength={5}/>
+                    {errors.zip  && <Text className="mt-2 mb-1 text-red-500">{errors.zip.message}</Text>}
                 </View>
 
-                <View className="items-center py-2 gap-2 my-6">
+
+                <View className="items-center py-2 gap-2 my-2">
                     <View className="flex-row items-center gap-2">
                         <Text className="font-primary top-1 text-gray-400 text-4 mb-2">Is this an emergency? </Text>
                         <CheckboxInput name="emergency" control={control} color='gray'/>
                     </View>
                     <Text className="font-primary text-center text-red-500 text-4 font-7 mt-2">
-                        {emergencyValue ? "If this is a medical emergency, do NOT submit a help request. Instead, call 911"
+                        {emergencyValue ? `If this is a medical emergency, do NOT submit a help request. Instead, call 911.  If you are experiencing a mental health crisis, please call 988, the Behavioral Health Crisis Line.`
                         : "Emergencies are time sensitive, crisis situations"}
                     </Text> 
                 </View>
