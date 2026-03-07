@@ -77,7 +77,7 @@ export default function Home() {
             <Text className='text-pink-300 mb-6'>
               "We're here to help, not judge."
             </Text>
-            {role === 'Mom' ? <RequestAVolunteer /> : <HelpRequests />}
+            {role === 'Mom' ? <RequestAVolunteer refreshKey={refreshKey}/> : <HelpRequests refreshKey={refreshKey}/>}
 
             {/* This View ensures Logout is pushed to the bottom when content is short */}
             <View className='flex-1 justify-end w-full items-center my-4'></View>
