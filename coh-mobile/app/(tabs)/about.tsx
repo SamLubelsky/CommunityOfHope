@@ -111,9 +111,10 @@ export default function AboutScreen() {
             <Accordion title = "How to Use the App">
               {role === "Mom" ? 
               <>
-
+                <Text className="font-bold font-primary text-black-400 text-sm mb-3">
+                  (All chats are monitored and recorded for safety purposes.)
+                </Text>
                 <Text className='font-primary text-grey-400 text-sm mb-3'>
-                  {' '}
                   Steps to use App:
                 </Text>
                 <Text className='font-primary text-black-400 text-sm mb-3'>

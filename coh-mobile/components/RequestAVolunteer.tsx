@@ -12,7 +12,10 @@ import { useWebSocket } from '@/hooks/useWebSocket'
 import Ionicons from '@expo/vector-icons/Ionicons'
 type HelpStatus = 'Not Requested' | 'Requested' | 'Accepted'
 
-const RequestAVolunteer = () => {
+type props = {
+  refreshKey: number
+}
+const RequestAVolunteer = ({refreshKey}: props) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false)
   const [helpStatus, setHelpStatus] = useState<HelpStatus>('Not Requested')
   const [volunteerName, setVolunteerName] = useState<string | null>('')
@@ -45,7 +48,8 @@ const RequestAVolunteer = () => {
 
   useEffect(() => {
     fetchHelpStatus()
-
+  }, [refreshKey])
+  useEffect(() => {
     const unsubscribeStatus = on('helpStatusUpdate', (data: any) => {
       console.log('Help status updated via WebSocket:', data)
       setHelpStatus(data.status)

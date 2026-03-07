@@ -5,6 +5,7 @@ import React, {
   useState,
   useRef,
 } from 'react'
+import { AppState } from 'react-native'
 import { webSocketService } from '@/app/socket'
 
 interface WebSocketContextType {
@@ -41,36 +42,71 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
     webSocketService.isConnecting(),
   )
 
-  // Use ref to track if we're already connecting to prevent multiple attempts
   const connectingRef = useRef(false)
 
+  const reconnectTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const reconnectAttemptRef = useRef(0)
+
+  const appState = useRef(AppState.currentState)
+
+  const BASE_DELAY = 1000
+  const MAX_DELAY = 30000
+
   const connect = async () => {
-    // Prevent multiple simultaneous connection attempts
     if (connectingRef.current) {
-      console.log('Connection already in progress, skipping duplicate attempt')
+      console.log('Connection already in progress')
       return
     }
 
-    // If already connected, don't try to connect again
     if (webSocketService.isConnected()) {
-      console.log('Already connected, skipping connection attempt')
       return
     }
 
     try {
       connectingRef.current = true
       setIsConnecting(true)
+
       await webSocketService.connect()
     } catch (error) {
-      console.error('Failed to connect:', error)
+      console.error('WebSocket connect failed:', error)
     } finally {
-      setIsConnecting(false)
       connectingRef.current = false
     }
   }
 
+  const scheduleReconnect = () => {
+    if (reconnectTimeoutRef.current) return
+
+    if (appState.current !== 'active') {
+      console.log('Skipping reconnect because app is backgrounded')
+      return
+    }
+
+    const delay = Math.min(
+      BASE_DELAY * 2 ** reconnectAttemptRef.current,
+      MAX_DELAY,
+    )
+
+    console.log(`WebSocket reconnect in ${delay}ms`)
+
+    reconnectTimeoutRef.current = setTimeout(() => {
+      reconnectTimeoutRef.current = null
+      reconnectAttemptRef.current += 1
+
+      if (!webSocketService.isConnected()) {
+        connect()
+      }
+    }, delay)
+  }
+
   const disconnect = () => {
     connectingRef.current = false
+
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current)
+      reconnectTimeoutRef.current = null
+    }
+
     webSocketService.disconnect()
   }
 
@@ -87,18 +123,50 @@ export const WebSocketProvider: React.FC<WebSocketProviderProps> = ({
   }
 
   useEffect(() => {
-    // Connect when the provider mounts
     connect()
 
-    // Subscribe to connection changes
     const unsubscribe = webSocketService.onConnectionChange((connected) => {
       setIsConnected(connected)
-      setIsConnecting(false) // Reset connecting state when connection status changes
-      connectingRef.current = false // Reset connecting ref
+      setIsConnecting(false)
+      connectingRef.current = false
+
+      if (connected) {
+        reconnectAttemptRef.current = 0
+
+        if (reconnectTimeoutRef.current) {
+          clearTimeout(reconnectTimeoutRef.current)
+          reconnectTimeoutRef.current = null
+        }
+      } else {
+        scheduleReconnect()
+      }
     })
+
+    const appStateSubscription = AppState.addEventListener(
+      'change',
+      (nextState) => {
+        const previousState = appState.current
+        appState.current = nextState
+
+        if (previousState.match(/inactive|background/) && nextState === 'active') {
+          console.log('App returned to foreground')
+
+          if (!webSocketService.isConnected()) {
+            reconnectAttemptRef.current = 0
+            connect()
+          }
+        }
+      },
+    )
 
     return () => {
       unsubscribe()
+
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current)
+      }
+
+      appStateSubscription.remove()
     }
   }, [])
 

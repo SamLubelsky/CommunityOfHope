@@ -26,6 +26,7 @@ export default function Home() {
   // Use the notification service
   const { getPushToken } = useNotifications()
 
+  const [refreshKey, setRefreshKey] = useState(0)
   // Setup notifications
   useNotificationSetup()
 
@@ -48,8 +49,17 @@ export default function Home() {
   return (
     <>
       <SafeAreaView className='flex-1'>
+        
         <WebSocketStatus />
         <ScrollView>
+          <View className='absolute top-1 left-1 z-10 bg-yellow-100 items-center justify-start mx-2 my-1'>
+            <Pressable
+              onPress={() => setRefreshKey((prev) => prev + 1)}
+              className="w-6 h-6 rounded-full bg-blue-100 border-2 border-blue-700 active:bg-blue-300"
+            >
+              <Ionicons name="refresh-outline" size={27} color="#1d4ed8" />
+            </Pressable>
+          </View>
           <View className='rounded-full absolute top-1 right-1 z-10 bg-yellow-100 items-center justify-start mx-2 my-1'>
             <Pressable onPress={() => setHelpVisible(!helpVisible)}>
               <Ionicons name='help-outline' color='#fde047' size={48} />

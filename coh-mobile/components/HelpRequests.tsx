@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 import { View, Text, ScrollView, Pressable } from 'react-native'
 import { useBoundStore } from '@/store/useBound'
 import { router } from 'expo-router'
@@ -13,8 +13,10 @@ type HelpRequest = {
   id: number
   zip: string
 }
-
-export default function HelpRequests() {
+type props = {
+  refreshKey: number
+}
+export default function HelpRequests({refreshKey}: props) {
   const [requests, setRequests] = useState<HelpRequest[]>([])
   const [helping, setHelping] = useState<boolean>(false)
   const [momName, setMomName] = useState<string | null>(null)
@@ -27,6 +29,8 @@ export default function HelpRequests() {
   const role = useBoundStore((state) => state.role)
   useEffect(() => {
     fetchData()
+  }, [refreshKey])
+  useEffect(() => {
     const unsubscribeRequests = on('helpRequestsUpdate', (data: any) => {
       console.log('Help requests updated via WebSocket:', data)
       if (data.Requests) {
@@ -227,12 +231,7 @@ export default function HelpRequests() {
   }
   return (
     <View className='flex-1 bg-gray-100 items-center'>
-        <Pressable>
-          <View className="py-2 active:bg-blue-400 px-1 border-2 border-blue-700 bg-blue-100 flex-row items-center justify-center mb-2">
-            <Text className="text-blue-700 text-6"> Refresh </Text>
-            <Ionicons name="refresh-outline" size={36} color='#3b82f6' onPress={fetchData} />
-          </View>
-        </Pressable>
+      <Text className='font-primary text-black-400 text-7 mb-7 mt-5'>Help Requests</Text>
       <MainContent />
     </View>
   )
