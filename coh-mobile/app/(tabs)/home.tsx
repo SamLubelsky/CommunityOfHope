@@ -1,6 +1,7 @@
 import HelpModal from '@/components/HelpModal'
 import HelpRequests from '@/components/HelpRequests'
 import RequestAVolunteer from '@/components/RequestAVolunteer'
+import VideoCard from '@/components/VideoCard'
 import { useBoundStore } from '@/store/useBound'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useIsFocused } from '@react-navigation/native'
@@ -78,7 +79,7 @@ export default function Home() {
               "We're here to help, not judge."
             </Text>
             {role === 'Mom' ? <RequestAVolunteer refreshKey={refreshKey}/> : <HelpRequests refreshKey={refreshKey}/>}
-
+            <VideoCard />
             {/* This View ensures Logout is pushed to the bottom when content is short */}
             <View className='flex-1 justify-end w-full items-center my-4'></View>
           </View>

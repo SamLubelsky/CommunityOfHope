@@ -134,12 +134,6 @@ const RequestAVolunteer = ({refreshKey}: props) => {
   }
   return (
     <View className='flex-1'>
-        <Pressable>
-          <View className="py-2 active:bg-blue-400 px-1 border-2 border-blue-700 bg-blue-100 flex-row items-center justify-center mb-2">
-            <Text className="text-blue-700 text-6"> Refresh </Text>
-            <Ionicons name="refresh-outline" size={36} color='#3b82f6' onPress={fetchHelpStatus} />
-          </View>
-        </Pressable>
       {helpStatus === 'Not Requested' ? (
         <PrimaryButton text='Request a volunteer' onPress={requestVolunteer} />
       ) : (

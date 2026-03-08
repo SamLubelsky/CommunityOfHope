@@ -28,15 +28,19 @@ export default function AboutScreen() {
         {/* Accordions */}
         <Accordion title="About EPIC">
           <Text className="font-primary text-black-600 text-5 mb-4">
-            At Community of Hope, we believe that the best opportunities for
-            personal growth come from hands-on experiences...
+          At Community of Hope, we believe that the best opportunities for personal growth come from hands-on experiences. This is the inspiration behind our Community Service Programs, 
+          where we encourage our staff and volunteers to use their own experiences - good or bad - to help guide their relationships with the community; promoting transparency to develop trust. 
+          Our programs are developed with all backgrounds and skill sets in mind, providing the perfect platform to connect, learn and grow. We are dedicated to providing resources and 
+          support for positive mental health and wellness. We do not share, sell or disclose your personal information to third parties without your explicit consent
+          except when required by law. Your information is kept confidential and used soley for the purposes you have agreed to.
           </Text>
         </Accordion>
 
         <Accordion title="Our Mission">
           <Text className="font-primary text-black-600 text-5 mb-4">
-            Our mission is to create a positive and supportive environment for
-            young mothers aged 11-19 and expecting mothers...
+            Our mission is to create a positive and supportive environment for young mothers aged 11-19 and expecting mothers. We believe that every
+            mother deserves the opportunity to thrive, and we are committed to their mental health and well-being. Through our programs and services,
+            we provide young mothers with the resources they need to become self-sufficient and confident parents.
           </Text>
         </Accordion>
 
