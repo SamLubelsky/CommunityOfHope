@@ -1,6 +1,6 @@
 # Community Of Hope
 
-Community of Hope is looking for a way to allow St. Louis area moms to easily get help from their volunteers.  Our site allows registered moms to send a help request alert to community of hope help board. Volunteers can see all of these help requests from the main page with high priority and moms that have been waiting for longer placed near the top.
+This app is developed in partnership and for St. Louis Community of Hope, a nonprofit that provides childcare service to young moms in St. Louis. Our site allows registered moms to send a help request alert to community of hope help board. Volunteers can see all of these help requests from the main page with high priority and moms that have been waiting for longer placed near the top.
 
 # Setup Instructions
 
